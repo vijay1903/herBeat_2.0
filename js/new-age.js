@@ -43,7 +43,6 @@
 //login function
 function loginSelect(){
   var selectvalue = $('input[name=gridRadios]:checked', '#loginForm').val();
-  console.log(selectvalue);
 
   if(selectvalue == "patient"){
     window.open('/Users/vijayvishwakarma/Documents/herBeat_2.0/patient_dash.html','_self');
