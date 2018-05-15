@@ -40,15 +40,15 @@
 
 })(jQuery); // End of use strict
 
+
 //login function
 function loginSelect(){
   var selectvalue = $('input[name=gridRadios]:checked', '#loginForm').val();
-
   if(selectvalue == "patient"){
     window.open('/Users/vijayvishwakarma/Documents/herBeat_2.0/patient_dash.html','_self');
   return true;
   }
-  else if(selectvalue == "coach"){
+  if(selectvalue == "coach"){
     window.open('/Users/vijayvishwakarma/Documents/herBeat_2.0/coach_dash.html','_self');
   return true;
   }
