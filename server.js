@@ -14,7 +14,7 @@ var conn = mysql.createConnection({
 	port: 3306,
     user: 'root',
     password: 'root',
-    database: 'herbeatapp'
+    database: 'herbeat'
 });
 
 conn.connect(function(err){
