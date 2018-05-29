@@ -1,44 +1,29 @@
 {
-    "title": "New Age",
-    "name": "startbootstrap-new-age",
-    "version": "4.1.1",
-    "description": "A one page app landing page HTML theme for Bootstrap.",
-    "keywords": [
-        "css",
-        "sass",
-        "html",
-        "responsive",
-        "theme",
-        "template"
-    ],
-    "homepage": "https://startbootstrap.com/template-overviews/new-age",
-    "bugs": {
-        "url": "https://github.com/BlackrockDigital/startbootstrap-new-age/issues",
-        "email": "feedback@startbootstrap.com"
-    },
-    "license": "MIT",
-    "author": "Start Bootstrap",
-    "contributors": [
-        "David Miller (http://davidmiller.io/)"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/BlackrockDigital/startbootstrap-new-age.git"
-    },
-    "dependencies": {
-        "bootstrap": "4.1.1",
-        "font-awesome": "4.7.0",
-        "jquery": "3.3.1",
-        "jquery.easing": "^1.4.1",
-        "simple-line-icons": "2.4.1"
-    },
-    "devDependencies": {
-        "browser-sync": "2.24.3",
-        "gulp": "^3.9.1",
-        "gulp-clean-css": "3.9.4",
-        "gulp-header": "2.0.5",
-        "gulp-rename": "^1.2.2",
-        "gulp-sass": "4.0.1",
-        "gulp-uglify": "3.0.0"
-    }
+  "name": "herbeatapp",
+  "version": "0.0.0",
+  "description": "herbeat app",
+  "main": "server.js",
+  "author": "arya",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "~1.5.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.6.1",
+    "elasticsearch": "14.0.0",
+    "express": "^4.7.4",
+    "express-session": "^1.15.6",
+    "method-override": "~2.1.2",
+    "mongoose": "~3.6.2",
+    "morgan": "~1.2.2",
+    "mysql": "2.15.0",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-google-oauth": "^1.0.0",
+    "passport-local": "^1.0.0",
+    "passport-twitter": "^1.0.4",
+    "redis": "2.8.0",
+    "sequelize": "4.23.2",
+    "session": "^0.1.0"
+  }
 }
