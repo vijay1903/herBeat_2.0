@@ -77,14 +77,43 @@ module.exports = function(app, passport) {
 		});
 	});
 
-	// =====================================
-	// Dash SECTION =========================
-	// =====================================
+	app.get('/auth/facebook', passport.authenticate('facebook-login'));
+
+	app.get('/auth/facebook/callback', 
+		passport.authenticate('facebook-login', { 
+			successRedirect: '/dashboard',
+			failureRedirect: '/login' 
+		}));
+
+	app.route('/signup/facebook').get(passport.authenticate('facebook-signup'));
+		
+	app.route('/signup/facebook/callback')
+		.get(passport.authenticate('facebook-signup', {
+			sucessRedirect: '/dashboard',
+			failureRedirect: '/login'
+		}));
+
+	app.route('/auth/twitter').get(passport.authenticate('twitter'));
+		
+	app.route('/auth/twitter/callback')
+		.get(passport.authenticate('twitter', {
+			sucessRedirect: '/dashboard',
+			failureRedirect: '/login'
+		}));
+
+	app.get('/auth/google',
+	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
 	
-	app.get('/dashboard', isLoggedIn, function(req, res) {
-		res.render('../public/views/dashboard.html', {
-			user : req.user // get the user out of session and pass to template
-		});
+
+	app.get('/auth/google/callback', 
+	passport.authenticate('google', { failureRedirect: '/login' }),
+	function(req, res) {
+		res.redirect('/dashboard');
+	});
+
+
+	app.get('/forgotpassword', function(req, res) {
+		res.render('../public/views/forgotpassword.html'); // load the index.html file
 	});
 
 
@@ -95,6 +124,7 @@ module.exports = function(app, passport) {
 		req.logout();
 		res.redirect('/');
 	});
+	
 };
 
 // route middleware to make sure

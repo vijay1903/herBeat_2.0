@@ -74,33 +74,3 @@ app.listen(port);
 console.log('Server at port : '+ port);
 
 
-app.route('/auth/facebook').get(passport.authenticate('facebook'));
-    
-app.route('/auth/facebook/callback')
-    .get(passport.authenticate('facebook', {
-        sucessRedirect: '/dashboard',
-        failureRedirect: '/login'
-    }));
-
-app.route('/auth/twitter').get(passport.authenticate('twitter'));
-    
-app.route('/auth/twitter/callback')
-    .get(passport.authenticate('twitter', {
-        sucessRedirect: '/dashboard',
-        failureRedirect: '/login'
-    }));
-
-app.get('/auth/google',
-passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
-  
-
-app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/dashboard');
-  });
-
-
-app.get('/forgotpassword', function(req, res) {
-    res.render('../public/views/forgotpassword.html'); // load the index.html file
-});

@@ -27,12 +27,12 @@ module.exports = function(passport) {
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
-        done(null, user.id);
+        done(null, user.username);
     });
 
     // used to deserialize the user
-    passport.deserializeUser(function(id, done) {
-        connection.query("SELECT * FROM users WHERE id = ? ",[id], function(err, rows){
+    passport.deserializeUser(function(username, done) {
+        connection.query("SELECT * FROM users WHERE username = ? ",[username], function(err, rows){
             done(err, rows[0]);
         });
     });
@@ -111,25 +111,86 @@ module.exports = function(passport) {
         })
     );
 
-    var FB_APP_ID = '2128017430559956';
-    var FB_APP_SECRET ='d311a2aee4167e4d1d52729af463c14e';
-
+    var FACEBOOK_APP_ID = '2128017430559956';
+    var FACEBOOK_APP_SECRET ='d311a2aee4167e4d1d52729af463c14e';
     var fbOpts = {
-        clientID: FB_APP_ID,
-        clientSecret: FB_APP_SECRET,
+        clientID: FACEBOOK_APP_ID,
+        clientSecret: FACEBOOK_APP_SECRET,
         callbackURL: 'http://localhost:8080/auth/facebook/callback',
-        passwordField: ['email']
+        profileFields: ['emails'],
+        passReqToCallback : true
     };
+    var fbOpts2 = {
+        clientID: FACEBOOK_APP_ID,
+        clientSecret: FACEBOOK_APP_SECRET,
+        callbackURL: 'http://localhost:8080/signup/facebook/callback',
+        passReqToCallback : true,
+        profileFields: ['emails']
+    };
+
 
     // var fbCallback = function(accessToken, refreshToken, profile, cb){
     //     console.log(accessToken, refreshToken, profile);
-    // }
+    // };
 
-    passport.use(new FacebookStrategy(fbOpts,
-      function(accessToken, refreshToken, profile, done) {
-        
-      }
-    ));
+    // passport.use(new FacebookStrategy(fbOpts, fbCallback));
+
+
+    passport.use('facebook-signup', new FacebookStrategy(fbOpts2,
+        function(req, accessToken, refreshToken, profile, done) {
+            console.log(accessToken, refreshToken, profile);
+        //   process.nextTick( function() {
+              // find a user whose facebook id is the same as the recieved facebook id
+            // we are checking to see if the  facebook user trying to login already exists
+            connection.query("SELECT * FROM users WHERE username = ?",[profile.displayName], function(err, rows) {
+                if (err)
+                    return done(err);
+                if (rows.length) {
+                    return done(null, false, req.flash('signupMessage', 'You are already registered. Please login.'));
+                    //redirect('/login')
+                } else {
+                    // if there is no facebook user id with that id
+                    // create the facebook user
+                    var newUserMysql = {
+                        facebook_id: profile.id,
+                        facebook_token: accessToken,
+                        username: profile.displayName,
+                        password: bcrypt.hashSync(profile.emails[0].value, null, null)  // use the generateHash function in our user model
+                    };
+                    var insertQuery = "INSERT INTO users (facebook_id, username, password, facebook_token) values (?,?,?,?)";
+
+                    connection.query(insertQuery,[newUserMysql.facebok_id, newUserMysql.username, newUserMysql.password, newUserMysql.facebook_token],
+                        function(err, rows) {
+                        newUserMysql.id = rows.insertId;
+                        return done(null, newUserMysql);
+                    });
+                    // redirect('/login');
+                }
+            });
+          })
+        // })
+      );
+
+
+    
+    passport.use('facebook-login', new FacebookStrategy(fbOpts,
+    function(req, accessToken, refreshToken, profile, done) {
+        console.log(accessToken, refreshToken, profile);
+    // process.nextTick( function() {
+        connection.query("SELECT * FROM users WHERE facebook_id = ?",[profile.id], function(err, rows){//search facebook user in database
+            if (err) //check for error
+                return done(err);
+            if (!rows.length) { //if user is not found
+                return done(null, false, req.flash('loginMessage', 'You are not registered please signup first.')); // req.flash is the way to set flashdata using connect-flash
+                // redirect to signup page
+                // redirect('/signup');
+            }
+            // all is well, return successful user
+            return done(null, rows[0]);
+        });
+    })
+    // })
+);
 
     // passport.use(new TwitterStrategy({
     //     consumerKey: TWITTER_CONSUMER_KEY,

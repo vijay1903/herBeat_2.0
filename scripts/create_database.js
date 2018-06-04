@@ -13,6 +13,7 @@ connection.query('\
 CREATE TABLE `' + dbconfig.database + '`.`' + dbconfig.users_table + '` ( \
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
     `facebook_id` VARCHAR(20), \
+    `name` VARCHAR(20), \
     `username` VARCHAR(20) NOT NULL, \
     `password` CHAR(60) NOT NULL, \
     `facebook_token` VARCHAR(20), \
