@@ -116,8 +116,8 @@ module.exports = function(passport) {
         })
     );
 
-    var FACEBOOK_APP_ID = '2128017430559956';
-    var FACEBOOK_APP_SECRET ='d311a2aee4167e4d1d52729af463c14e';
+    var FACEBOOK_APP_ID = 'get_your_own';
+    var FACEBOOK_APP_SECRET ='get_your_own';
     var fbOpts = {
         clientID: FACEBOOK_APP_ID,
         clientSecret: FACEBOOK_APP_SECRET,
@@ -163,8 +163,8 @@ module.exports = function(passport) {
         // })
       );
 
-    var TWITTER_CONSUMER_KEY = '6bAkuJOS94Nuypa9TRWfBn7mS';
-    var TWITTER_CONSUMER_SECRET = '8tbHjucyPWFPz97rr5vpp16uH2O2IuSHXICgiardtRfwuD3L0R' ;
+    var TWITTER_CONSUMER_KEY = 'get_your_own';
+    var TWITTER_CONSUMER_SECRET = 'get_your_own' ;
     passport.use('twitter', new TwitterStrategy({
         consumerKey: TWITTER_CONSUMER_KEY,
         consumerSecret: TWITTER_CONSUMER_SECRET,
@@ -206,8 +206,8 @@ module.exports = function(passport) {
       }
     ));
 
-    var GOOGLE_CLIENT_ID = '875326343130-2bq6lilveu1a8atnnqnf61ch6mpsa36c.apps.googleusercontent.com',
-    GOOGLE_CLIENT_SECRET = '8uUG-LxFWmL0JB8_jaJKDq3B',
+    var GOOGLE_CLIENT_ID = 'get_your_own',
+    GOOGLE_CLIENT_SECRET = 'get_your_own',
     oauth_callback = "https://api.twitter.com/oauth/request_token";
 
     passport.use('google', new GoogleStrategy({
