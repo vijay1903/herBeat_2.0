@@ -27,7 +27,7 @@ module.exports = function(app, passport) {
 	// process the login form
 	app.post('/login', passport.authenticate('local-login', {
             successRedirect : '/dashboard', // redirect to the secure dashboard section
-            failureRedirect : '/login', // redirect back to the signup page if there is an error
+            failureRedirect : '/login', // redirect back to the login page if there is an error
             failureFlash : true // allow flash messages
 		}),
         function(req, res) {
@@ -77,33 +77,26 @@ module.exports = function(app, passport) {
 		});
 	});
 
-	app.get('/auth/facebook', passport.authenticate('facebook-login'));
+	app.get('/auth/facebook', passport.authenticate('facebook'));
 
 	app.get('/auth/facebook/callback', 
-		passport.authenticate('facebook-login', { 
+		passport.authenticate('facebook', { 
 			successRedirect: '/dashboard',
 			failureRedirect: '/login' 
 		}));
 
-	app.route('/signup/facebook').get(passport.authenticate('facebook-signup'));
+	app.get('/auth/twitter', 
+	passport.authenticate('twitter', { scope: ['email']}));
 		
-	app.route('/signup/facebook/callback')
-		.get(passport.authenticate('facebook-signup', {
-			sucessRedirect: '/dashboard',
-			failureRedirect: '/login'
-		}));
-
-	app.route('/auth/twitter').get(passport.authenticate('twitter'));
-		
-	app.route('/auth/twitter/callback')
-		.get(passport.authenticate('twitter', {
-			sucessRedirect: '/dashboard',
-			failureRedirect: '/login'
-		}));
+	app.get('/auth/twitter/callback', 
+		passport.authenticate('twitter', {sucessRedirect: '/dashboard'}),
+		function(req, res) {
+			res.redirect('/dashboard');
+		}
+	);
 
 	app.get('/auth/google',
-	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
-	
+	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'email'] }));
 
 	app.get('/auth/google/callback', 
 	passport.authenticate('google', { failureRedirect: '/login' }),

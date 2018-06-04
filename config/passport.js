@@ -5,7 +5,7 @@ var express = require('express');
 var LocalStrategy   = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var TwitterStrategy = require('passport-twitter').Strategy;
-var GoogleStrategy = require('passport-google-oauth').OAuthStrategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 var app = express();
 
@@ -27,13 +27,17 @@ module.exports = function(passport) {
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
-        done(null, user.username);
+        done(null, user.id);
     });
 
     // used to deserialize the user
-    passport.deserializeUser(function(username, done) {
-        connection.query("SELECT * FROM users WHERE username = ? ",[username], function(err, rows){
-            done(err, rows[0]);
+    passport.deserializeUser(function(id, done) {
+        connection.query("SELECT * FROM users WHERE id = ? ", [id], function(err, rows){
+            if(err){
+                console.log(err);
+                return done(null, err);
+            }
+            done(null, rows[0]);
         });
     });
 
@@ -46,30 +50,31 @@ module.exports = function(passport) {
     passport.use(
         'local-signup',
         new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
-            usernameField : 'username',
+            // by default, local strategy uses email and password, we will override with email
+            emailField : 'email',
             passwordField : 'password',
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
-        function(req, username, password, done) {
+        function(req, email, password, done) {
             // find a user whose email is the same as the forms email
             // we are checking to see if the user trying to login already exists
-            connection.query("SELECT * FROM users WHERE username = ?",[username], function(err, rows) {
+            connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows) {
                 if (err)
                     return done(err);
                 if (rows.length) {
-                    return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
+                    return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                 } else {
-                    // if there is no user with that username
+                    // if there is no user with that email
                     // create the user
                     var newUserMysql = {
-                        username: username,
+                        email: email,
                         password: bcrypt.hashSync(password, null, null)  // use the generateHash function in our user model
                     };
 
-                    var insertQuery = "INSERT INTO users ( username, password ) values (?,?)";
+                    var insertQuery = "INSERT INTO users ( email, password ) values (?,?)";
 
-                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.password],function(err, rows) {
+                    connection.query(insertQuery,[newUserMysql.email, newUserMysql.password],function(err, rows) {
+                        // console.log("rows = "+rows);
                         newUserMysql.id = rows.insertId;
 
                         return done(null, newUserMysql);
@@ -88,13 +93,13 @@ module.exports = function(passport) {
     passport.use(
         'local-login',
         new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
-            usernameField : 'username',
+            // by default, local strategy uses email and password, we will override with email
+            emailField : 'email',
             passwordField : 'password',
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
-        function(req, username, password, done) { // callback with email and password from our form
-            connection.query("SELECT * FROM users WHERE username = ?",[username], function(err, rows){
+        function(req, email, password, done) { // callback with email and password from our form
+            connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows){
                 if (err)
                     return done(err);
                 if (!rows.length) {
@@ -117,100 +122,131 @@ module.exports = function(passport) {
         clientID: FACEBOOK_APP_ID,
         clientSecret: FACEBOOK_APP_SECRET,
         callbackURL: 'http://localhost:8080/auth/facebook/callback',
-        profileFields: ['emails'],
+        profileFields: ['emails','id', 'name', 'gender', 'displayName'],
         passReqToCallback : true
     };
-    var fbOpts2 = {
-        clientID: FACEBOOK_APP_ID,
-        clientSecret: FACEBOOK_APP_SECRET,
-        callbackURL: 'http://localhost:8080/signup/facebook/callback',
-        passReqToCallback : true,
-        profileFields: ['emails']
-    };
 
-
-    // var fbCallback = function(accessToken, refreshToken, profile, cb){
-    //     console.log(accessToken, refreshToken, profile);
-    // };
-
-    // passport.use(new FacebookStrategy(fbOpts, fbCallback));
-
-
-    passport.use('facebook-signup', new FacebookStrategy(fbOpts2,
+    passport.use('facebook', new FacebookStrategy(fbOpts,
         function(req, accessToken, refreshToken, profile, done) {
-            console.log(accessToken, refreshToken, profile);
-        //   process.nextTick( function() {
-              // find a user whose facebook id is the same as the recieved facebook id
-            // we are checking to see if the  facebook user trying to login already exists
-            connection.query("SELECT * FROM users WHERE username = ?",[profile.displayName], function(err, rows) {
+            console.log('FB accessToken : ', accessToken, ' FB refreshToken: ', refreshToken, ' FB profile : ', profile);
+        
+            connection.query("SELECT * FROM users WHERE facebook_id = ?", profile.id, function(err, rows) {
                 if (err)
                     return done(err);
                 if (rows.length) {
-                    return done(null, false, req.flash('signupMessage', 'You are already registered. Please login.'));
-                    //redirect('/login')
+                    return done(null, rows[0]);
+                    
                 } else {
                     // if there is no facebook user id with that id
                     // create the facebook user
                     var newUserMysql = {
                         facebook_id: profile.id,
+                        name: profile.displayName,
                         facebook_token: accessToken,
-                        username: profile.displayName,
+                        email: profile.emails[0].value,
+                        provider: profile.provider,
                         password: bcrypt.hashSync(profile.emails[0].value, null, null)  // use the generateHash function in our user model
                     };
-                    var insertQuery = "INSERT INTO users (facebook_id, username, password, facebook_token) values (?,?,?,?)";
-
-                    connection.query(insertQuery,[newUserMysql.facebok_id, newUserMysql.username, newUserMysql.password, newUserMysql.facebook_token],
+                    console.log("newUser Facebook details : ");
+                    console.log(newUserMysql);
+                    var insertQuery = "INSERT INTO users (facebook_id, name, email, password, facebook_token, provider) values (?,?,?,?,?,?)";
+                    // connection.query(insertQuery,[newUserMysql.facebook_id, newUserMysql.name, newUserMysql.email, newUserMysql.password, newUserMysql.facebook_token, newUserMysql.provider]);
+                    connection.query(insertQuery,[newUserMysql.facebook_id, newUserMysql.name, newUserMysql.email, newUserMysql.password, newUserMysql.facebook_token, newUserMysql.provider],
                         function(err, rows) {
+                            // console.log("rows = "+rows);
                         newUserMysql.id = rows.insertId;
                         return done(null, newUserMysql);
                     });
-                    // redirect('/login');
                 }
             });
           })
         // })
       );
 
-
-    
-    passport.use('facebook-login', new FacebookStrategy(fbOpts,
-    function(req, accessToken, refreshToken, profile, done) {
-        console.log(accessToken, refreshToken, profile);
-    // process.nextTick( function() {
-        connection.query("SELECT * FROM users WHERE facebook_id = ?",[profile.id], function(err, rows){//search facebook user in database
-            if (err) //check for error
-                return done(err);
-            if (!rows.length) { //if user is not found
-                return done(null, false, req.flash('loginMessage', 'You are not registered please signup first.')); // req.flash is the way to set flashdata using connect-flash
-                // redirect to signup page
-                // redirect('/signup');
-            }
-            // all is well, return successful user
-            return done(null, rows[0]);
-        });
-    })
-    // })
-);
-
-    // passport.use(new TwitterStrategy({
-    //     consumerKey: TWITTER_CONSUMER_KEY,
-    //     consumerSecret: TWITTER_CONSUMER_SECRET,
-    //     callbackURL: "http://localhost:8080/auth/twitter/callback"
-    //   },
-    //   function(token, tokenSecret, profile, done) {
+    var TWITTER_CONSUMER_KEY = '6bAkuJOS94Nuypa9TRWfBn7mS';
+    var TWITTER_CONSUMER_SECRET = '8tbHjucyPWFPz97rr5vpp16uH2O2IuSHXICgiardtRfwuD3L0R' ;
+    passport.use('twitter', new TwitterStrategy({
+        consumerKey: TWITTER_CONSUMER_KEY,
+        consumerSecret: TWITTER_CONSUMER_SECRET,
+        callbackURL: "http://localhost:8080/auth/twitter/callback"
+      },
+      function(token, tokenSecret, profile, done) {
+          
+            console.log(' Tw token : ',token, ' Tw tokenSecret : ', tokenSecret, ' Tw profile : ', profile);
         
-    //   }
-    // ));
+            connection.query("SELECT * FROM users WHERE twitter_id = ?", profile.id, function(err, rows) {
+                if (err)
+                    return done(err);
+                if (rows.length) {
+                    return done(null, rows[0]);
+                    
+                } else {
+                    // if there is no titter user id with that id
+                    // create the twitter user
+                    var newUserMysql = {
+                        twitter_id: profile.id,
+                        name: profile.displayName,
+                        twitter_token: token,
+                        provider: profile.provider,
+                        // email: profile.emails[0].value,
+                        password: bcrypt.hashSync(profile.id, null, null)  // use the generateHash function in our user model
+                    };
+                    console.log("newUser Twitter details : ");
+                    console.log(newUserMysql);
+                    var insertQuery = "INSERT INTO users (twitter_id, name, password, twitter_token, provider) values (?,?,?,?,?,?)";
+                    // connection.query(insertQuery,[newUserMysql.twitter_id, newUserMysql.name, newUserMysql.password, newUserMysql.twitter_token, newUserMysql.provider]);
+                    connection.query(insertQuery,[newUserMysql.twitter_id, newUserMysql.name, newUserMysql.password, newUserMysql.twitter_token, newUserMysql.provider],
+                        function(err, rows) {
+                        // console.log("rows = "+rows);
+                        newUserMysql.id = rows.insertId;
+                        return done(null, newUserMysql);
+                    });
+                }
+            });
+      }
+    ));
 
-    // passport.use(new GoogleStrategy({
-    //     consumerKey: GOOGLE_CONSUMER_KEY,
-    //     consumerSecret: GOOGLE_CONSUMER_SECRET,
-    //     callbackURL: "http://localhost:8080/auth/google/callback"
-    //   },
-    //   function(token, tokenSecret, profile, done) {
-    //       User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    //         return done(err, user);
-    //       });
-    //   }
-    // ));
+    var GOOGLE_CLIENT_ID = '875326343130-2bq6lilveu1a8atnnqnf61ch6mpsa36c.apps.googleusercontent.com',
+    GOOGLE_CLIENT_SECRET = '8uUG-LxFWmL0JB8_jaJKDq3B',
+    oauth_callback = "https://api.twitter.com/oauth/request_token";
+
+    passport.use('google', new GoogleStrategy({
+        clientID: GOOGLE_CLIENT_ID,
+        clientSecret: GOOGLE_CLIENT_SECRET,
+        callbackURL: "http://localhost:8080/auth/google/callback"        
+      },
+      function(accessToken, refreshToken, profile, done) {
+            console.log('G+ accessToken : ', accessToken, ' G+ refreshToken : ', refreshToken," G+ profile : ", profile);
+
+            connection.query("SELECT * FROM users WHERE google_id = ?", profile.id, function(err, rows) {
+                if (err)
+                    return done(err);
+                if (rows.length) {
+                    return done(null, rows[0]);
+                    
+                } else {
+                    // if there is no google user id with that id
+                    // create the google user
+                    var newUserMysql = {
+                        google_id: profile.id,
+                        name: profile.displayName,
+                        google_token: accessToken,
+                        email: profile.emails[0].value,
+                        provider: profile.provider,
+                        password: bcrypt.hashSync(profile.id, null, null)  // use the generateHash function in our user model
+                    };
+                    console.log("newUser Google details : ");
+                    console.log(newUserMysql);
+                    var insertQuery = "INSERT INTO users (google_id, name, email, password, google_token, provider) values (?,?,?,?,?,?)";
+                    // connection.query(insertQuery,[newUserMysql.google_id, newUserMysql.name newUserMysql.password, newUserMysql.google_token, newUserMysql.provider]);
+                    connection.query(insertQuery,[newUserMysql.google_id, newUserMysql.name, newUserMysql.email, newUserMysql.password, newUserMysql.google_token, newUserMysql.provider],
+                        function(err, rows) {
+                            // console.log("rows = "+rows);
+                        newUserMysql.id = rows.insertId;
+                        return done(null, newUserMysql);
+                    });
+                }
+            });
+      }
+    ));
 }

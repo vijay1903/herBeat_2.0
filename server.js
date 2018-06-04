@@ -56,8 +56,8 @@ app.set('view engine', 'html');
 // required for passport
 app.use(session({
 	secret: 'vijayvishwakarmahasdonethis',
-	resave: true,
-	saveUninitialized: true
+	resave: false,
+	saveUninitialized: false
  } )); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
