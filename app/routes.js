@@ -63,18 +63,26 @@ module.exports = function(app, passport) {
 	// we will want this protected so you have to be logged in to visit
 	// we will use route middleware to verify this (the isLoggedIn function)
 	app.get('/dashboard', isLoggedIn, function(req, res) {
-		res.render('../public/views/dashboard.html', {
+		if(!isLoggedIn){
+			res.redirect('/');
+		} else {
+			res.render('../public/views/dashboard.html', {
 			user : req.user // get the user out of session and pass to template
 		});
+		}
 	});
 	// =====================================
 	// Stat SECTION =========================
 	// =====================================
 	
-	app.get('/statistics', isLoggedIn, function(req, res) {
-		res.render('../public/views/statistics.html', {
+	app.get('/statistics',isLoggedIn, function(req, res) {
+		if(!isLoggedIn){
+			res.redirect('/');
+		} else {
+			res.render('../public/views/statistics.html', {
 			user : req.user // get the user out of session and pass to template
 		});
+		}
 	});
 
 	app.get('/auth/facebook', passport.authenticate('facebook'));
@@ -122,7 +130,6 @@ module.exports = function(app, passport) {
 
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
-
 	// if user is authenticated in the session, carry on
 	if (req.isAuthenticated())
 		return next();

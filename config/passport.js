@@ -6,7 +6,7 @@ var LocalStrategy   = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var TwitterStrategy = require('passport-twitter').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-
+var configAuth = require('./auth');
 var app = express();
 
 // load up the user model
@@ -75,6 +75,9 @@ module.exports = function(passport) {
 
                     connection.query(insertQuery,[newUserMysql.email, newUserMysql.password],function(err, rows) {
                         // console.log("rows = "+rows);
+                        if(err){
+                            console.log("error",err);
+                        }
                         newUserMysql.id = rows.insertId;
 
                         return done(null, newUserMysql);
@@ -116,12 +119,12 @@ module.exports = function(passport) {
         })
     );
 
-    var FACEBOOK_APP_ID = 'get_your_own';
-    var FACEBOOK_APP_SECRET ='get_your_own';
+    // var FACEBOOK_APP_ID = '2128017430559956';
+    // var FACEBOOK_APP_SECRET ='d311a2aee4167e4d1d52729af463c14e';
     var fbOpts = {
-        clientID: FACEBOOK_APP_ID,
-        clientSecret: FACEBOOK_APP_SECRET,
-        callbackURL: 'http://localhost:8080/auth/facebook/callback',
+        clientID: configAuth.facebookAuth.clientID,
+        clientSecret: configAuth.facebookAuth.clientSecret,
+        callbackURL: configAuth.facebookAuth.callbackURL,
         profileFields: ['emails','id', 'name', 'gender', 'displayName'],
         passReqToCallback : true
     };
@@ -153,7 +156,10 @@ module.exports = function(passport) {
                     // connection.query(insertQuery,[newUserMysql.facebook_id, newUserMysql.name, newUserMysql.email, newUserMysql.password, newUserMysql.facebook_token, newUserMysql.provider]);
                     connection.query(insertQuery,[newUserMysql.facebook_id, newUserMysql.name, newUserMysql.email, newUserMysql.password, newUserMysql.facebook_token, newUserMysql.provider],
                         function(err, rows) {
-                            // console.log("rows = "+rows);
+                        // console.log("rows = "+rows);
+                        if(err){
+                            console.log("error",err);
+                        }
                         newUserMysql.id = rows.insertId;
                         return done(null, newUserMysql);
                     });
@@ -163,12 +169,12 @@ module.exports = function(passport) {
         // })
       );
 
-    var TWITTER_CONSUMER_KEY = 'get_your_own';
-    var TWITTER_CONSUMER_SECRET = 'get_your_own' ;
+    // var TWITTER_CONSUMER_KEY = '6bAkuJOS94Nuypa9TRWfBn7mS';
+    // var TWITTER_CONSUMER_SECRET = '8tbHjucyPWFPz97rr5vpp16uH2O2IuSHXICgiardtRfwuD3L0R' ;
     passport.use('twitter', new TwitterStrategy({
-        consumerKey: TWITTER_CONSUMER_KEY,
-        consumerSecret: TWITTER_CONSUMER_SECRET,
-        callbackURL: "http://localhost:8080/auth/twitter/callback"
+        consumerKey: configAuth.twitterAuth.consumerKey,
+        consumerSecret: configAuth.twitterAuth.consumerSecret,
+        callbackURL: configAuth.twitterAuth.callbackURL
       },
       function(token, tokenSecret, profile, done) {
           
@@ -193,11 +199,14 @@ module.exports = function(passport) {
                     };
                     console.log("newUser Twitter details : ");
                     console.log(newUserMysql);
-                    var insertQuery = "INSERT INTO users (twitter_id, name, password, twitter_token, provider) values (?,?,?,?,?,?)";
+                    var insertQuery = "INSERT INTO users (twitter_id, name, password, twitter_token, provider) values (?,?,?,?,?)";
                     // connection.query(insertQuery,[newUserMysql.twitter_id, newUserMysql.name, newUserMysql.password, newUserMysql.twitter_token, newUserMysql.provider]);
                     connection.query(insertQuery,[newUserMysql.twitter_id, newUserMysql.name, newUserMysql.password, newUserMysql.twitter_token, newUserMysql.provider],
                         function(err, rows) {
-                        // console.log("rows = "+rows);
+                        console.log("rows = "+rows);
+                        if(err){
+                            console.log("error",err);
+                        }
                         newUserMysql.id = rows.insertId;
                         return done(null, newUserMysql);
                     });
@@ -206,14 +215,14 @@ module.exports = function(passport) {
       }
     ));
 
-    var GOOGLE_CLIENT_ID = 'get_your_own',
-    GOOGLE_CLIENT_SECRET = 'get_your_own',
-    oauth_callback = "https://api.twitter.com/oauth/request_token";
+    // var GOOGLE_CLIENT_ID = '875326343130-2bq6lilveu1a8atnnqnf61ch6mpsa36c.apps.googleusercontent.com',
+    // GOOGLE_CLIENT_SECRET = '8uUG-LxFWmL0JB8_jaJKDq3B',
+    // oauth_callback = "https://api.twitter.com/oauth/request_token";
 
     passport.use('google', new GoogleStrategy({
-        clientID: GOOGLE_CLIENT_ID,
-        clientSecret: GOOGLE_CLIENT_SECRET,
-        callbackURL: "http://localhost:8080/auth/google/callback"        
+        clientID: configAuth.googleAuth.clientID,
+        clientSecret: configAuth.googleAuth.clientSecret,
+        callbackURL: configAuth.googleAuth.callbackURL       
       },
       function(accessToken, refreshToken, profile, done) {
             console.log('G+ accessToken : ', accessToken, ' G+ refreshToken : ', refreshToken," G+ profile : ", profile);
@@ -241,7 +250,10 @@ module.exports = function(passport) {
                     // connection.query(insertQuery,[newUserMysql.google_id, newUserMysql.name newUserMysql.password, newUserMysql.google_token, newUserMysql.provider]);
                     connection.query(insertQuery,[newUserMysql.google_id, newUserMysql.name, newUserMysql.email, newUserMysql.password, newUserMysql.google_token, newUserMysql.provider],
                         function(err, rows) {
-                            // console.log("rows = "+rows);
+                        // console.log("rows = "+rows);
+                        if(err){
+                            console.log("error",err);
+                        }
                         newUserMysql.id = rows.insertId;
                         return done(null, newUserMysql);
                     });
