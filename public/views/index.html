@@ -54,7 +54,8 @@
               <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#loginModal">Login</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#signupModal">Signup</a>
+              <a class="nav-link js-scroll-trigger" href='/signup'>Signup</a>
+              <!-- <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#signupModal">Signup</a> -->
             </li>
           </ul>
         </div>
@@ -117,7 +118,7 @@
     </div>
 
 
-    <!--signUp Modal-->
+    <!-- signUp Modal -->
     <div class="modal fade" id="signupModal" tabindex="-1" role="form" aria-labelledby="signupModel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="form">
         <div class="modal-content">
@@ -156,13 +157,13 @@
                     <label class="form-control-label" for="password1">
                         Password
                     </label>
-                    <input type="password" id="password1" class="form-control" placeholder="6-12 characters" minlength="4" maxlength="12" name="password1" required>
+                    <input type="password" id="password1" class="form-control" placeholder="6-12 characters" minlength="6" maxlength="12" name="password1" required>
                   </div>
                   <div class="col">
-                    <label class="form-control-label" for="password">
+                    <label class="form-control-label" for="password2">
                         Confirm Password
                     </label>
-                    <input type="password" id="password2" class="form-control" placeholder="6-12 characters" minlength="4" maxlength="12" onkeyup='check();' name="password2" required>
+                    <input type="password" id="password2" class="form-control" placeholder="6-12 characters" minlength="6" maxlength="12" onkeyup='check();' name="password2" required>
                   </div>
 
                   <span id='confirm_message' class="label label-info" style="padding-left: 20px"></span>
@@ -171,7 +172,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary btn-sm">Signup</button>
                   </div>
-                  </form>
+              </form>
           </div>
         </div>
       </div>
@@ -220,6 +221,35 @@
           <div class="modal-footer">
           </div>
          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--mail Modal-->
+    <div class="modal fade" id="mailModal" tabindex="-1" role="form" aria-labelledby="mailModel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="form">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Send a mail to us.</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="mailto:vijayv@mail.usf.edu" method="post" enctype="text/plain">
+              Your name:<br>
+              <input class="form-control" type="text" name="name" placeholder="Vijay Vishwakarma"><br>
+              Your e-mail:<br>
+              <input class="form-control" type="text" name="mail" placeholder="abc@example.com"><br>
+              Message:<br>
+              <input class="form-control" type="text" name="comment" size="100" placeholder="Your message"><br><br>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary btn-sm" type="submit">Send</button>
+              <button class="btn btn-secondary btn-sm" type="reset">Reset</button>
+            </form>
+          </div>
+          </div>
         </div>
       </div>
     </div>
@@ -372,6 +402,11 @@
           <li class="list-inline-item social-google-plus">
             <a href="#">
               <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+          <li class="list-inline-item social-google-plus">
+            <a href="#" data-toggle="modal" data-target="#mailModal">
+              <i class="fa fa-envelope"></i>
             </a>
           </li>
         </ul>
