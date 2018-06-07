@@ -51,29 +51,39 @@ module.exports = function(passport) {
         'local-signup',
         new LocalStrategy({
             // by default, local strategy uses email and password, we will override with email
-            emailField : 'email',
-            passwordField : 'password',
+            emailField : 'signup_email',
+            passwordField : 'password1',
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
-        function(req, email, password, done) {
+        function(req, username, password1, done) {
+            var email = req.body.signup_email;
+            var name = req.body.name;
+            console.log("Values from form : ", username, name, email, password1);
             // find a user whose email is the same as the forms email
             // we are checking to see if the user trying to login already exists
             connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows) {
-                if (err)
+                console.log('user searched.....');
+                if (err){
+                    console.log("Error while seraching user in db : ",err);
                     return done(err);
+                }
                 if (rows.length) {
-                    return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                    console.log('loginMessage', 'That email is already registered.');
+                    return done(null, false, req.flash('loginMessage', 'That email is already registered.'));
                 } else {
                     // if there is no user with that email
                     // create the user
                     var newUserMysql = {
+                        username : username,
+                        name : name,
                         email: email,
-                        password: bcrypt.hashSync(password, null, null)  // use the generateHash function in our user model
+                        provider: 'local',
+                        password: bcrypt.hashSync(password1, null, null)  // use the generateHash function in our user model
                     };
 
-                    var insertQuery = "INSERT INTO users ( email, password ) values (?,?)";
+                    var insertQuery = "INSERT INTO users (username, name, email, password, provider ) values (?,?,?,?,?)";
 
-                    connection.query(insertQuery,[newUserMysql.email, newUserMysql.password],function(err, rows) {
+                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.name, newUserMysql.email, newUserMysql.password, newUserMysql.provider],function(err, rows) {
                         // console.log("rows = "+rows);
                         if(err){
                             console.log("error",err);
@@ -102,15 +112,19 @@ module.exports = function(passport) {
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
         function(req, email, password, done) { // callback with email and password from our form
+        console.log('From login form : ', email, password)
             connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows){
+                console.log('user searched....');
                 if (err)
                     return done(err);
                 if (!rows.length) {
+                    console.log('loginMessage', 'No user found.');
                     return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
                 }
 
                 // if the user is found but the password is wrong
                 if (!bcrypt.compareSync(password, rows[0].password))
+                console.log('loginMessage', 'Oops! Wrong password.');
                     return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
                 // all is well, return successful user

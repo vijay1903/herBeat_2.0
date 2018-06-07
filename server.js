@@ -51,7 +51,7 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(methodOverride());
 
 app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
+// app.set('view engine', 'html');
 
 // required for passport
 app.use(session({

@@ -5,13 +5,26 @@ res.render('routes', { title: 'ejs' });
 // app/routes.js
 
 
-module.exports = function(app, passport) {
+// route middleware to make sure
+function isLoggedIn(req, res, next) {
+	// if user is authenticated in the session, carry on
+	if (req.isAuthenticated()){
+		next();
+	} else {
+		alert('Access Denied!!!');
+		next(res.redirect('/'));
+	}
+	// if they aren't redirect them to the home page
+	// res.redirect('/');
+}
 
+
+module.exports = function(app, passport) {
 	// =====================================
 	// HOME PAGE (with login links) ========
 	// =====================================
 	app.get('/', function(req, res) {
-		res.render('../public/views/index.html'); // load the index.html file
+		res.render('../public/views/index.html', { message: req.flash('loginMessage') || req.flash('signupMessage') }); // load the index.html file
 	});
 
 	// =====================================
@@ -19,9 +32,9 @@ module.exports = function(app, passport) {
 	// =====================================
 	// show the login form
 	app.get('/login', function(req, res) {
-
+		
 		// render the page and pass in any flash data if it exists
-		res.render('../public/views/login.html', { message: req.flash('loginMessage') });
+		res.render('../public/views/index.html', { message: req.flash('loginMessage') });
 	});
 
 	// process the login form
@@ -47,7 +60,7 @@ module.exports = function(app, passport) {
 	// show the signup form
 	app.get('/signup', function(req, res) {
 		// render the page and pass in any flash data if it exists
-		res.render('../public/views/signup.html', { message: req.flash('signupMessage') });
+		res.render('../public/views/index.html', { message: req.flash('signupMessage') });
 	});
 
 	// process the signup form
@@ -90,14 +103,14 @@ module.exports = function(app, passport) {
 	app.get('/auth/facebook/callback', 
 		passport.authenticate('facebook', { 
 			successRedirect: '/dashboard',
-			failureRedirect: '/login' 
+			failureRedirect: '/' 
 		}));
 
 	app.get('/auth/twitter', 
 	passport.authenticate('twitter', { scope: ['email']}));
 		
 	app.get('/auth/twitter/callback', 
-		passport.authenticate('twitter', {sucessRedirect: '/dashboard'}),
+		passport.authenticate('twitter', {failureRedirect: '/'}),
 		function(req, res) {
 			res.redirect('/dashboard');
 		}
@@ -107,7 +120,7 @@ module.exports = function(app, passport) {
 	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'email'] }));
 
 	app.get('/auth/google/callback', 
-	passport.authenticate('google', { failureRedirect: '/login' }),
+	passport.authenticate('google', { failureRedirect: '/' }),
 	function(req, res) {
 		res.redirect('/dashboard');
 	});
@@ -122,18 +135,10 @@ module.exports = function(app, passport) {
 	// LOGOUT ==============================
 	// =====================================
 	app.get('/logout', function(req, res) {
-		req.logout();
+		req.logOut();
+		req.session.destroy();
 		res.redirect('/');
 	});
 	
 };
 
-// route middleware to make sure
-function isLoggedIn(req, res, next) {
-	// if user is authenticated in the session, carry on
-	if (req.isAuthenticated())
-		return next();
-
-	// if they aren't redirect them to the home page
-	res.redirect('/');
-}
