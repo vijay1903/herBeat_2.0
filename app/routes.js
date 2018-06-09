@@ -11,8 +11,7 @@ function isLoggedIn(req, res, next) {
 	if (req.isAuthenticated()){
 		next();
 	} else {
-		alert('Access Denied!!!');
-		next(res.redirect('/'));
+		res.redirect('/');
 	}
 	// if they aren't redirect them to the home page
 	// res.redirect('/');

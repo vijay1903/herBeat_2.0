@@ -58,3 +58,4 @@ $(document).on("click",".new_user",function(){
   $('#loginModal').modal('hide');
   $('#signupModal').modal('show');
 });
+

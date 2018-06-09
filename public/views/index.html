@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" np-app="app">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,7 +13,7 @@
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom fonts for this template -->
-    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="vendor/font-awesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="vendor/simple-line-icons/css/simple-line-icons.css">
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
@@ -34,10 +34,10 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top" style="color: blueviolet"><i class="fa fa-heartbeat"></i> HerBeat</a>
+        <a class="navbar-brand js-scroll-trigger" href="#page-top" style="color: blueviolet"><i class="fas fa-heartbeat"></i> HerBeat</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           Menu
-          <i class="fa fa-bars"></i>
+          <i class="fas fa-bars"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
@@ -54,15 +54,14 @@
               <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#loginModal">Login</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href='/signup'>Signup</a>
-              <!-- <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#signupModal">Signup</a> -->
+              <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#signupModal">Signup</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
     <!--login Modal-->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="form" aria-labelledby="loginModel" aria-hidden="true">
+    <div class="modal fade" id="loginModal" tabindex="-1" role="form" aria-labelledby="loginModal" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="form">
         <div class="modal-content">
           <div class="modal-header">
@@ -74,7 +73,7 @@
           <div class="modal-body">
           <!-- show any messages that come back with authentication -->
             <% if (message.length > 0) { %>
-                <div class="alert alert-danger"><%= message %></div>
+                <div class="alert alert-danger"><%= message %></div>   
             <% } %>
               <p style="text-align : center;">Login with Email and password</p>
               <form action="/login" method="post" id="loginForm">            
@@ -105,9 +104,9 @@
           <hr>
           <div class="btn-groups">
             <p>Or Login with</p> 
-            <button class="loginBtn loginBtn--facebook" type="submit"><a href="/auth/facebook" style="color: whitesmoke;"><i class="fa fa-facebook"></i></a></button>
-            <button class="loginBtn loginBtn--twitter" type="submit"><a href="/auth/twitter" style="color: whitesmoke;"><i class="fa fa-twitter"></i></a></button>
-            <button class="loginBtn loginBtn--google" type="submit"><a href="/auth/google" style="color: whitesmoke;"><i class="fa fa-google"></i></a></button>
+            <button class="loginBtn loginBtn--facebook" type="submit"><a href="/auth/facebook" style="color: whitesmoke;"><i class="fab fa-facebook-f"></i></a></button>
+            <button class="loginBtn loginBtn--twitter" type="submit"><a href="/auth/twitter" style="color: whitesmoke;"><i class="fab fa-twitter"></i></a></button>
+            <button class="loginBtn loginBtn--google" type="submit"><a href="/auth/google" style="color: whitesmoke;"><i class="fab fa-google"></i></a></button>
           </div>
           <hr>
           <!-- <p>Need an account? <a href="" class="new_user" data-toggle="modal" data-target="#signupModal">Signup</a></p> -->
@@ -119,7 +118,7 @@
 
 
     <!-- signUp Modal -->
-    <div class="modal fade" id="signupModal" tabindex="-1" role="form" aria-labelledby="signupModel" aria-hidden="true">
+    <div class="modal fade" id="signupModal" tabindex="-1" role="form" aria-labelledby="signupModal" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="form">
         <div class="modal-content">
           <div class="modal-header">
@@ -179,7 +178,7 @@
     </div>
     
     <!--about Modal-->
-    <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="aboutModel" aria-hidden="true">
+    <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="aboutModal" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -226,7 +225,7 @@
     </div>
 
     <!--mail Modal-->
-    <div class="modal fade" id="mailModal" tabindex="-1" role="form" aria-labelledby="mailModel" aria-hidden="true">
+    <div class="modal fade" id="mailModal" tabindex="-1" role="form" aria-labelledby="mailModal" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="form">
         <div class="modal-content">
           <div class="modal-header">
@@ -386,27 +385,27 @@
     <section class="contact bg-primary" id="contact">
       <div class="container">
         <h2>We
-          <i class="fa fa-heart"></i>
+          <i class="fas fa-heart"></i>
           to hear from you!</h2>
         <ul class="list-inline list-social">
           <li class="list-inline-item social-twitter">
             <a href="#">
-              <i class="fa fa-twitter"></i>
+              <i class="fab fa-twitter"></i>
             </a>
           </li>
           <li class="list-inline-item social-facebook">
             <a href="#">
-              <i class="fa fa-facebook"></i>
+              <i class="fab fa-facebook-f"></i>
             </a>
           </li>
           <li class="list-inline-item social-google-plus">
             <a href="#">
-              <i class="fa fa-google-plus"></i>
+              <i class="fab fa-google-plus-g"></i>
             </a>
           </li>
           <li class="list-inline-item social-google-plus">
             <a href="#" data-toggle="modal" data-target="#mailModal">
-              <i class="fa fa-envelope"></i>
+              <i class="fab fa-envelope"></i>
             </a>
           </li>
         </ul>

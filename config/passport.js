@@ -61,39 +61,50 @@ module.exports = function(passport) {
             console.log("Values from form : ", username, name, email, password1);
             // find a user whose email is the same as the forms email
             // we are checking to see if the user trying to login already exists
-            connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows) {
-                console.log('user searched.....');
-                if (err){
-                    console.log("Error while seraching user in db : ",err);
-                    return done(err);
+            connection.query("SELECT * FROM app_users WHERE username = ?",[username], function(err, row){
+                if(err){
+                    console.log("Error while serching app user : ", err);
                 }
-                if (rows.length) {
-                    console.log('loginMessage', 'That email is already registered.');
-                    return done(null, false, req.flash('loginMessage', 'That email is already registered.'));
+                if(!row.length){
+                    console.log("This username is not registered.");
+                    return done(null, false, req.flash('signupMessage','No such username is registered. Please enter username provided by us.'))
                 } else {
-                    // if there is no user with that email
-                    // create the user
-                    var newUserMysql = {
-                        username : username,
-                        name : name,
-                        email: email,
-                        provider: 'local',
-                        password: bcrypt.hashSync(password1, null, null)  // use the generateHash function in our user model
-                    };
+                    connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows) {
+                    console.log('user searched.....');
+                    if (err){
+                        console.log("Error while seraching user in db : ",err);
+                        return done(err);
+                    }
+                    if (rows.length) {
+                        console.log('That email is already registered.');
+                        return done(null, false, req.flash('signupMessage', 'That email is already registered.'));
+                    } else {
+                        // if there is no user with that email
+                        // create the user
+                        var newUserMysql = {
+                            username : username,
+                            name : name,
+                            email: email,
+                            provider: 'local',
+                            password: bcrypt.hashSync(password1, null, null)  // use the generateHash function in our user model
+                        };
 
-                    var insertQuery = "INSERT INTO users (username, name, email, password, provider ) values (?,?,?,?,?)";
+                        var insertQuery = "INSERT INTO users (username, name, email, password, provider ) values (?,?,?,?,?)";
 
-                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.name, newUserMysql.email, newUserMysql.password, newUserMysql.provider],function(err, rows) {
-                        // console.log("rows = "+rows);
-                        if(err){
-                            console.log("error",err);
-                        }
-                        newUserMysql.id = rows.insertId;
+                        connection.query(insertQuery,[newUserMysql.username, newUserMysql.name, newUserMysql.email, newUserMysql.password, newUserMysql.provider],function(err, rows) {
+                            // console.log("rows = "+rows);
+                            if(err){
+                                console.log("error",err);
+                            }
+                            newUserMysql.id = rows.insertId;
 
-                        return done(null, newUserMysql);
-                    });
+                            return done(null, newUserMysql);
+                        });
+                    }
+                }); 
                 }
             });
+           
         })
     );
 
@@ -112,7 +123,7 @@ module.exports = function(passport) {
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
         function(req, email, password, done) { // callback with email and password from our form
-        console.log('From login form : ', email, password)
+        // console.log('From login form : ', email, password);
             connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows){
                 console.log('user searched....');
                 if (err)
@@ -133,8 +144,7 @@ module.exports = function(passport) {
         })
     );
 
-    // var FACEBOOK_APP_ID = '2128017430559956';
-    // var FACEBOOK_APP_SECRET ='d311a2aee4167e4d1d52729af463c14e';
+    
     var fbOpts = {
         clientID: configAuth.facebookAuth.clientID,
         clientSecret: configAuth.facebookAuth.clientSecret,
@@ -183,8 +193,7 @@ module.exports = function(passport) {
         // })
       );
 
-    // var TWITTER_CONSUMER_KEY = '6bAkuJOS94Nuypa9TRWfBn7mS';
-    // var TWITTER_CONSUMER_SECRET = '8tbHjucyPWFPz97rr5vpp16uH2O2IuSHXICgiardtRfwuD3L0R' ;
+   
     passport.use('twitter', new TwitterStrategy({
         consumerKey: configAuth.twitterAuth.consumerKey,
         consumerSecret: configAuth.twitterAuth.consumerSecret,
@@ -229,9 +238,7 @@ module.exports = function(passport) {
       }
     ));
 
-    // var GOOGLE_CLIENT_ID = '875326343130-2bq6lilveu1a8atnnqnf61ch6mpsa36c.apps.googleusercontent.com',
-    // GOOGLE_CLIENT_SECRET = '8uUG-LxFWmL0JB8_jaJKDq3B',
-    // oauth_callback = "https://api.twitter.com/oauth/request_token";
+   
 
     passport.use('google', new GoogleStrategy({
         clientID: configAuth.googleAuth.clientID,
