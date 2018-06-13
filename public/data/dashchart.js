@@ -104,14 +104,6 @@ var config_hr = {
 	data: {
 	  labels: ["1", "2", "3", "4", "5", "6", "7"],
 	  datasets: [{
-		type: 'bar',
-		label: 'Daily Avg',
-		backgroundColor: chartColors.red,
-		data: dailyAvgData,
-		// xAxisID: 'x-axis-1',
-		borderColor: 'white',
-		borderWidth: 2
-	  }, {
 		type: 'line',
 		label: 'Hourly Avg',
 		borderColor: chartColors.green,
@@ -119,7 +111,6 @@ var config_hr = {
 		borderWidth: 1,
 		fill: false,
 		pointRadius: 1,
-		xAxisID: 'x-axis-2',
 		data: hourlyAvgData
 	  }]
 	},
@@ -133,15 +124,6 @@ var config_hr = {
 		mode: 'nearest',
 		intersect: true
 	  },
-	  scales: {
-		xAxes: [{	
-		  }, {
-		  id: 'x-axis-2',
-		  type: 'linear',
-		  position: 'top',
-		  display: true,
-		}]
-	  }
 	}
   };
 
