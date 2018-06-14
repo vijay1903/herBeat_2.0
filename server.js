@@ -16,8 +16,8 @@ var methodOverride = require('method-override');
 var app = express(); 
 
 var passport = require('passport');
-var flash    = require('connect-flash');
-var FacebookStrategy = require('passport-facebook');
+var flash = require('connect-flash');
+// var FacebookStrategy = require('passport-facebook');
 
 // app.set('view engine', 'ejs');
 // app.engine('html', require('ejs').renderFile);
@@ -56,7 +56,7 @@ app.engine('html', require('ejs').renderFile);
 // required for passport
 app.use(session({
 	secret: 'vijayvishwakarmahasdonethis',
-	resave: false,
+	resave: true,
 	saveUninitialized: true
  } )); // session secret
 app.use(passport.initialize());
@@ -66,8 +66,6 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 // routes ======================================================================
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
-
-
 require('./routes/routes.js')(app, conn);
 
 app.listen(port);

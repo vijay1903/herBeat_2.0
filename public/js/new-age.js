@@ -59,6 +59,16 @@ $(document).on("click",".new_user",function(){
   $('#signupModal').modal('show');
 });
 
+$(document).on("click","#flip2",function(){
+    $('#panel').slideUp('slow');
+  });
+
+
+$(document).on("click","#flip1",function(){
+    $('#panel').slideUp('slow');
+  });
+
+
 
 
 var favicon_images = [],

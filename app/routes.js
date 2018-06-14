@@ -23,34 +23,34 @@ module.exports = function(app, passport) {
 	// HOME PAGE (with login links) ========
 	// =====================================
 	app.get('/', function(req, res) {
-		res.render('../public/views/index.html', { message: req.flash('loginMessage') || req.flash('signupMessage') }); // load the index.html file
+		res.render('../public/views/index.html', { message: req.flash('loginMessage')}); // load the index.html file
 	});
 
 	// =====================================
 	// LOGIN ===============================
 	// =====================================
 	// show the login form
-	app.get('/login', function(req, res) {
+	// app.get('/login', function(req, res) {
 		
-		// render the page and pass in any flash data if it exists
-		res.render('../public/views/index.html', { message: req.flash('loginMessage') });
-	});
+	// 	// render the page and pass in any flash data if it exists
+	// 	res.render('../public/views/index.html', { message: req.flash('loginMessage') });
+	// });
 
 	// process the login form
 	app.post('/login', passport.authenticate('local-login', {
-            successRedirect : '/dashboard', // redirect to the secure dashboard section
-            failureRedirect : '/login', // redirect back to the login page if there is an error
+            // successRedirect : '/dashboard', // redirect to the secure dashboard section
+            failureRedirect : '/', // redirect back to the login page if there is an error
             failureFlash : true // allow flash messages
 		}),
         function(req, res) {
             console.log("hello");
 
-            if (req.body.remember) {
+            if (req.body.remember=="yes") {
               req.session.cookie.maxAge = 1000 * 60 * 3;
             } else {
               req.session.cookie.expires = false;
             }
-        res.redirect('/');
+        res.redirect('/dashboard');
     });
 
 	// =====================================
