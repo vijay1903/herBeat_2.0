@@ -80,15 +80,17 @@ for(var i = 1; i <= 125; i++ ){
 
 
 
-setInterval(function() {
-    $("link[rel='icon']").remove();
-    $("link[rel='shortcut icon']").remove();
-    $("head").append('<link rel="icon" href="../img/' + favicon_images[image_counter] + '" type="image/gif">');
+// setInterval(function() {
+//     $("link[rel='icon']").remove();
+//     $("link[rel='shortcut icon']").remove();
+//     $("head").append('<link rel="icon" href="../img/' + favicon_images[image_counter] + '" type="image/gif">');
     
-	// If last image then goto first image
-	// Else go to next image    
-	if(image_counter == favicon_images.length -1)
-        image_counter = 0;
-    else
-        image_counter++;
-}, 20);
+// 	// If last image then goto first image
+// 	// Else go to next image    
+// 	if(image_counter == favicon_images.length -1)
+//         image_counter = 0;
+//     else
+//         image_counter++;
+// }, 20);
+
+

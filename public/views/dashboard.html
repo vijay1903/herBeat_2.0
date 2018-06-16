@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> 
-<!-- ng-app="app"> -->
+<html lang="en" ng-app="myApp">
 
 <head>
     
@@ -49,22 +48,21 @@
 <body>
 
     <div id="wrapper">
-
+        <input type="hidden" id="user_username" ng-model="username"  value=<%=user.username%>>
+                                        <input type="hidden" id="user_id" ng-model="userId"  value=<%=user.id%>>
         <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" role="navigation" style="margin-bottom: 0">
             <a class="navbar-brand" style="color: blueviolet"><i class="fas fa-heartbeat"></i> HerBeat</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+            <div class="container"></div>
             <!-- /.navbar-header -->
-            <div class="container">
-            </div>
-            
-            <div class="btn-group">
+            <div class="btn-group" style="float: right;">
                 <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                      <i class="fas fa-user fa-fw"></i> 
                 </button>
+                
                 <div class="dropdown-menu dropdown-menu-right">
                     <button class="dropdown-item" type="button"><a href="/profile"><i class="fas fa-user fa-fw"></i> User Profile</a></button>
                     <button class="dropdown-item" type="button"><a href="/settings"><i class="fas fa-cogs fa-fw"></i> Settings</a></button>
@@ -89,10 +87,18 @@
                 <div class="tab-content" id="v-pills-tabContent">
                     <div class="tab-pane fade active show" id="v-pills-dash" role="tabcard" aria-labelledby="v-pills-dash-tab">
                         <br>
-                        <div class="container">
+                        <div class="container"  ng-controller="cardCtrl">
                             <div class="card border-primary">
                                 <div class="card-body text-primary">
-                                    <h4>Hi Vijay Vishwakarma</h4>
+                                    <div class="container">
+                                        <h4 style="text-transform: capitalize;">Welcome <%=user.full_name%>!
+                                        <form style="float: right;">
+                                             <!-- {{date}} -->
+                                            <input type="date" format="yyyy-MM-dd" ng-model="date" value="06/15/2018"><button ng-click="updateDate()" type="submit"><i class="fas fa-arrow-right"></i></button></input>
+                                        </form>
+                                        <!-- {{date | date:'yyyy-MM-dd'}} -->
+                                        </h4>
+                                    </div>                                    
                                 </div>
                             </div>
                             <br>
@@ -100,20 +106,33 @@
                             <!-- /.row -->
 
                             <div class="card-deck">
-                                <div class="card border-primary text-right">
-                                    <div class="card-header">Heartbeat</div>
-                                    <div class="card-body text-primary text-right">
-                                        <div class="row">
-                                            <div class="col-xs-3">
-                                                <i class="fas fa-heartbeat fa-5x"></i>
-                                            </div>
-                                            <div class="col-xs-9">
-                                                <h1>76</h1>
-                                                <div>05/09/2018 12:36:56</div>
-                                            </div>
-                                        </div>
+                                <div class="card border-primary text-left">
+                                    <div class="card-header">Goals</div>
+                                    <div class="card-body text-primary">
+                                        <p style="line-height: 0.5;" ng-model="goals_readiness">Readiness: {{goals_readiness}} / 10</p>
+                                        <p style="line-height: 0.5;" ng-model="goals_walk">Walk Target: {{goals_walk}}</p>
+                                        <p style="line-height: 0.5;" ng-model="goals_energy">Energy Level : {{goals_energy}} / 10</p>
+                                        <p style="line-height: 1.0;" ng-model="goals_date">Data from : {{goals_date}}</p>
                                     </div>
-                                    <a href="#v-pills-info">
+                                    <a href="#">
+                                        <div class="card-footer">
+                                            <span>View Details</span>
+                                            <span><i class="fas fa-arrow-circle-right"></i></span>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="card border-primary text-left">
+                                    <div class="card-header"><a href="#"><i class="fas fa-chart-bar"></i></a> Performance</div>
+                                    <div class="card-body text-primary text-left">
+                                        <p style="line-height: 0.5;" ng-model="per_sitting">Sitting Time: {{per_sitting}}</p>
+                                        <p style="line-height: 0.5;" ng-model="per_walking">Walking Time: {{per_walking}}</p>
+                                        <p style="line-height: 0.5;" ng-model="per_steps">Steps: {{per_steps}}</p>
+                                        <p style="line-height: 0.5;" ng-model="per_distance">Distance: {{per_distance}}</p>
+                                        <p style="line-height: 0.5;" ng-model="per_av_hr">Average Heart rate: {{per_av_hr}}</p>
+                                        <p style="line-height: 1.0;" ng-model="per_time">Data from : {{per_time}}</p>
+                                    </div>
+                                    <a href="#">
                                         <div class="card-footer">
                                             <span>View Details</span>
                                             <span ><i class="fas fa-arrow-circle-right"></i></span>
@@ -121,20 +140,17 @@
                                     </a>
                                 </div>
 
-                                <div class="card border-primary text-right">
-                                    <div class="card-header">Tasks</div>
-                                    <div class="card-body text-primary text-right">
-                                        <div class="row">
-                                            <div class="col-xs-3">
-                                                <i class="fas fa-tasks fa-5x"></i>
-                                            </div>
-                                            <div class="col-xs-9">
-                                                <h1> 2</h1>
-                                                <div>05/09/2018 12:36:56</div>
-                                            </div>
-                                        </div>
+
+
+                                <div class="card border-primary text-left">
+                                    <div class="card-header">EMA Response</div>
+                                    <div class="card-body text-primary">
+                                        <p>No of recorded EMA Responses</p>
+                                        <h1 ng-model="res_num" ng-model="res_den">{{res_num}}/{{res_den}}</h1>
+                                        <p ng-model="res_time">Data taken from : {{res_time}}</p>
+                                        <!-- <p ng-model="res_time2">Data taken from : {{res_time2}}</p> -->
                                     </div>
-                                    <a href="#v-pills-info">
+                                    <a href="#">
                                         <div class="card-footer">
                                             <span>View Details</span>
                                             <span><i class="fas fa-arrow-circle-right"></i></span>
@@ -143,46 +159,16 @@
                                 </div>
 
 
-                                <div class="card border-primary text-right">
-                                    <div class="card-header">Watch Status</div>
-                                    <div class="card-body text-primary text-right">
-                                        <div class="row">
-                                                <div class="col-xs-3">
-                                                    <i class="fas fa-battery-full fa-4x"></i>
-                                                </div>
-                                                <div class="col-xs-9 text-right">
-                                                    <div> <i class="fas fa-battery-half"></i> 25%</div>
-                                                    <div><i class="fab fa-bluetooth"></i> Connected</div>
-                                                    <div> <i class="fas fa-wifi"></i> Connected</div>
-                                                    <div>05/09/2018 12:36:56</div>
-                                            </div>
-                                        </div>
+                                <div class="card border-primary text-left">
+                                    <div class="card-header">Messages</div>
+                                    <div class="card-body text-primary">
+                                            <p>New Messages</p>
+                                            <h1 ng-model="msg_num">{{msg_num}}</h1>
+                                            <p ng-model="msg_date">{{msg_date}}</p>
                                     </div>
-                                    <a href="#v-pills-info">
+                                    <a href="#">
                                         <div class="card-footer">
-                                            <span>View Details</span>
-                                            <span><i class="fas fa-arrow-circle-right"></i></span>
-                                        </div>
-                                    </a>
-                                </div>
-
-
-                                <div class="card border-primary text-right">
-                                    <div class="card-header">New Videos</div>
-                                    <div class="card-body text-primary text-right">
-                                        <div class="row">
-                                            <div class="col-xs-3">
-                                                <i class="fas fa-video fa-4x"></i>
-                                            </div>
-                                            <div class="col-xs-9">
-                                                <h1>2</h1>
-                                                <div>05/09/2018 12:36:56</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a href="#videos">
-                                        <div class="card-footer">
-                                            <span>View videos</span>
+                                            <span>View messages</span>
                                             <span><i class="fas fa-arrow-circle-right"></i></span>
                                         </div>
                                     </a>
@@ -192,25 +178,35 @@
 
                         <br>
                         <!-- /.row -->
-                        <div class="container">
+                        <div class="container" ng-controller="chartCtrl">
                             <div class="card-deck">
 
                                 <div class="card border-primary">
                                     <div class="card-header">
-                                        <i class="fas fa-file-medical-alt"></i> Heartrate
+                                        <i class="fas fa-file-medical-alt"></i> Heartrate on
+                                        <select ng-model="heart_date" ng-options="item for item in dates"></select>
+                                        <button type="button" ng-click="getHR()"><i class="fas fa-arrow-right"></i></button>
+                                        <!-- <form>
+                                            <input type="date" ng-model="heart_date">
+                                            <button type="submit" ng-click="getHR()"><i class="fas fa-arrow-right"></i></button>
+                                        </form>("2018-02-13","2018-02-14") -->
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-text">
                                         <div style="width:100%;">
-                                            <canvas id="heartrateChart"></canvas>
+                                            <canvas id="line" class="chart chart-line" chart-data="data"
+                                            chart-labels="labels" chart-series="series" chart-options="options"
+                                            chart-click="onClick" chart-colors="chart_colors">
+                                            </canvas>
+                                            <!-- <canvas id="heartrateChart"></canvas> -->
                                         </div>
                                     </div>
                                     <div class="card-footer">
-                                        <button class="btn" id="randomizeData_hr">Randomize Data</button>
-                                        <!-- <button class="btn" id="addDataset_hr">Add Dataset</button>
-                                        <button class="btn" id="removeDataset_hr">Remove Dataset</button> -->
+                                        <!--<button class="btn" id="randomizeData_hr">Randomize Data</button>
+                                        <button class="btn" id="addDataset_hr">Add Dataset</button>
+                                        <button class="btn" id="removeDataset_hr">Remove Dataset</button>
                                         <button class="btn" id="addData_hr">Extend range</button>
-                                        <button class="btn" id="removeData_hr">Shrink range</button>
+                                        <button class="btn" id="removeData_hr">Shrink range</button>-->
                                         <button class="btn btn-warning">View Details <i class="fas fa-arrow-circle-right"></i></button>
                                     </div>
                                     <!-- /.card-body -->
@@ -221,17 +217,22 @@
                         <!-- /.row -->
 
                         <br>
-                        <div class="container">
+                        <div class="container" ng-controller="radarCtrl">
                             <div class="card-deck"> 
                                 <div class="card border-primary">
                                     <div class="card-header">
                                         <i class="fas fa-chart-area fa-fw"></i> Your Activities from EMA Response
+                                        <!-- <select ng-model="activity_date" ng-options="item for item in dates"></select> -->
+                                        <button type="button" ng-click="getACT()"><i class="fas fa-arrow-right"></i></button>
                                     </div>
 
                                     <!-- /.card-header -->
                                     <div class="card-text">
                                             <div style="width:100%;">
-                                                <canvas id="your-activities"></canvas>
+                                                <!-- <canvas id="your-activities"></canvas> -->
+                                                <canvas id="radar" class="chart chart-radar"
+                                                chart-data="data" chart-options="options" chart-labels="labels" chart-colors="chart_colors">
+                                                </canvas>
                                             </div>
                                         </div>
                                         <div class="card-footer">
@@ -652,7 +653,7 @@
     <!-- /#wrapper -->
 
     <!-- <script src="../data/watch.js"></script> -->
-    <script src="../data/dashchart.js"></script>
+    <!-- <script src="../data/dashchart.js"></script> -->
     <!-- jQuery -->
     <script src="../vendor/jquery/jquery.min.js"></script>
     
@@ -660,7 +661,12 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="../vendor/bootstrap4/js/bootstrap.min.js"></script>
 
-   
+    <!--Angular scripts-->
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src = "http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-sanitize.js"></script>
+    <script src="../angular-chart.js/angular-chart.min.js"></script>
     
 
     <!-- Metis Menu Plugin JavaScript -->
@@ -690,6 +696,9 @@
 
      <!-- Custom scripts for this template -->
     <script src="js/new-age.js"></script>
+
+    <!-- angular controller javascript -->
+    <script src="./controllers/dashboardController.js"></script>
 	
 
 </body>

@@ -33,9 +33,9 @@
 
 <% if (message.length > 0) { %>
 <script>             
-  $(document).ready(function(){
-          $("#panel").slideToggle("slow");
-  });
+  $(window).on('load',function(){
+        $('#loginModal').modal('show');
+    });
 </script>
 <% } %>
 
