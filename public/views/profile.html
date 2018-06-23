@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>User Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="../img/logo.png" type="image/gif">
+    <!-- Bootstrap Core CSS -->
+    <link href="../vendor/bootstrap4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendor/bootstrap4/css/bootstrap-grid.min.css" rel="stylesheet">
+    <link href="../vendor/bootstrap4/css/bootstrap-reboot.min.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="../vendor/font-awesome/css/fontawesome-all.css" rel="stylesheet" type="text/css">
+
+    <script></script>
+</head>
+<body>
+        <h1 style="text-align: center"><a href="/dashboard"><i class="fas fa-home"></i></a> User Profile</h1>
+        <div class="container-fluid">
+            <h4>Username : <%=user.username%></h4>
+            <h4>Full name : <%=user.full_name%></h4>
+            <h4>User id : <%=user.id%></h4>
+            <h4>User Email : <%=user.email%></h4>
+        </div>
+</body>
+</html>

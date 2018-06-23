@@ -87,11 +87,21 @@ module.exports = function(app, passport) {
 	// Stat SECTION =========================
 	// =====================================
 	
-	app.get('/statistics',isLoggedIn, function(req, res) {
+	app.get('/profile',isLoggedIn, function(req, res) {
 		if(!isLoggedIn){
 			res.redirect('/');
 		} else {
-			res.render('../public/views/statistics.html', {
+			res.render('../public/views/profile.html', {
+			user : req.user // get the user out of session and pass to template
+		});
+		}
+	});
+
+	app.get('/settings',isLoggedIn, function(req, res) {
+		if(!isLoggedIn){
+			res.redirect('/');
+		} else {
+			res.render('../public/views/settings.html', {
 			user : req.user // get the user out of session and pass to template
 		});
 		}
@@ -128,6 +138,12 @@ module.exports = function(app, passport) {
 	app.get('/forgotpassword', function(req, res) {
 		res.render('../public/views/forgotpassword.html'); // load the index.html file
 	});
+
+	// app.post('/setpassword', {
+	// 	successRedirect : '/', // redirect to the home page for login
+	// 	failureRedirect : '/forgotpassword', // redirect back to the forgot password page if there is an error
+	// 	failureFlash : true // allow flash messages
+	// });
 
 
 	// =====================================

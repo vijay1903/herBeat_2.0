@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="../img/logo.png" type="image/gif">
+    <!-- Bootstrap Core CSS -->
+    <link href="../vendor/bootstrap4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendor/bootstrap4/css/bootstrap-grid.min.css" rel="stylesheet">
+    <link href="../vendor/bootstrap4/css/bootstrap-reboot.min.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="../vendor/font-awesome/css/fontawesome-all.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <h1 style="text-align: center"><a href="/dashboard"><i class="fas fa-home"></i></a>User Settings</h1>
+    <h2>Change Password</h2>
+    <div class="container">
+        <form class="form" method="POST" action="/changepassword">
+            <div class="form-group"> 
+                <label for="current_password">Current Password</label>
+                <input class="form-control" type="password" id="current_password" name="current_password">
+            </div>
+               
+            <div class="form-group">
+                <label for="new_password">New Password</label>
+                <input class="form-control" type="password" id="new_password" name="new_password">
+            </div>
+            <div class="form-group">
+                <label for="confirm_new_password">Re-enter new Password</label>
+                <input class="form-control" type="password" id="confirm_new_password" name="confirm_new_password">
+                <span id="confirm_message"></span>
+            </div>
+                
+            <button class="btn btn-danger" type="submit">Change Password</button>
+            <button class="btn btn-secondary" type="reset">Reset</button>
+        </form>
+    </div>  
+</body>
+<script>
+var check = function() {
+    if (document.getElementById('new_password').value == document.getElementById('confirm_new_password').value) {
+            document.getElementById('confirm_message').style.color = 'green';
+            document.getElementById('confirm_new_password').style.borderColor = 'green';
+            document.getElementById('confirm_message').innerHTML = '<i class="fa fa-check"></i>Passwords match.';
+    } else {
+    document.getElementById('confirm_message').style.color = 'red';
+    document.getElementById('confirm_new_password').style.borderColor = 'red';
+    document.getElementById('confirm_message').innerHTML = '<i class="fa fa-times"></i>Passwords do not match!!';
+    }
+}
+</script>
+</html>

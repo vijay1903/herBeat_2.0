@@ -94,3 +94,36 @@ for(var i = 1; i <= 125; i++ ){
 // }, 20);
 
 
+$('#loginModal').on('shown.bs.modal', function() {
+    $(this).find('input:first').focus();
+});
+
+$('#signupModal').on('shown.bs.modal', function() {
+    $(this).find('input:first').focus();
+});
+
+$('userBtn').on('click',function(){
+  $(this).toggle('aria-expanded:true');
+});
+
+$('#view_goals').on('click', function(){
+  $('#v-pills-info-tab').click();
+})
+$('#view_activities').on('click', function(){
+  $('#v-pills-info-tab').click();
+})
+$('#view_response').on('click', function(){
+  $('#v-pills-responses-tab').click();
+})
+$('#view_messages').on('click', function(){
+  $('#v-pills-messages-tab').click();
+})
+$('#view_heart').on('click', function(){
+  $('#v-pills-info-tab').click();
+})
+$('#view_radar').on('click', function(){
+  $('#v-pills-info-tab').click();
+})
+$('#view_goals_1').on('click', function(){
+  $('#v-pills-info-tab').click();
+})
