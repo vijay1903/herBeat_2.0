@@ -36,7 +36,7 @@ module.exports = function(app, conn) {
     });
 
     app.get('/api/gettotalemas', function(req, res) {
-        conn.query('select distinct count(*) as count from ema_schedule_perday where username=? and DATE(activity_time) BETWEEN ? AND ? order by DATE(activity_time) desc;'
+        conn.query('select distinct count(*) as count from ematime_notification_fired where username=? and DATE(notification_fired_time) BETWEEN ? AND ? order by DATE(notification_fired_time) desc;'
         , [req.query.username, req.query.start_date, req.query.end_date], function (error, result) {
             if (error)
             {
@@ -99,72 +99,74 @@ module.exports = function(app, conn) {
         });
     });
 
-    app.get('/api/getuseractivities', function(req, res) {
-        conn.query('select user_selected_activity as activity, count(*) as count from ema_response where username = ? and DATE(activity_time) BETWEEN ? AND ? group by user_selected_activity;'
-        , [req.query.username, req.query.start_date, req.query.end_date], function (error, result) {
-            if (error)
-            {
-                console.log(error);
-            }
-            else
-            {
-                res.json(result);
-                console.log(result);
-                console.log('Fetched ema user activity from DB.');
-            }
-        });
-    });
 
-    app.get('/api/getuserfeelings', function(req, res) {
-        conn.query('select user_feelings as feeling, count(*) as count from ema_response where username = ? and DATE(activity_time) BETWEEN ? AND ? group by user_feelings;'
-        , [req.query.username, req.query.start_date, req.query.end_date], function (error, result) {
-            if (error)
-            {
-                console.log(error);
-            }
-            else
-            {
-                res.json(result);
-                console.log(result);
-                console.log('Fetched feelings from DB.');
-            }
-        });
-    });
 
-    app.get('/api/getuserlocations', function(req, res) {
-        conn.query('select user_curr_location as location, count(*) as count from ema_response where username = ? and DATE(activity_time) BETWEEN ? AND ? group by user_curr_location;'
-        , [req.query.username, req.query.start_date, req.query.end_date], function (error, result) {
-            if (error)
-            {
-                console.log(error);
-            }
-            else
-            {
-                res.json(result);
-                console.log(result);
-                console.log('Fetched location from DB.');
-            }
-        });
-    });
+    // app.get('/api/getuseractivities', function(req, res) {
+    //     conn.query('select user_selected_activity as activity, count(*) as count from ema_response where username = ? and DATE(activity_time) BETWEEN ? AND ? group by user_selected_activity;'
+    //     , [req.query.username, req.query.start_date, req.query.end_date], function (error, result) {
+    //         if (error)
+    //         {
+    //             console.log(error);
+    //         }
+    //         else
+    //         {
+    //             res.json(result);
+    //             console.log(result);
+    //             console.log('Fetched ema user activity from DB.');
+    //         }
+    //     });
+    // });
 
-    app.get('/api/getusercompany', function(req, res) {
-        conn.query('select user_company as company, count(*) as count from ema_response where username = ? and DATE(activity_time) BETWEEN ? AND ? group by user_company;'
-        , [req.query.username, req.query.start_date, req.query.end_date], function (error, result) {
-            if (error)
-            {
-                console.log(error);
-            }
-            else
-            {
-                res.json(result);
-                console.log(result);
-                console.log('Fetched company from DB.');
-            }
-        });
-    });
+    // app.get('/api/getuserfeelings', function(req, res) {
+    //     conn.query('select user_feelings as feeling, count(*) as count from ema_response where username = ? and DATE(activity_time) BETWEEN ? AND ? group by user_feelings;'
+    //     , [req.query.username, req.query.start_date, req.query.end_date], function (error, result) {
+    //         if (error)
+    //         {
+    //             console.log(error);
+    //         }
+    //         else
+    //         {
+    //             res.json(result);
+    //             console.log(result);
+    //             console.log('Fetched feelings from DB.');
+    //         }
+    //     });
+    // });
+
+    // app.get('/api/getuserlocations', function(req, res) {
+    //     conn.query('select user_curr_location as location, count(*) as count from ema_response where username = ? and DATE(activity_time) BETWEEN ? AND ? group by user_curr_location;'
+    //     , [req.query.username, req.query.start_date, req.query.end_date], function (error, result) {
+    //         if (error)
+    //         {
+    //             console.log(error);
+    //         }
+    //         else
+    //         {
+    //             res.json(result);
+    //             console.log(result);
+    //             console.log('Fetched location from DB.');
+    //         }
+    //     });
+    // });
+
+    // app.get('/api/getusercompany', function(req, res) {
+    //     conn.query('select user_company as company, count(*) as count from ema_response where username = ? and DATE(activity_time) BETWEEN ? AND ? group by user_company;'
+    //     , [req.query.username, req.query.start_date, req.query.end_date], function (error, result) {
+    //         if (error)
+    //         {
+    //             console.log(error);
+    //         }
+    //         else
+    //         {
+    //             res.json(result);
+    //             console.log(result);
+    //             console.log('Fetched company from DB.');
+    //         }
+    //     });
+    // });
 
     app.get('/api/getallsetgoals', function(req, res) {
-        conn.query('select sum(user_walk_target) as set_goal, DATE(activity_time) as set_date from set_goals where  username = ? and DATE(activity_time) BETWEEN ? AND ? group by DATE(activity_time);'
+        conn.query('select sum(user_walk_target) as set_goal, avg(user_current_energy) as energy, avg(user_readiness_level) as readiness, DATE(activity_time) as set_date from set_goals where  username = ? and DATE(activity_time) BETWEEN ? AND ? group by DATE(activity_time);'
         , [req.query.username, req.query.start_date, req.query.end_date], function (error, result) {
             if (error)
             {
@@ -178,6 +180,7 @@ module.exports = function(app, conn) {
             }
         });
     });
+
 
     app.get('/api/getallgetgoals', function(req, res) {
         conn.query('select round((TIME_TO_SEC(max(user_walking_duration))/60),2) as get_goal, DATE(activity_time) as get_date from physical_activity where username = ? and DATE(activity_time) BETWEEN ? AND ? group by DATE(activity_time);'
@@ -228,7 +231,31 @@ module.exports = function(app, conn) {
         });
     });
 
-
+    app.get('/api/checkpassword', function(req, res) {
+        conn.query('select * from users where username = ?',[req.query.username]
+        , function (error, result) {
+            if (error)
+            {
+                console.log(error);
+            }
+            else
+            {   
+                if(result.length){
+                    if(bcrypt.compareSync(req.query.password, result[0].password)) {
+                        var answer = true;
+                        console.log('Password matched.');
+                    } 
+                } else {
+                    var answer = false;
+                    console.log('Password no match.');
+                }
+                
+                res.send(answer);
+                console.log(answer);
+                console.log('Searched username from users table.');
+            }
+        });
+    });
 
 
 

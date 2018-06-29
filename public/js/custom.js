@@ -107,12 +107,15 @@ $('userBtn').on('click',function(){
 });
 
 $('#view_goals').on('click', function(){
-  $('#v-pills-info-tab').click();
+  $('#v-pills-tasks-tab').click();
 })
 $('#view_activities').on('click', function(){
   $('#v-pills-info-tab').click();
 })
 $('#view_response').on('click', function(){
+  $('#v-pills-responses-tab').click();
+})
+$('#view_response_1').on('click', function(){
   $('#v-pills-responses-tab').click();
 })
 $('#view_messages').on('click', function(){
@@ -127,3 +130,80 @@ $('#view_radar').on('click', function(){
 $('#view_goals_1').on('click', function(){
   $('#v-pills-info-tab').click();
 })
+$('#view_goals_2').on('click', function(){
+  $('#v-pills-info-tab').click();
+})
+
+
+// date range picker start
+// $(function() {
+// $("#e1").daterangepicker({
+//   presetRanges: [{
+//       text: 'Today',
+//       dateStart: function() { return moment().set({hour:0,minute:0,second:0,millisecond:0}) },
+//       dateEnd: function() { return moment().set({hour:0,minute:0,second:0,millisecond:0}) }
+//   }, {
+//       text: 'Yesterday',
+//       dateStart: function() { return moment().subtract(1, 'days').set({hour:0,minute:0,second:0,millisecond:0}) },
+//       dateEnd: function() { return moment().subtract(1, 'days').set({hour:0,minute:0,second:0,millisecond:0}) }
+//   }, {
+//       text: 'Last 7 Days',
+//       dateStart: function() { return moment().subtract(6, 'days').set({hour:0,minute:0,second:0,millisecond:0}) },
+//       dateEnd: function() { return moment().set({hour:0,minute:0,second:0,millisecond:0}) }
+//   },
+//   {
+//     text: 'This Month',
+//     dateStart: function() { return moment().startOf('month').set({hour:0,minute:0,second:0,millisecond:0}) },
+//     dateEnd: function() { return moment().set({hour:0,minute:0,second:0,millisecond:0}) }
+//   }, {
+//       text: 'Last Month',
+//       dateStart: function() { return moment().subtract(1, 'months').startOf('month').set({hour:0,minute:0,second:0,millisecond:0}) },
+//       dateEnd: function() { return moment().subtract(1, 'months').endOf('month').set({hour:0,minute:0,second:0,millisecond:0}) }
+//   }],
+//   applyOnMenuSelect: false,
+//   datepickerOptions: {
+//       minDate: null,
+//       maxDate: 0
+//   }
+// });
+// });
+// date range picker end
+
+
+// chart colors
+// window.chartColors = {
+// 	red: 'rgb(255, 99, 132)',
+// 	orange: 'rgb(255, 159, 64)',
+// 	yellow: 'rgb(255, 205, 86)',
+// 	green: 'rgb(75, 192, 192)',
+// 	blue: 'rgb(54, 162, 235)',
+// 	purple: 'rgb(153, 102, 255)',
+// 	grey: 'rgb(201, 203, 207)'
+// };
+// var color = Chart.helpers.color;
+// window.onload = function() {
+//   var ctx = document.getElementById('bar').getContext('2d');
+//   window.myBar = new Chart(ctx, {
+//     type: 'bar',
+//     data: {datasets: [{
+//       backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+//       borderColor: window.chartColors.red,
+//       borderWidth: 1}]}
+//   });
+
+// };
+
+//adding a loader
+
+var myVar;
+
+function myFunction() {
+    // document.getElementById("overlay").style.display = "block";
+    myVar = setTimeout(showPage, 50);
+}
+
+function showPage() {
+  document.getElementById("overlay").style.display = "none";
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("dashboard").style.display = "initial";
+}

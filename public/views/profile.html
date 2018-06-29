@@ -13,15 +13,48 @@
     <!-- Custom Fonts -->
     <link href="../vendor/font-awesome/css/fontawesome-all.css" rel="stylesheet" type="text/css">
 
-    <script></script>
+    <style>
+        #profile{
+            margin: 100px;
+            padding : 20px;
+            box-shadow: 1px 1px 50px silver;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
-        <h1 style="text-align: center"><a href="/dashboard"><i class="fas fa-home"></i></a> User Profile</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" role="navigation" style="margin-bottom: 0">
+            <a class="navbar-brand" style="color: black"><a href="/dashboard"><i class="fas fa-arrow-left"></i></a><img src="../img/logo.png" alt="Herbeat logo" style="width: 30px; height: 30px;"> HerBeat</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="container">
+                
+            </div>            
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user fa-fw"></i> 
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupDrop1">
+                    <a class="dropdown-item" href="/dashboard" ng-show="profile_visible"><i class="fas fa-dash fa-tachometer-alt"></i> Dashboard</a>
+                    <a class="dropdown-item" href="/profile"><i class="fas fa-user fa-fw"></i> User Profile</a>
+                    <a class="dropdown-item" href="/settings"><i class="fas fa-cogs fa-fw"></i> Settings</a>
+                    <a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
+                </div>
+            </div>
+        </nav>
+    <div class="container" id="profile">
+        <h1 style="text-align: center"> User Profile</h1>
         <div class="container-fluid">
             <h4>Username : <%=user.username%></h4>
             <h4>Full name : <%=user.full_name%></h4>
             <h4>User id : <%=user.id%></h4>
             <h4>User Email : <%=user.email%></h4>
         </div>
+    </div>
+<!-- jQuery -->
+<script src="../vendor/jquery/jquery.min.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="../vendor/bootstrap4/js/bootstrap.min.js"></script>
 </body>
 </html>

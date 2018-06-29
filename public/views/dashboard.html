@@ -10,7 +10,7 @@
     <meta name="author" content="Vijay Vishwakarma">
     <link rel="icon" href="../img/logo.png" type="image/gif">
     <title>HerBeat</title>
-
+   
     
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap4/css/bootstrap.min.css" rel="stylesheet">
@@ -21,13 +21,16 @@
     <link href="../vendor/font-awesome/css/fontawesome-all.css" rel="stylesheet" type="text/css">
 
      <!-- Chart.js Javascript -->
-    <script src="../charts/Chart.bundle.js"></script>
+    <script src="../vendor/charts/Chart.js"></script>
     <!-- <script src="../charts/utils.js"></script> -->
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/custom.css">
     
-
+    <!-- for date range -->
+        <!-- <link href="../vendor/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet">
+        <link href="../vendor/jquery-ui-daterangepicker/jquery.comiseo.daterangepicker.css" rel="stylesheet">
+     -->
     
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -39,22 +42,27 @@
 
 </head>
 
-<body>
-
-    <div id="wrapper">
-        <input type="hidden" id="user_username" ng-model="username"  value=<%=user.username%>>
-        <input type="hidden" id="user_id" ng-model="userId"  value=<%=user.id%>>
+<body  onload="myFunction()"  style="margin:0;">
+    
+    <div id="Wrapper">
+        <input type="hidden" id="user_username" ng-model="username" value=<%=user.username%>>
+        <input type="hidden" id="user_email" ng-model="email" value=<%=user.email%>>
+        <input type="hidden" id="user_id" ng-model="userId" value=<%=user.id%>>
         <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" role="navigation" style="margin-bottom: 0">
             <a class="navbar-brand" style="color: black"><img src="../img/logo.png" alt="Herbeat logo" style="width: 30px; height: 30px;"> HerBeat</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="container"></div>
-            <div class="col-lg-4" ng-controller="navCtrl">
-                From <input type="date" id="startDate" ng-model="start" style="padding-right: 5px; width:160px;" ng-change="date_change()">
-                 to <input type="date" id="endDate" ng-model="end" style="padding-right: 5px; width:160px;" ng-change="date_change()">
+            <div class="container">
+                
+            </div>
+            <div class="col-auto" ng-controller="navCtrl">
+                From <input type="date" id="startDate" ng-model="start" style="padding-right: 5px; width:160px;">
+                 to <input type="date" id="endDate" ng-model="end" style="padding-right: 5px; width:160px;">
+                 <button type="submit" ng-click="date_change()"><i class="fas fa-search"></i></button>
                  <!-- {{start | date :  "dd.MM.yyyy hh:mm a"}} and {{end | date :  "dd.MM.yyyy hh:mm a"}} -->
+                 <!-- <input id="e1" name="e1"> -->
             </div>
             <!-- /.navbar-header -->                
             <div class="btn-group" role="group">
@@ -68,8 +76,9 @@
                 </div>
             </div>
         </nav>
-
-        <div class="row">
+        <div id="loader"></div>
+        <div id="overlay"></div>
+        <div class="row" id="dashboard"  style="display:none;" class="animate-bottom">
             <div class="sidenav" id="navbarSupportedContent">
                 <div class="col-auto collapse navbar-collapse" id="navbarSupportedContent">
                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -101,7 +110,9 @@
 
                             <div class="card-deck">
                                 <div class="card border-primary text-left">
-                                    <div class="card-header"><span class="badge badge-success" ng-model="count">{{count}}</span> Goals</div>
+                                    <div class="card-header">
+                                        <span class="badge badge-success" style="font-size: 16px;" ng-model="count">{{count}}</span> Goals
+                                    </div>
                                     <div class="card-body text-primary" style="font-size: 16px;">
                                         <p ng-model="max">Max: {{max}} mins.</p>
                                         <p ng-model="avg">Avg: {{avg}} mins.</p>
@@ -173,9 +184,10 @@
 
 
                                 <div class="card border-primary text-left">
-                                    <div class="card-header"><span class="badge badge-success" ng-model="msg_num">{{msg_num}}</span> Messages</div>
+                                    <div class="card-header"><span class="badge badge-success" style="font-size: 16px;" ng-model="msg_num">{{msg_num}}</span> Messages</div>
                                     <div class="card-body text-primary" style="font-size: 12px; padding:2px">   
                                         <div style="overflow: auto; height: 130px;">
+                                            <center> Most recent {{(msg_num >= 5)?5:msg_num}} messages</center>
                                             <table class="table table-responsive">
                                                 <thead style="position:relative;top:0px;">
                                                     <tr  style="padding-top: 2px; padding-bottom: 2px;">
@@ -212,22 +224,40 @@
 
                                 <div class="card border-primary">
                                     <div class="card-header">
-                                        <i class="fas fa-file-medical-alt"></i> Heartrate <input type="range" max="8" min="1" ng-model="heart_scale">
+                                        <i class="fas fa-file-medical-alt"></i> Heartrate 
+                                        <ul class="pagination float-right">
+                                            <li class="page-item">
+                                                <a class="page-link" ng-click="prevPage()" aria-label="Previous" ng-disabled="prev">
+                                                <span aria-hidden="true">&laquo;</span>
+                                                <span class="sr-only">Previous</span>
+                                                </a>
+                                            </li>
+                                            <li class="page-item" ng-repeat="x in heart_options"><a class="page-link">{{x}}</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" ng-click="nextPage()" aria-label="Next" ng-disabled="next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                                <span class="sr-only">Next</span>
+                                                </a>
+                                            </li>
+                                            <li class="page-item">
+                                                <select class="form-control" ng-model="heart_range">
+                                                    <option>Monthly</option>
+                                                    <option>Weekly</option>
+                                                    <option>Daily</option>
+                                                </select>
+                                            </li>
+                                        </ul>
                                     </div>
                                     <div class="card-text">
                                         <div class="chartWrapper">
                                             <div class="chartAreaWrapper" height="400">
                                                 <canvas id="bar" class="chart chart-bar" chart-data="data"
-                                                chart-labels="labels" chart-series="series" chart-options="options_bar" chart-colors="chart_color"
-                                                ng-model="heart_width" ng-model="heart_scale" width="{{heart_width}}" height="600">
+                                                chart-labels="labels" chart-series="series" chart-options="options" 
+                                                chart-colors= "chart_color"                                               
+                                                ng-model="heart_width" ng-model="heart_scale" width="3000" height="600">
                                                 </canvas>
                                             </div>
                                         </div>
-                                        <!-- <div style="overflow-x: scroll;">
-                                            <canvas id="bar" class="chart chart-bar" chart-data="data"
-                                            chart-labels="labels" chart-series="series" chart-options="options_bar" chart-colors="chart_color">
-                                            </canvas>
-                                        </div> -->
                                     </div>
                                     <div class="card-footer">
                                         <p ng-model="heart_start_date" ng-model="heart_end_date">{{heart_start_date | date : "MMM dd"}} to {{heart_end_date | date : "MMM dd"}}</p>
@@ -239,49 +269,109 @@
                         <!-- /.row -->
 
                         <br>
-                        <div class="container" ng-controller="radarCtrl">
-                            <div class="card-deck"> 
-                                <div class="card border-primary">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-area fa-fw"></i> Your Activities from EMA Response
-                                        <!-- <select ng-model="activity_date" ng-options="item for item in dates"></select> -->
-                                        <!-- <button type="button" ng-click="getACT()"><i class="fas fa-arrow-right"></i></button> -->
-                                    </div>
-
-                                    <!-- /.card-header -->
-                                    <div class="card-text">
-                                        <div class="chartWrapperHorizontal">
-                                                <div class="chartAreaWrapperHorizontal">
-                                                   
-                                                        
-                                                            <canvas id="radar_act" class="chart chart-radar"
-                                                            chart-data="data_act" chart-labels="labels_act" style="width:300px; height:600px" chart-colors="chart_colors_act">
-                                                            </canvas>
-                                                        
-                                                        
-                                                            <canvas id="radar_feel" class="chart chart-radar"
-                                                            chart-data="data_feel" chart-labels="labels_feel" style="width:300px; height:600px" chart-colors="chart_colors_feel">
-                                                            </canvas>
-                                                        
-                                                        
-                                                            <canvas id="radar_loc" class="chart chart-radar"
-                                                            chart-data="data_loc" chart-labels="labels_loc" style="width:300px; height:600px" chart-colors="chart_colors_loc">
-                                                            </canvas>
-                                                        
-                                                        
-                                                            <canvas id="radar_comp" class="chart chart-radar"
-                                                            chart-data="data_comp" chart-labels="labels_comp" style="width:300px; height:600px" chart-colors="chart_colors_comp">
-                                                            </canvas>
-                                                        
-
-                                                </div>
+                        <div class="container" ng-controller="cardCtrl">
+                            <div class="card  border-primary">
+                                <div class="card-header"><i class="fas fa-chart-area fa-fw"></i> Your Activities from EMA Response
+                                    <ul class="pagination float-right">
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                            <span class="sr-only">Previous</span>
+                                            </a>
+                                        </li>
+                                        <li class="page-item" ng-repeat="x in activities_options"><a class="page-link" href="#">{{x}}</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">Next</span>
+                                            </a>
+                                        </li>
+                                        <li class="page-item">
+                                            <select class="form-control">
+                                                <option>Monthly</option>
+                                                <option>Weekly</option>
+                                                <option>Daily</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <div class="card-deck">
+                                        <div class="card border-primary">
+                                            <div class="card-header">
+                                                Activities
+                                            </div>
+                                            <div class="card-body">
+                                                <canvas id="radar_act" class="chart chart-radar"
+                                                chart-data="data_act" chart-labels="labels_act" style="width:300px; height:600px" chart-colors="chart_colors_act">
+                                                </canvas>
                                             </div>
                                         </div>
-                                        <div class="card-footer">
-                                            <p ng-model="activity_start_date" ng-model="activity_end_date">{{activity_start_date | date : "MMM dd"}} to {{activity_end_date | date : "MMM dd"}}</p>
-                                            <button class="btn btn-warning" id='view_radar'>View Details <i class="fas fa-arrow-circle-right"></i></button>
+                                        <div class="card border-primary">
+                                            <div class="card-header">
+                                                Feelings
+                                            </div>
+                                            <div class="card-body">
+                                                <canvas id="radar_feel" class="chart chart-radar"
+                                                chart-data="data_feel" chart-labels="labels_feel" style="width:300px; height:600px" chart-colors="chart_colors_feel">
+                                                </canvas>
+                                            </div>
                                         </div>
-                                        <!-- /.card-body -->
+                                    </div>
+                                    <br>
+                                    <div class="card-deck">
+                                        <div class="card border-primary">
+                                            <div class="card-header">
+                                                Location
+                                            </div>
+                                            <div class="card-body">
+                                                <canvas id="radar_loc" class="chart chart-radar"
+                                                chart-data="data_loc" chart-labels="labels_loc" style="width:300px; height:600px" chart-colors="chart_colors_loc">
+                                                </canvas>
+                                            </div>
+                                        </div>
+                                        <div class="card border-primary">
+                                            <div class="card-header">
+                                                Company
+                                            </div>
+                                            <div class="card-body">
+                                                <canvas id="radar_comp" class="chart chart-radar"
+                                                chart-data="data_comp" chart-labels="labels_comp" style="width:300px; height:600px" chart-colors="chart_colors_comp">
+                                                </canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="card-deck">
+                                        <div class="card border-primary">
+                                            <div class="card-header">
+                                                Food : Unhealthy
+                                            </div>
+                                            <div class="card-body">
+                                                    <canvas id="radar_unhealthy" class="chart chart-radar"
+                                                    chart-data="data_unhealthy" chart-labels="labels_unhealthy" style="width:300px; height:600px" chart-colors="chart_colors_unhealthy">
+                                                    </canvas>
+                                            </div>
+                                        </div>
+                                        <div class="card border-primary">
+                                            <div class="card-header">
+                                                Food : Healthy
+                                            </div>
+                                            <div class="card-body">
+                                                    <canvas id="radar_healthy" class="chart chart-radar"
+                                                    chart-data="data_healthy" chart-labels="labels_healthy" style="width:300px; height:600px" chart-colors="chart_colors_healthy">
+                                                    </canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <p style="line-height: 1.0;" ng-model="card_start_date" ng-model="card_end_date">{{card_start_date | date : "MMM dd"}} to {{card_end_date | date : "MMM dd"}}</p>
+                                        
+                                        
+                                    <button class="btn btn-sm btn-primary" id="view_response_1">
+                                        View Details <i class="fas fa-arrow-circle-right"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -295,14 +385,36 @@
 
                                 <div class="card border-primary">
                                     <div class="card-header">
-                                        <i class="fas fa-chart-pie fa-fw"></i> Activity Chart  <input type="range" max="8" min="1" ng-model="horizon_scale">
+                                        <i class="fas fa-chart-pie fa-fw"></i> Activity Chart 
+                                        <ul class="pagination float-right">
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                                <span class="sr-only">Previous</span>
+                                                </a>
+                                            </li>
+                                            <li class="page-item" ng-repeat="x in bar_options"><a class="page-link" href="#">{{x}}</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                                <span class="sr-only">Next</span>
+                                                </a>
+                                            </li>
+                                            <li class="page-item">
+                                                <select class="form-control">
+                                                    <option>Monthly</option>
+                                                    <option>Weekly</option>
+                                                    <option>Daily</option>
+                                                </select>
+                                            </li>
+                                        </ul>
                                     </div>
                                     <div class="card-body">
                                         <div class="chartWrapperHorizontal">
-                                            <div class="chartAreaWrapperHorizontal">
-                                                <canvas id="bar" class="chart-horizontal-bar" chart-data="data"
-                                                chart-labels="labels" chart-series="series" chart-options="options" chart-colors="chart_color"
-                                                ng-model="horizon_height" ng-model="horizon_scale" height="{{horizon_height}}" width="1050">
+                                            <div class="chartAreaWrapperHorizontal" style="height:1000px;">
+                                                <canvas id="horizon_bar" class="chart-horizontal-bar" chart-data="data_bar"
+                                                chart-labels="labels_bar" chart-series="series_bar" chart-options="options_bar" chart-colors="chart_color_bar"
+                                                width="1050">
                                                 </canvas>
                                             </div>
                                         </div>
@@ -410,80 +522,48 @@
 
                     </div>
                     <div class="tab-pane fade" id="v-pills-tasks" role="tabcard" aria-labelledby="v-pills-tasks-tab">
-                        <div class="container">
-                            <div class="card-deck">
-                                <div class="card outline-primary">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Your goals.</h4>
-                                    </div>
+                        <div class="container" ng-controller="cardCtrl">
+                            <div class="card outline-primary">
+                                <div class="card-header">
+                                    <h4 class="card-title">Your goals
+                                        <button class="btn btn-sm btn-primary float-right" id = "view_goals_2"> View table</button>
+                                    </h4>
                                 </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="container">
-                            <div class="accordion" id="accordionExample">
-                                <div class="card">
-                                    <div class="card-header" id="headingOne">
-                                        <h5 class="mb-0">
-                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            Today
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            <div class="container">
+                                <div class="card-body">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:250px;">
+                                                    Date
+                                                </th>
+                                                <th>
+                                                    Set goals
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="x in goals">
+                                                <td style="width:250px;">
+                                                    {{x.goal_date | date: 'MMM dd yyyy hh:mm:ss a'}}
+                                                </td>
+                                                <td>
+                                                    Readiness :
                                                 <div class="progress">
-                                                    Task 1<hr>
-                                                    <div class="progress-bar progress-bar" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
+                                                    
+                                                    <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated" role="progressbar" ng-style="{width : ( {{x.readiness}}*10 + '%' ) }" aria-valuenow={{x.readiness}} aria-valuemin="0" aria-valuemax="10"> {{x.readiness}} / 10</div>
+                                                </div>Energy : 
                                                 <div class="progress">
-                                                    Task 2
-                                                    <div class="progress-bar progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
+                                                    
+                                                    <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" ng-style="{width : ( {{x.energy}}*10 + '%' ) }" aria-valuenow={{x.energy}} aria-valuemin="0" aria-valuemax="10"> {{x.energy}} / 10</div>
+                                                </div>Walking goal :
                                                 <div class="progress">
-                                                    Task 3
-                                                    <div class="progress-bar progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    
+                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" ng-style="{width : ( {{x.walk}} + '%' ) }" aria-valuenow={{x.walk}} aria-valuemin="0" aria-valuemax="100">{{x.walk}}</div>
                                                 </div>
-                                                <div class="progress">
-                                                    Task 4
-                                                    <div class="progress-bar progress-bar bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                                <div class="progress">
-                                                    Task 5
-                                                    <div class="progress-bar progress-bar bg-danger" role="progressbar" style="width: 80%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-header" id="headingTwo">
-                                        <h5 class="mb-0">
-                                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                            Yesterday
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-header" id="headingThree">
-                                        <h5 class="mb-0">
-                                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                            June 7, 2018
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                        </div>
-                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -566,7 +646,11 @@
                             <br>
                             <div class="card" ng-controller="cardCtrl">
                                 <div class="card-header">
+                                    <span class="badge badge-success" ng-model="searchCount">{{searchCount}}</span>                                    
                                     EMA Responses
+                                    <!-- <select name="searchCat" id="searchCat" ng-options="cat for cat in searchCat" ng-model="selectedCat">{{x}}</select> -->
+                                    
+                                    <input class="float-right" type="text" name="search" id="search" ng-model="searchText" ng-change="searchBy()">
                                 </div>
                                 <div class="card-body chartAreaWrapperHorizontal">
                                     <table class="table table-hover">
@@ -600,7 +684,7 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="x in responses | orderBy:propertyName:reverse">
-                                                <td>{{x.response_date | date : 'MMM dd yyyy'}}</td>
+                                                <td>{{x.response_date | date : 'yyyy-MM-dd'}}</td>
                                                 <td>{{x.response_date | date : 'hh:mm:ss a'}}</td>
                                                 <td>{{x.activity}}</td>
                                                 <td>{{x.company}}</td>
@@ -712,19 +796,19 @@
                                                             <span class="sortorder" ng-show="propertyName === 'acts_date'" ng-class="{reverse: reverse}"></span>
                                                         </th>
                                                         <th ng-click="sortBy('sitting')"><a href=""> Sitting Duration</a>
-                                                            <span class="sortorder" ng-show="propertyName === 'readiness'" ng-class="{reverse: reverse}"></span>
+                                                            <span class="sortorder" ng-show="propertyName === 'sitting'" ng-class="{reverse: reverse}"></span>
                                                         </th>
                                                         <th ng-click="sortBy('walking')"><a href=""> Walking Duration</a>
-                                                            <span class="sortorder" ng-show="propertyName === 'walk'" ng-class="{reverse: reverse}"></span>
+                                                            <span class="sortorder" ng-show="propertyName === 'walking'" ng-class="{reverse: reverse}"></span>
                                                         </th>
                                                         <th ng-click="sortBy('step')"><a href=""> Step count</a>
-                                                            <span class="sortorder" ng-show="propertyName === 'energy'" ng-class="{reverse: reverse}"></span>
+                                                            <span class="sortorder" ng-show="propertyName === 'step'" ng-class="{reverse: reverse}"></span>
                                                         </th>
                                                         <th ng-click="sortBy('distance')"><a href=""> Distance covered</a>
-                                                            <span class="sortorder" ng-show="propertyName === 'energy'" ng-class="{reverse: reverse}"></span>
+                                                            <span class="sortorder" ng-show="propertyName === 'distance'" ng-class="{reverse: reverse}"></span>
                                                         </th>
                                                         <th ng-click="sortBy('hr')"><a href=""> Heart rate</a>
-                                                            <span class="sortorder" ng-show="propertyName === 'energy'" ng-class="{reverse: reverse}"></span>
+                                                            <span class="sortorder" ng-show="propertyName === 'hr'" ng-class="{reverse: reverse}"></span>
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -752,8 +836,11 @@
                             <div class="card">
                                 <div class="card-header">Whats the issue?</div>
                                 <div class="card-body">
-                                    <form action="">
-                                        <input type="text" ng-model="issue" placeholder="I am having isssue with ..." style="height:100px;width: 1000px; vertical-align: top;">
+                                <form action="mailto:vijayv@mail.usf.edu" method="post" enctype="text/plain">
+                                        <input type="text" name="Issue" placeholder="I am having isssue with ..." style="height:100px;width: 1000px; vertical-align: top;">
+                                        <input type="hidden" name="Username" value=<%=user.username%>>
+                                        <input type="hidden" name="Email" value=<%=user.email%>>
+                                        <input type="hidden" name="User Id" value=<%=user.id%>>
                                 </div>
                                 <div class="card-footer">
                                     <button class="btn btn-primary" type="submit" style="float: right">Submit</button> 
@@ -773,6 +860,10 @@
     <!-- jQuery -->
     <script src="../vendor/jquery/jquery.min.js"></script>
     
+    <!-- for date range picker -->
+    <!-- <script src="../vendor/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <script src="../js/moment.js"></script>
+    <script src="../vendor/jquery-ui-daterangepicker/jquery.comiseo.daterangepicker.js"></script> -->
 
     <!-- Bootstrap Core JavaScript -->
     <script src="../vendor/bootstrap4/js/bootstrap.min.js"></script>
@@ -806,7 +897,7 @@
     <script src="../data/flot-data.js"></script> -->
 
      <!-- Custom scripts for this template -->
-    <script src="js/new-age.js"></script>
+    <script src="js/custom.js"></script>
 
     <!-- angular controller javascript -->
     <script src="./controllers/dashboardController.js"></script>

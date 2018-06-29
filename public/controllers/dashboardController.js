@@ -1,5 +1,6 @@
 var app = angular.module("myApp",['chart.js']);
 
+
 app.controller('navCtrl', function($rootScope, $scope) {
     var midnight = new Date();
     midnight.setHours(0,0,0,0);
@@ -45,6 +46,9 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
 
         $scope.card_start_date = start;
         $scope.card_end_date = end;
+
+        $scope.activities_options = [4,5,6];
+
         $http({
             url: '/api/getusergoals',
             method: 'GET',
@@ -101,11 +105,7 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                     $scope.per_distance += item.distance;
                     vals.push(item.hr); 
                 }
-                if($scope.per_sitting >= 86400){
-                    $scope.per_sitting /= 86400;
-                    $scope.per_sitting = $filter('number')($scope.per_sitting,2);
-                    $scope.per_sitting += " days";
-                } else if($scope.per_sitting >= 3600){
+                if($scope.per_sitting >= 3600){
                     $scope.per_sitting /= 3600;
                     $scope.per_sitting = $filter('number')($scope.per_sitting,2);
                     $scope.per_sitting += " hrs.";
@@ -114,12 +114,7 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                     $scope.per_sitting = $filter('number')($scope.per_sitting,2);
                     $scope.per_sitting += " mins.";
                 }
-                if($scope.per_walking >= 86400){
-                    $scope.per_walking /= 86400;
-                    $scope.per_walking = $filter('number')($scope.per_walking,2);
-
-                    $scope.per_walking += " days";
-                } else if($scope.per_walking >= 3600){
+                if($scope.per_walking >= 3600){
                     $scope.per_walking /= 3600;
                     $scope.per_walking = $filter('number')($scope.per_walking,2);
                     $scope.per_walking += " hrs.";
@@ -169,9 +164,102 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
         .success(function(data) {
             // console.log(data);
             $scope.res_num = data.length;
-            $scope.responses = data;
-            // $scope.res_time2 = $scope.card_date;
-            // $filter('date')(data[0].ema_date,'medium');
+            $scope.searchText = '';
+            // $scope.searchCat = ["response_date","activity","company","location","food","feel"];
+            
+            $scope.searchBy = function(){
+                if($scope.searchText == ''){
+                    $scope.responses = data;
+                    $scope.searchCount = data.length;
+                } else {
+                    $scope.responses = $filter('filter')(data,$scope.searchText);
+                    $scope.searchCount = $scope.responses.length;
+                }
+            }
+            $scope.searchBy();
+
+            //for activity radar 
+            var act_times = [0,0,0,0,0,0];
+            var act = ["jogging","standing","walking","sitting","bicycling","None of the above"];
+            for(var i = 0; i < data.length; i++){
+                for(var j = 0; j< 6 ; j++){
+                    if(data[i].activity == act[j]){
+                        act_times[j]++;
+                    }
+                }
+            }
+            // console.log(act, act_times);
+            $scope.labels_act = act;
+            $scope.data_act = act_times;
+            $scope.chart_colors_act = [ '#00ADF9'];
+
+            // for feelings radar
+            var feel_times = [0,0,0,0,0];
+            var feel = ["Very Positive","Positive","Neutral","Negative","Very Negative"];
+            for(var i = 0; i < data.length; i++){
+                for(var j = 0; j< 5; j++){
+                    if(feel[j] == data[i].feel){
+                        feel_times[j]++;
+                    }
+                }
+            }
+            // console.log(feel, feel_times);
+            $scope.labels_feel = feel;
+            $scope.data_feel = feel_times;
+            $scope.chart_colors_feel = ['#DCDCDC'];
+             
+            // for loaction radar
+            var loc_times = [0,0,0,0,0,0];
+            var loc = ["In House", "at recreation center", "at park", "at restaurant", "None of the place", "at gym"];
+            for(var i = 0; i < data.length; i++){
+                for(var j = 0; j<6; j++){
+                    if(loc[j] == data[i].location){
+                        loc_times[j]++;
+                    }
+                }
+            }
+            // console.log(loc, loc_times);
+            $scope.labels_loc = loc;
+            $scope.data_loc = loc_times;
+            $scope.chart_colors_loc = ['#46BFBD'];
+
+            // for company radar
+            var comp_times = [0,0,0,0,0,0];
+            var comp = ["Alone", "With Spouse", "With Children", "With friends", "With Co-worker", "None of the above"];
+            for(var i = 0; i < data.length; i++){
+                for(var j = 0; j < 6; j++){
+                    if(comp[j] == data[i].company){
+                        comp_times[j]++;
+                    }
+                }
+            }
+            // console.log(comp, comp_times);
+            $scope.labels_comp = comp;
+            $scope.data_comp = comp_times;
+            $scope.chart_colors_comp = ['#FDB45C'];
+
+            // for food radar
+            var healthy_times = [0,0,0,0,0,0];
+            var unhealthy_times = [0,0,0,0,0,0];
+            var healthy = ["Protein","Vegetable","Whole Grain","One Drink","Fruit","None of the Above"];
+            var unhealthy = ["Sweet and Sugary Drink","Salty Snack","SeveralDrink","Fried food","Didn' Eat anything last hour"];
+            for(var i = 0; i < data.length; i++){
+                for(var j = 0; j< 6; j++){
+                    if(healthy[j] == data[i].food){
+                        healthy_times[j]++;
+                    }
+                    if(unhealthy[j] == data[i].food){
+                        unhealthy_times[j]++;
+                    }
+                }
+            }
+            $scope.labels_healthy = healthy;
+            $scope.data_healthy = healthy_times;
+            $scope.chart_colors_healthy = ['#6AB35F'];
+            $scope.labels_unhealthy = unhealthy;
+            $scope.data_unhealthy = unhealthy_times;
+            $scope.chart_colors_unhealthy = [ '#F87D6C'];
+             
         })
         .error(function(error) {
                 console.log('Error: ' + error);
@@ -195,7 +283,7 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                 console.log('Error: ' + error);
         });
     };
-    cards($rootScope.start_date,$rootScope.end_date);
+    // cards($rootScope.start_date,$rootScope.end_date);
     $scope.$on('datechange', function(event, args){
         cards($rootScope.start_date,$rootScope.end_date);
     });   
@@ -204,12 +292,19 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
 app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
     $scope.heart_start_date = $rootScope.start_date;
     $scope.heart_end_date = $rootScope.end_date;
+    $scope.heart_options = []
     $scope.heart_scale = 1;
     $scope.username = document.getElementById("user_username").value;
-    
+    $scope.heart_range = "Monthly";
     var heart = function(start, end) {
         $scope.heart_start_date = start;
         $scope.heart_end_date = end;
+        var dates = [];
+        var h_rate = [];
+        var chart_color_arr = [];
+        var counter_arr = [];
+        var counter = '';
+        
         $http({
             url: '/api/getheartrate',
             method: 'GET',
@@ -217,59 +312,110 @@ app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
         })
         .success(function(data) {
             // console.log(data);
-            var dates = [];
-            var h_rate = [];
-            for(var i = 0; i < data.length; i++){
-                h_rate[i] = data[i].hr;
-                dates[i] = $filter('date')(data[i].act_time,'MMM dd hh:mm a');;
+           
+            var range = 'MMM';
+            switch ($scope.heart_range) {
+                case "Monthly":
+                    range='MMM yyyy';
+                    break;
+                case "Weekly":
+                    range='ww yyyy';
+                    break;
+                case "Daily":
+                    range='dd MMM yyyy';
+                    break;
+                default:
+                    range='MMM yyyy';
             }
-            // console.log(dates, h_rate)
-            $scope.labels = dates;
-            $scope.data = h_rate;
-            $scope.heart_width = 11*h_rate.length*$scope.heart_scale;
+            // var counter = "06";
+            if(data.length){
+                counter = $filter('date')(data[0].act_time,range);
+                counter_arr.push(counter);
+                h_rate[counter] = [];
+                dates[counter] = [];
+                chart_color_arr[counter] = [];
+            }
+            var k = 0,l = 0;
+            for(var i = 0; i < data.length; i++,l++){
+                
+                if($filter('date')(data[i].act_time,range) != counter){
+                    l = 0;
+                    counter = $filter('date')(data[i].act_time,range);
+                    counter_arr.push(counter);
+                    h_rate[counter] = [];
+                    dates[counter] = [];
+                    chart_color_arr[counter] = [];
+                }
+                h_rate[counter][l] = (data[i].hr).toString();
+                dates[counter][l] = $filter('date')(data[i].act_time,'MMM dd hh:mm a');
+                chart_color_arr[counter].push(
+                    { // grey
+                      backgroundColor: 'rgba(148,159,177,0.2)',
+                      pointBackgroundColor: 'rgba(148,159,177,1)',
+                      pointHoverBackgroundColor: 'rgba(148,159,177,1)',
+                      borderColor: 'rgba(148,159,177,1)',
+                      pointBorderColor: '#fff',
+                      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+                    }
+                );
+            }
+            var page_no = 0;
+            currentPage(page_no);
+            function currentPage(current){
+                if(!counter_arr[current+1]){
+                    $scope.next = true;
+                } else {
+                    $scope.next = false;
+                }
+                if(!counter_arr[current-1]){
+                    $scope.prev = true;
+                } else {
+                    $scope.prev = false;
+                }
+                var x = counter_arr[current];
+                // console.log("in loop",dates[x],h_rate[x],counter_arr);
+                
+                $scope.heart_options = [counter_arr[current]];
+
+
+                $scope.chart_color = chart_color_arr[x];
+                $scope.data = h_rate[x];
+                $scope.labels = dates[x];
+                // console.log(" scope variable ",$scope.data,$scope.labels);
+            }
+            $scope.nextPage = function(){
+                if(counter_arr[page_no+1]){
+                    page_no++;
+                    currentPage(page_no);
+                }
+            }
+            $scope.prevPage = function(){
+                if(counter_arr[page_no-1]){
+                    page_no--;
+                    currentPage(page_no);
+                }
+            }
         })
         .error(function(error) {
             console.log('Error: ' + error);
         });        
         $scope.series = ['Heart Rate'];
-        
-        // $scope.onClick = function (points, evt) {
-        //     // console.log(points, evt);
-        // };
-        // $scope.chart_color = [ '#803690'];
-        // $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
-        // date1 = new Date($scope.heart_start_date);
-        // date1.setHours(0,0,0,0);
-        // date2 = new Date($scope.heart_end_date);
-        // date2.setHours(0,0,0,0);
-        // var days = (date2.getTime()-date1.getTime())/86400000;
-        
-        $scope.options_bar = {
-            onAnimationComplete: function () {
-                var sourceCanvas = this.chart.ctx.canvas;
-                // the -5 is so that we don't copy the edges of the line
-                var copyWidth = this.scale.xScalePaddingLeft - 5;
-                // the +5 is so that the bottommost y axis label is not clipped off
-                // we could factor this in using measureText if we wanted to be generic
-                var copyHeight = this.scale.endPoint + 5;
-                var targetCtx = document.getElementById("myChartAxis").getContext("2d");
-                targetCtx.canvas.width = copyWidth;
-                targetCtx.drawImage(sourceCanvas, 0, 0, copyWidth, copyHeight, 0, 0, copyWidth, copyHeight);
-            },
+       
+       
+
+        $scope.options = {
             responsive: false,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             legend: {
                 position: 'top',
             },
             scales: {
                 xAxes: [{
                     display: true,
+                    min : 0 ,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Time',
-                        ticks: {
-                            autoSkipPadding: 100
-                        }
+                        labelString: 'Time'
                     }
                 }],
                 yAxes: [{
@@ -277,144 +423,150 @@ app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
                     scaleLabel: {
                         display: true,
                         labelString: 'Heart rate'
+                    },
+                    ticks: {
+                        beginAtZero:true
                     }
                 }]
             },
-            title: {
-                display: true,
-                text: 'Heart Rate'
-            }
         };
         
 
 
     };
-    heart($rootScope.start_date,$rootScope.end_date);
+    // heart($rootScope.start_date,$rootScope.end_date);
 
     $scope.$on('datechange', function(event, args){
         heart($rootScope.start_date,$rootScope.end_date);
     })
 });
 
-app.controller('radarCtrl', function($rootScope, $scope, $filter, $http){
-    $scope.activity_start_date = $rootScope.start_date;
-    $scope.activity_end_date = $rootScope.end_date;
-    $scope.username = document.getElementById("user_username").value;
+// app.controller('radarCtrl', function($rootScope, $scope, $filter, $http){
+//     $scope.activity_start_date = $rootScope.start_date;
+//     $scope.activity_end_date = $rootScope.end_date;
+//     $scope.username = document.getElementById("user_username").value;
     
-    var radar = function(start, end){
-        $scope.activity_start_date = start;
-        $scope.activity_end_date = end;
-
+//     var radar = function(start, end){
+//         $scope.activity_start_date = start;
+//         $scope.activity_end_date = end;
         
-        $http({
-            url: '/api/getuseractivities',
-            method: 'GET',
-            params: {username: $scope.username, start_date: $filter('date')($scope.activity_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.activity_end_date,'yyyy-MM-dd')}
-        })
-        .success(function(data) {
-            // console.log(data);
-            var act_times = [0,0,0,0,0];
-            var act = ["jogging","standing","walking","sitting","None of the above"];
-            for(var i = 0; i < data.length; i++){
-                for(var j = 0; j<5; j++){
-                    if(act[j] == data[i].activity){
-                        act_times[j] = data[i].count;
-                    }
-                }
-            }
-            // console.log(act, act_times);
-            $scope.labels_act = act;
-            $scope.data_act = act_times;
-        })
-        .error(function(error) {
-            console.log('Error: ' + error);
-        });
-        $scope.chart_colors_act = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
-        
-        $http({
-            url: '/api/getuserfeelings',
-            method: 'GET',
-            params: {username: $scope.username, start_date: $filter('date')($scope.activity_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.activity_end_date,'yyyy-MM-dd')}
-        })
-        .success(function(data) {
-            // console.log(data);
-            var feel_times = [0,0,0,0,0];
-            var feel = ["Very Positive","Positive","Neutral","Negative","Very Negative"];
-            for(var i = 0; i < data.length; i++){
-                for(var j = 0; j< 5; j++){
-                    if(feel[j] == data[i].feeling){
-                        feel_times[j] = data[i].count;
-                    }
-                }
-            }
-            // console.log(feel, feel_times);
-            $scope.labels_feel = feel;
-            $scope.data_feel = feel_times;
-        })
-        .error(function(error) {
-            console.log('Error: ' + error);
-        });
-        $scope.chart_colors_feel = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
-
-        $http({
-            url: '/api/getuserlocations',
-            method: 'GET',
-            params: {username: $scope.username, start_date: $filter('date')($scope.activity_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.activity_end_date,'yyyy-MM-dd')}
-        })
-        .success(function(data) {
-            // console.log(data);
-            var loc_times = [0,0,0,0,0];
-            var loc = ["In House", "at recreation center", "at park", "at restaurant", "None of the place"];
-            for(var i = 0; i < data.length; i++){
-                for(var j = 0; j<5; j++){
-                    if(loc[j] == data[i].location){
-                        loc_times[j] = data[i].count;
-                    }
-                }
-            }
-            // console.log(loc, loc_times);
-            $scope.labels_loc = loc;
-            $scope.data_loc = loc_times;
-        })
-        .error(function(error) {
-            console.log('Error: ' + error);
-        });
-        $scope.chart_colors_loc = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
         
 
-        $http({
-            url: '/api/getusercompany',
-            method: 'GET',
-            params: {username: $scope.username, start_date: $filter('date')($scope.activity_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.activity_end_date,'yyyy-MM-dd')}
-        })
-        .success(function(data) {
-            // console.log(data);
-            var comp_times = [0,0,0,0,0,0];
-            var comp = ["Alone", "With Spouse", "With Children", "With friends", "With Co-worker", "None of the above"];
-            for(var i = 0; i < data.length; i++){
-                for(var j = 0; j < 6; j++){
-                    if(comp[j] == data[i].company){
-                        comp_times[j] = data[i].count;
-                    }
-                }
-            }
-            // console.log(comp, comp_times);
-            $scope.labels_comp = comp;
-            $scope.data_comp = comp_times;
-        })
-        .error(function(error) {
-            console.log('Error: ' + error);
-        });
-        $scope.chart_colors_comp = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
+
+        
+//         $http({
+//             url: '/api/getuseractivities',
+//             method: 'GET',
+//             params: {username: $scope.username, start_date: $filter('date')($scope.activity_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.activity_end_date,'yyyy-MM-dd')}
+//         })
+//         .success(function(data) {
+//             // console.log(data);
+//             var act_times = [0,0,0,0,0,0];
+//             var act = ["jogging","standing","walking","sitting","bicycling","None of the above"];
+//             var data = [];
+//             data = $rootScope.ema_responses;
+//             console.log("EMA Responses : ",$rootScope.ema_responses);
+//             for(var i = 0; i < data.length; i++){
+//                 for(var j = 0; j< 6 ; j++){
+//                     if(act[j] == data[i].activity){
+//                         act_times[j] = data[i].count;
+//                     }
+//                 }
+//             }
+//             // console.log(act, act_times);
+//             $scope.labels_act = act;
+//             $scope.data_act = act_times;
+//         })
+//         .error(function(error) {
+//             console.log('Error: ' + error);
+//         });
+//         $scope.chart_colors_act = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
+        
+//         $http({
+//             url: '/api/getuserfeelings',
+//             method: 'GET',
+//             params: {username: $scope.username, start_date: $filter('date')($scope.activity_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.activity_end_date,'yyyy-MM-dd')}
+//         })
+//         .success(function(data) {
+//             // console.log(data);
+//             var feel_times = [0,0,0,0,0];
+//             var feel = ["Very Positive","Positive","Neutral","Negative","Very Negative"];
+//             for(var i = 0; i < data.length; i++){
+//                 for(var j = 0; j< 5; j++){
+//                     if(feel[j] == data[i].feeling){
+//                         feel_times[j] = data[i].count;
+//                     }
+//                 }
+//             }
+//             // console.log(feel, feel_times);
+//             $scope.labels_feel = feel;
+//             $scope.data_feel = feel_times;
+//         })
+//         .error(function(error) {
+//             console.log('Error: ' + error);
+//         });
+//         $scope.chart_colors_feel = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
+
+//         $http({
+//             url: '/api/getuserlocations',
+//             method: 'GET',
+//             params: {username: $scope.username, start_date: $filter('date')($scope.activity_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.activity_end_date,'yyyy-MM-dd')}
+//         })
+//         .success(function(data) {
+//             // console.log(data);
+//             var loc_times = [0,0,0,0,0];
+//             var loc = ["In House", "at recreation center", "at park", "at restaurant", "None of the place"];
+//             for(var i = 0; i < data.length; i++){
+//                 for(var j = 0; j<5; j++){
+//                     if(loc[j] == data[i].location){
+//                         loc_times[j] = data[i].count;
+//                     }
+//                 }
+//             }
+//             // console.log(loc, loc_times);
+//             $scope.labels_loc = loc;
+//             $scope.data_loc = loc_times;
+//         })
+//         .error(function(error) {
+//             console.log('Error: ' + error);
+//         });
+//         $scope.chart_colors_loc = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
         
 
-    };
-    radar($rootScope.start_date,$rootScope.end_date);
+//         $http({
+//             url: '/api/getusercompany',
+//             method: 'GET',
+//             params: {username: $scope.username, start_date: $filter('date')($scope.activity_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.activity_end_date,'yyyy-MM-dd')}
+//         })
+//         .success(function(data) {
+//             // console.log(data);
+//             var comp_times = [0,0,0,0,0,0];
+//             var comp = ["Alone", "With Spouse", "With Children", "With friends", "With Co-worker", "None of the above"];
+//             for(var i = 0; i < data.length; i++){
+//                 for(var j = 0; j < 6; j++){
+//                     if(comp[j] == data[i].company){
+//                         comp_times[j] = data[i].count;
+//                     }
+//                 }
+//             }
+//             // console.log(comp, comp_times);
+//             $scope.labels_comp = comp;
+//             $scope.data_comp = comp_times;
+//         })
+//         .error(function(error) {
+//             console.log('Error: ' + error);
+//         });
+//         $scope.chart_colors_comp = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
+        
 
-    $scope.$on('datechange', function(event, args){
-        radar($rootScope.start_date,$rootScope.end_date);
-    })
-});
+//     };
+//     radar($rootScope.start_date,$rootScope.end_date);
+
+//     $scope.$on('datechange', function(event, args){
+//         radar($rootScope.start_date,$rootScope.end_date);
+//     })
+    
+// });
 
 
 app.controller("barCtrl", function($rootScope, $scope, $filter, $http) {
@@ -424,30 +576,28 @@ app.controller("barCtrl", function($rootScope, $scope, $filter, $http) {
     
     
     var bar = function(start, end) {
-        $scope.options = {
-            responsive: false,
+        $scope.options_bar = {
+            responsive: true,
+            maintainAspectRatio: false,
             legend: {
                 position: 'top',
             },
             scales: {
                 xAxes: [{
                     display: true,
+                    position: 'top',
                     scaleLabel: {
                         display: true,
-                        labelString: 'Dates'
+                        labelString: 'Walking time in minutes'
                     }
                 }],
                 yAxes: [{
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Walking time'
+                        labelString: 'Dates'
                     }
                 }]
-            },
-            title: {
-                display: true,
-                text: 'Goal comparision'
             }
         };
 
@@ -471,11 +621,53 @@ app.controller("barCtrl", function($rootScope, $scope, $filter, $http) {
             formatted_dates[j] = $filter('date')(dates[j],'yyyy-MM-dd');
         }
         $scope.horizon_scale = 1;
-        var x = 40*(formatted_dates.length)*($scope.horizon_scale)
-        $scope.horizon_height = x>600?x:600;
+        var x = 40*(formatted_dates.length)*($scope.horizon_scale);
+        console.log("length  ",x);
+        $scope.horizon_height = {'height':x+"px;"}
+        
         // console.log("dates array : ",dates);
         // console.log("formatted dates array :", formatted_dates);
 
+        $scope.bar_options = [4,5,6];
+
+        $http({
+            url:"/api/getallsetgoals",
+            method:"GET",
+            params: {username: $scope.username, start_date: $filter('date')($scope.all_goals_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.all_goals_end_date,'yyyy-MM-dd')}
+        })
+        .success(function(data){
+            // console.log(data);
+            var j = 0;
+            for(var i = 0; i < formatted_dates.length; i++){
+                if(data.length == 0){
+                    set_goals[i] = 0;
+                    continue;
+                }
+                var d = new Date(data[j].set_date);
+                d.setHours(0,0,0,0);
+                var date = $filter('date')(d,'yyyy-MM-dd');
+                
+                // console.log('set_date : ',date);
+                
+                
+                if(date == formatted_dates[i]){
+                    set_goals.push(data[j].set_goal);
+                    j++;
+                    if(j == data.length)
+                        break;
+                } else {
+                    set_goals.push(0);
+
+                }
+                // console.log(set_goals);
+                
+            }
+        })
+        .error(function(error){
+            console.log('Error : '+error);
+        });
+        // console.log("set_goals array : ",set_goals);
+        
         $http({
             url:"/api/getallgetgoals",
             method:"GET",
@@ -509,48 +701,23 @@ app.controller("barCtrl", function($rootScope, $scope, $filter, $http) {
             console.log('Error : '+error);
         });
         // console.log("get_goals array : ",get_goals);
-        $http({
-            url:"/api/getallsetgoals",
-            method:"GET",
-            params: {username: $scope.username, start_date: $filter('date')($scope.all_goals_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.all_goals_end_date,'yyyy-MM-dd')}
-        })
-        .success(function(data){
-            // console.log(data);
-            var j = 0;
-            for(var i = 0; i < formatted_dates.length; i++){
-                if(data.length == 0){
-                    set_goals[i]= 0 ;
-                    continue;
-                }
-                var d = new Date(data[j].set_date);
-                d.setHours(0,0,0,0);
-                var date = $filter('date')(d,'yyyy-MM-dd');
-                
-                // console.log('set_date : ',date);
-                // console.log(formatted_dates[i]);
-                
-                if(date == formatted_dates[i]){
-                    set_goals.push(data[j].set_goal);
-                    j++;
-                    if(j == data.length)
-                        break;
-                } else {
-                    set_goals.push(0);
-                }
-                // console.log(set_goals);
-            }
-        })
-        .error(function(error){
-            console.log('Error : '+error);
-        });
-        // console.log("set_goals array : ",set_goals);
         
-        $scope.labels = formatted_dates;
-        $scope.series = ['set','get'];
-        $scope.data = [set_goals, get_goals];
+        $scope.labels_bar = formatted_dates;
+        $scope.series_bar = ['Set goal','Achieved goal'];
+        $scope.data_bar = [set_goals, get_goals];
+        $scope.chart_color_bar = [{//blue
+            backgroundColor: 'rgba(62, 56, 229, 0.9)',
+            pointHoverBackgroundColor: 'rgba(148,159,177,1)',
+            borderColor: 'rgba(1,1,1,1)',
+        },{//red
+            backgroundColor: 'rgba(240, 45, 45, 0.9)',
+            borderColor: 'rgba(1,1,1,1)',
+        }
+        ];
+        
         
     };
-    bar($rootScope.start_date,$rootScope.end_date);
+    // bar($rootScope.start_date,$rootScope.end_date);
     $scope.$on('datechange', function(event, args){
         bar($rootScope.start_date,$rootScope.end_date);
     });

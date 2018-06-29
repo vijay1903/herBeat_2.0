@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html  lang="en" ng-app="profile">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,32 +12,90 @@
     <link href="../vendor/bootstrap4/css/bootstrap-reboot.min.css" rel="stylesheet">
     <!-- Custom Fonts -->
     <link href="../vendor/font-awesome/css/fontawesome-all.css" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/custom.css">
 </head>
+
 <body>
-    <h1 style="text-align: center"><a href="/dashboard"><i class="fas fa-home"></i></a>User Settings</h1>
-    <h2>Change Password</h2>
-    <div class="container">
-        <form class="form" method="POST" action="/changepassword">
-            <div class="form-group"> 
-                <label for="current_password">Current Password</label>
-                <input class="form-control" type="password" id="current_password" name="current_password">
-            </div>
-               
-            <div class="form-group">
-                <label for="new_password">New Password</label>
-                <input class="form-control" type="password" id="new_password" name="new_password">
-            </div>
-            <div class="form-group">
-                <label for="confirm_new_password">Re-enter new Password</label>
-                <input class="form-control" type="password" id="confirm_new_password" name="confirm_new_password">
-                <span id="confirm_message"></span>
-            </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" role="navigation" style="margin-bottom: 0">
+            <a class="navbar-brand" style="color: black"><a href="/dashboard"><i class="fas fa-arrow-left"></i></a><img src="../img/logo.png" alt="Herbeat logo" style="width: 30px; height: 30px;"> HerBeat</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="container">
                 
-            <button class="btn btn-danger" type="submit">Change Password</button>
-            <button class="btn btn-secondary" type="reset">Reset</button>
-        </form>
-    </div>  
+            </div>            
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user fa-fw"></i> 
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupDrop1">
+                    <a class="dropdown-item" href="/dashboard"><i class="fas fa-dash fa-tachometer-alt"></i> Dashboard</a>
+                    <a class="dropdown-item" href="/profile"><i class="fas fa-user fa-fw"></i> User Profile</a>
+                    <a class="dropdown-item" href="/settings"><i class="fas fa-cogs fa-fw"></i> Settings</a>
+                    <a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
+                </div>
+            </div>
+        </nav>
+        
+    <div class="row">
+            
+        <div class="sidenav col-2">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active show" aria-selected="true">Change Password</a>
+                    </div>
+        </div>
+        <div class="main container-fluid col-10">
+                
+                <div class="container" ng-controller="passCtrl">
+                        <h2>Change Password</h2>
+                        <div class="container">
+                            <form class="form" ng-submit="reset()">
+                                <div class="alert alert-danger" role="alert" ng-hide="alert">
+                                        <span ng-model="reset_message" class="label label-info" style="padding-left: 20px">{{reset_message}}</span>
+                                </div>
+                                
+                                <div class="form-group"> 
+                                        <label for="username">Username</label>
+                                        <input class="form-control" type="text" id="username" name="username" ng-model="username" required>
+                                    </div>
+                                <div class="form-group"> 
+                                    <label for="current_password">Current Password</label>
+                                    <input class="form-control" type="password" id="current_password" name="current_password" ng-model="curr_password" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="new_password">New Password</label>
+                                    <input class="form-control" type="password" id="new_password" name="new_password" ng-model="new_password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirm_new_password">Re-enter new Password</label>
+                                    <input class="form-control" type="password" id="confirm_new_password" name="confirm_new_password" required>
+                                    <span id="confirm_message"></span>
+                                </div>
+                                    
+                                <button class="btn btn-danger" type="submit">Change Password</button>
+                                <button class="btn btn-warning" type="reset">Reset</button>
+                                <a href="/dashboard"><button class="btn btn-secondary">Cancel</button></a>
+                            </form>
+                        </div>  
+                    </div>
+        </div>
+    </div>
+        
+    <!--Angular scripts-->
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src = "http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-sanitize.js"></script>
+
+    <script src="./controllers/profileController.js"></script>
+    <!-- jQuery -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../vendor/bootstrap4/js/bootstrap.min.js"></script>
 </body>
+    
 <script>
 var check = function() {
     if (document.getElementById('new_password').value == document.getElementById('confirm_new_password').value) {

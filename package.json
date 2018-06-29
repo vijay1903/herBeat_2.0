@@ -17,6 +17,7 @@
     "express-session": "^1.15.6",
     "method-override": "~2.1.2",
     "metismenu": "^1.1.3",
+    "moment": "^2.22.2",
     "mongoose": "~3.6.2",
     "morgan": "~1.2.2",
     "mysql": "2.15.0",
