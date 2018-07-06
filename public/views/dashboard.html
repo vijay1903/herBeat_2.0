@@ -79,16 +79,16 @@
         <div id="loader"></div>
         <div id="overlay"></div>
         <div class="row" id="dashboard"  style="display:none;" class="animate-bottom">
-            <div class="sidenav" id="navbarSupportedContent">
-                <div class="col-auto collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="sidenav collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="col-auto">
                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <a class="nav-link active show" id="v-pills-dash-tab" data-toggle="pill" href="#v-pills-dash" role="tab" aria-controls="v-pills-dash" aria-selected="true"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</a>
                     <a class="nav-link" id="v-pills-tasks-tab" data-toggle="pill" href="#v-pills-tasks" role="tab" aria-controls="v-pills-tasks" aria-selected="false"><i class="fas fa-tasks fa-fw"></i> Your Goals</a>
-                    <a class="nav-link" id="v-pills-watch-tab" data-toggle="pill" href="#v-pills-watch" role="tab" aria-controls="v-pills-watch" aria-selected="false"><i class="fas fa-battery-full fa-fw"></i>  Watch Status</a>
+                    <!-- <a class="nav-link" id="v-pills-watch-tab" data-toggle="pill" href="#v-pills-watch" role="tab" aria-controls="v-pills-watch" aria-selected="false"><i class="fas fa-battery-full fa-fw"></i>  Watch Status</a> -->
                     <a class="nav-link" id="v-pills-responses-tab" data-toggle="pill" href="#v-pills-responses" role="tab" aria-controls="v-pills-responses" aria-selected="false"><i class="fas fa-paper-plane"></i> Your responses</a>
                     <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="fas fa-comments fa-fw"></i> Messages</a>
                     <a class="nav-link" id="v-pills-info-tab" data-toggle="pill" href="#v-pills-info" role="tab" aria-controls="v-pills-info" aria-selected="false"><i class="fas fa-table fa-fw"></i> Detailed Info</a>
-                    <a class="nav-link" id="v-pills-issue-tab" data-toggle="pill" href="#v-pills-issue" role="tab" aria-controls="v-pills-issue" aria-selected="false"><i class="fas fa-exclamation-triangle fa-fw"></i> Report Issue</a>
+                    <!-- <a class="nav-link" id="v-pills-issue-tab" data-toggle="pill" href="#v-pills-issue" role="tab" aria-controls="v-pills-issue" aria-selected="false"><i class="fas fa-exclamation-triangle fa-fw"></i> Report Issue</a> -->
                     </div>
                 </div>
             </div>
@@ -114,16 +114,17 @@
                                         <span class="badge badge-success" style="font-size: 16px;" ng-model="count">{{count}}</span> Goals
                                     </div>
                                     <div class="card-body text-primary" style="font-size: 16px;">
-                                        <p ng-model="max">Max: {{max}} mins.</p>
-                                        <p ng-model="avg">Avg: {{avg}} mins.</p>
-                                        <p ng-model="min">Min : {{min}} mins.</p>
+                                        <p ng-model="card_message_1" ng-hide="card_1">{{card_message_1}}</p>
+                                        <p ng-model="max" ng-show="card_1">Max: {{max}} mins.</p>
+                                        <p ng-model="avg" ng-show="card_1">Avg: {{avg}} mins.</p>
+                                        <p ng-model="min" ng-show="card_1">Min : {{min}} mins.</p>
                                         <!-- <h1 style="line-height: 0.5;margin-right:0px; " ng-model="count">{{count}}</h1> -->
                                     </div>
                                         <div class="card-footer">
                                             <p style="line-height: 1.0;" ng-model="goals_start_date" ng-model="goals_end_date">{{goals_start_date | date : "MMM dd"}} to {{goals_end_date | date : "MMM dd"}}</p>
                                             
                                             
-                                            <button class="btn btn-sm btn-primary" id="view_goals">
+                                            <button class="btn btn-sm btn-primary" id="view_goals" ng-disabled="!card_1">
                                                 View Details <i class="fas fa-arrow-circle-right"></i>
                                             </button>
                                         </div>
@@ -132,7 +133,8 @@
                                 <div class="card border-primary text-left">
                                     <div class="card-header"><a href="#"><i class="fas fa-chart-bar"></i></a> Activities</div>
                                     <div class="card-body text-primary text-left" style="font-size: 16px;">
-                                        <table>
+                                        <p ng-hide="card_1" ng-model="card_message_2">{{card_message_2}}</p>
+                                        <table ng-show="card_2">
                                             <tr>
                                                 <td><img src="../img/standing.jpg" alt="standing logo" style="height:20px;"></td>
                                                 <td style="vertical-align: middle;" ng-model="per_sitting"> {{per_sitting}} </td>
@@ -157,7 +159,7 @@
                                     </div>
                                         <div class="card-footer">
                                             <p style="line-height: 1.0;" ng-model="per_start_date" ng-model="per_end_date">{{per_start_date | date : "MMM dd"}} to {{per_end_date | date : "MMM dd"}}</p>
-                                            <button class="btn btn-sm btn-primary" id='view_activities'>
+                                            <button class="btn btn-sm btn-primary" id='view_activities' ng-disabled="!card_2">
                                                 <span>View Details</span>
                                                 <span><i class="fas fa-arrow-circle-right"></i></span>
                                             </button>
@@ -169,13 +171,14 @@
                                 <div class="card border-primary text-left">
                                     <div class="card-header">EMA Response</div>
                                     <div class="card-body text-primary" style="font-size: 16px;">
-                                        <h1 ng-model="res_num" ng-model="res_den">{{res_num}}/{{res_den}}</h1>
+                                        <p ng-model="card_message_3" ng-hide="card_3">{{card_message_3}}</p>
+                                        <h1 ng-model="res_num" ng-model="res_den" ng-show="card_3">{{res_num}}/{{res_den}}</h1>
                                         
                                         <!-- <p ng-model="res_time2">Data taken from : {{res_time2}}</p> -->
                                     </div>
                                         <div class="card-footer">
                                             <p ng-model="res_start_date" ng-model="res_end_date">{{res_start_date | date : "MMM dd"}} to {{res_end_date | date : "MMM dd"}}</p>
-                                            <button class="btn btn-sm btn-primary" id='view_response'>
+                                            <button class="btn btn-sm btn-primary" id='view_response' ng-disabled="!card_3">
                                                 <span>View Details</span>
                                                 <span><i class="fas fa-arrow-circle-right"></i></span>
                                             </button>
@@ -187,8 +190,9 @@
                                     <div class="card-header"><span class="badge badge-success" style="font-size: 16px;" ng-model="msg_num">{{msg_num}}</span> Messages</div>
                                     <div class="card-body text-primary" style="font-size: 12px; padding:2px">   
                                         <div style="overflow: auto; height: 130px;">
-                                            <center> Most recent {{(msg_num >= 5)?5:msg_num}} messages</center>
-                                            <table class="table table-responsive">
+                                            <p style="padding:10px; font-size: 16px;" ng-model="card_message_4" ng-hide="card_4">{{card_message_4}}</p>
+                                            <center ng-show="card_4"> Most recent {{(msg_num >= 5)?5:msg_num}} messages</center>
+                                            <table class="table table-responsive"  ng-show="card_4">
                                                 <thead style="position:relative;top:0px;">
                                                     <tr  style="padding-top: 2px; padding-bottom: 2px;">
                                                         <th style="padding-top: 2px; padding-bottom: 2px;">Message</th>
@@ -208,7 +212,7 @@
                                     
                                         <div class="card-footer">
                                             <p ng-model="msg_start_date" ng-model="msg_end_date">{{msg_start_date | date : "MMM dd"}} to {{msg_end_date | date: 'MMM dd'}}</p>
-                                            <button class="btn btn-sm btn-primary" id="view_messages">
+                                            <button class="btn btn-sm btn-primary" id="view_messages" ng-disabled="!card_4">
                                                 <span>View all messages</span>
                                                 <span><i class="fas fa-arrow-circle-right"></i></span>
                                             </button>
@@ -227,20 +231,20 @@
                                         <i class="fas fa-file-medical-alt"></i> Heartrate 
                                         <ul class="pagination float-right">
                                             <li class="page-item">
-                                                <a class="page-link" ng-click="prevPage()" aria-label="Previous" ng-disabled="prev">
+                                                <button class="page-link" ng-click="prevPage()" aria-label="Previous" ng-disabled="prev">
                                                 <span aria-hidden="true">&laquo;</span>
                                                 <span class="sr-only">Previous</span>
-                                                </a>
+                                            </button>
                                             </li>
-                                            <li class="page-item" ng-repeat="x in heart_options"><a class="page-link">{{x}}</a></li>
+                                            <li class="page-item" ng-repeat="x in heart_options track by $index"><button class="page-link">{{x}}</button></li>
                                             <li class="page-item">
-                                                <a class="page-link" ng-click="nextPage()" aria-label="Next" ng-disabled="next">
+                                                <button class="page-link" ng-click="nextPage()" aria-label="Next" ng-disabled="next">
                                                 <span aria-hidden="true">&raquo;</span>
                                                 <span class="sr-only">Next</span>
-                                                </a>
+                                                </button>
                                             </li>
                                             <li class="page-item">
-                                                <select class="form-control" ng-model="heart_range">
+                                                <select class="form-control" ng-model="heart_range" ng-change="change_range({{heart_range}});">
                                                     <option>Monthly</option>
                                                     <option>Weekly</option>
                                                     <option>Daily</option>
@@ -250,18 +254,21 @@
                                     </div>
                                     <div class="card-text">
                                         <div class="chartWrapper">
-                                            <div class="chartAreaWrapper" height="400">
+                                            <div class="chartAreaWrapper" height="500">
+                                                <div style="height: 500px;" ng-hide="card_5">
+                                                    <p ng-model="card_message_5">{{card_message_5}}</p>
+                                                </div>
                                                 <canvas id="bar" class="chart chart-bar" chart-data="data"
                                                 chart-labels="labels" chart-series="series" chart-options="options" 
                                                 chart-colors= "chart_color"                                               
-                                                ng-model="heart_width" ng-model="heart_scale" width="3000" height="600">
+                                                ng-model="heart_width" ng-model="heart_scale" width="10000" height="600" ng-show="card_5">
                                                 </canvas>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="card-footer">
                                         <p ng-model="heart_start_date" ng-model="heart_end_date">{{heart_start_date | date : "MMM dd"}} to {{heart_end_date | date : "MMM dd"}}</p>
-                                        <button class="btn btn-warning" id="view_heart">View Details <i class="fas fa-arrow-circle-right"></i></button>
+                                        <button class="btn btn-warning" id="view_heart" ng-disabled="!card_5">View Details <i class="fas fa-arrow-circle-right"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -272,7 +279,7 @@
                         <div class="container" ng-controller="cardCtrl">
                             <div class="card  border-primary">
                                 <div class="card-header"><i class="fas fa-chart-area fa-fw"></i> Your Activities from EMA Response
-                                    <ul class="pagination float-right">
+                                    <!-- <ul class="pagination float-right">
                                         <li class="page-item">
                                             <a class="page-link" href="#" aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
@@ -293,7 +300,7 @@
                                                 <option>Daily</option>
                                             </select>
                                         </li>
-                                    </ul>
+                                    </ul> -->
                                 </div>
                                 <div class="card-body">
                                     <div class="card-deck">
@@ -303,8 +310,8 @@
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_act" class="chart chart-radar"
-                                                chart-data="data_act" chart-labels="labels_act" style="width:300px; height:600px" chart-colors="chart_colors_act">
-                                                </canvas>
+                                                chart-data="data_act" chart-labels="labels_act" style="width:300px; height:600px" chart-colors="chart_colors_act" 
+                                                chart-options="radar_options"></canvas>
                                             </div>
                                         </div>
                                         <div class="card border-primary">
@@ -313,7 +320,8 @@
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_feel" class="chart chart-radar"
-                                                chart-data="data_feel" chart-labels="labels_feel" style="width:300px; height:600px" chart-colors="chart_colors_feel">
+                                                chart-data="data_feel" chart-labels="labels_feel" style="width:300px; height:600px" chart-colors="chart_colors_feel"
+                                                chart-options="radar_options">
                                                 </canvas>
                                             </div>
                                         </div>
@@ -326,7 +334,8 @@
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_loc" class="chart chart-radar"
-                                                chart-data="data_loc" chart-labels="labels_loc" style="width:300px; height:600px" chart-colors="chart_colors_loc">
+                                                chart-data="data_loc" chart-labels="labels_loc" style="width:300px; height:600px" chart-colors="chart_colors_loc"
+                                                chart-options="radar_options">
                                                 </canvas>
                                             </div>
                                         </div>
@@ -336,7 +345,8 @@
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_comp" class="chart chart-radar"
-                                                chart-data="data_comp" chart-labels="labels_comp" style="width:300px; height:600px" chart-colors="chart_colors_comp">
+                                                chart-data="data_comp" chart-labels="labels_comp" style="width:300px; height:600px" chart-colors="chart_colors_comp"
+                                                chart-options="radar_options">
                                                 </canvas>
                                             </div>
                                         </div>
@@ -349,7 +359,8 @@
                                             </div>
                                             <div class="card-body">
                                                     <canvas id="radar_unhealthy" class="chart chart-radar"
-                                                    chart-data="data_unhealthy" chart-labels="labels_unhealthy" style="width:300px; height:600px" chart-colors="chart_colors_unhealthy">
+                                                    chart-data="data_unhealthy" chart-labels="labels_unhealthy" style="width:300px; height:600px" chart-colors="chart_colors_unhealthy"
+                                                    chart-options="radar_options">
                                                     </canvas>
                                             </div>
                                         </div>
@@ -359,7 +370,8 @@
                                             </div>
                                             <div class="card-body">
                                                     <canvas id="radar_healthy" class="chart chart-radar"
-                                                    chart-data="data_healthy" chart-labels="labels_healthy" style="width:300px; height:600px" chart-colors="chart_colors_healthy">
+                                                    chart-data="data_healthy" chart-labels="labels_healthy" style="width:300px; height:600px" chart-colors="chart_colors_healthy"
+                                                    chart-options="radar_options">
                                                     </canvas>
                                             </div>
                                         </div>
@@ -388,20 +400,20 @@
                                         <i class="fas fa-chart-pie fa-fw"></i> Activity Chart 
                                         <ul class="pagination float-right">
                                             <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Previous">
+                                                <button class="page-link" ng-click="prevBarPage()" aria-label="Previous" ng-disabled="prev_bar">
                                                 <span aria-hidden="true">&laquo;</span>
                                                 <span class="sr-only">Previous</span>
-                                                </a>
+                                                </button>
                                             </li>
-                                            <li class="page-item" ng-repeat="x in bar_options"><a class="page-link" href="#">{{x}}</a></li>
+                                            <li class="page-item" ng-repeat="x in bar_options"><button class="page-link" href="#">{{x}}</button></li>
                                             <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Next">
+                                                <button class="page-link" ng-click="nextBarPage()" aria-label="Next" ng-disabled="next_bar">
                                                 <span aria-hidden="true">&raquo;</span>
                                                 <span class="sr-only">Next</span>
-                                                </a>
+                                                </button>
                                             </li>
                                             <li class="page-item">
-                                                <select class="form-control">
+                                                <select class="form-control" ng-model="bar_range" ng-change="change_bar_range({{bar_range}});">
                                                     <option>Monthly</option>
                                                     <option>Weekly</option>
                                                     <option>Daily</option>
@@ -412,9 +424,10 @@
                                     <div class="card-body">
                                         <div class="chartWrapperHorizontal">
                                             <div class="chartAreaWrapperHorizontal" style="height:1000px;">
+                                                <p ng-model="card_message_6" ng-hide="card_6">{{card_message_6}}</p>
                                                 <canvas id="horizon_bar" class="chart-horizontal-bar" chart-data="data_bar"
                                                 chart-labels="labels_bar" chart-series="series_bar" chart-options="options_bar" chart-colors="chart_color_bar"
-                                                width="1050">
+                                                width="1050" height="1000" ng-show="card_6">
                                                 </canvas>
                                             </div>
                                         </div>
@@ -424,7 +437,7 @@
                                     </div>
                                     <div class="card-footer">
                                         <p ng-model="all_goals_start_date" ng-model="all_goals_end_date">{{all_goals_start_date | date : "MMM dd"}} to {{all_goals_end_date | date : "MMM dd"}}</p>
-                                        <button class="btn btn-warning" id='view_goals_1'>View Details <i class="fas fa-arrow-circle-right"></i></button>
+                                        <button class="btn btn-warning" id='view_goals_1' ng-disabled="!card_6">View Details <i class="fas fa-arrow-circle-right"></i></button>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
@@ -530,7 +543,7 @@
                                     </h4>
                                 </div>
                                 <div class="card-body">
-                                    <table class="table table-hover">
+                                    <table class="table" id="goals_table">
                                         <thead>
                                             <tr>
                                                 <th style="width:250px;">
@@ -645,39 +658,45 @@
                         <div class="container">
                             <br>
                             <div class="card" ng-controller="cardCtrl">
-                                <div class="card-header">
+                                <div class="card-header">EMA Responses
                                     <span class="badge badge-success" ng-model="searchCount">{{searchCount}}</span>                                    
-                                    EMA Responses
+                                    
                                     <!-- <select name="searchCat" id="searchCat" ng-options="cat for cat in searchCat" ng-model="selectedCat">{{x}}</select> -->
                                     
-                                    <input class="float-right" type="text" name="search" id="search" ng-model="searchText" ng-change="searchBy()">
+                                    <!-- <input class="float-right" type="text" name="search" id="search" ng-model="searchText" ng-change="searchBy()"> -->
+                                    <button class="btn float-right" ng-click="resetFilter();">Clear filter</button>
                                 </div>
-                                <div class="card-body chartAreaWrapperHorizontal">
-                                    <table class="table table-hover">
+                                <div class="card-body">
+                                    <table class="ema_table">
                                         <thead>
                                             <tr>
-                                                <th ng-click="sortBy('response_date')"><a href=""> Date</a>
+                                                <th ng-click="sortBy('response_date')"><a href=""> Date of response</a>
                                                     <span class="sortorder" ng-show="propertyName === 'response_date'" ng-class="{reverse: reverse}"></span>
                                                 </th>
-                                                <th ng-click="sortBy('response_date')"><a href=""> Time</a>
+                                                <th ng-click="sortBy('response_date')"><a href=""> Time of response</a>
                                                     <span class="sortorder" ng-show="propertyName === 'response_date'" ng-class="{reverse: reverse}"></span>
                                                 </th>
-                                                <th ng-click="sortBy('activity')"><a href=""> Activity</a>
+                                                <th><a href="" ng-click="sortBy('activity')"> Activity</a>
                                                     <span class="sortorder" ng-show="propertyName === 'activity'" ng-class="{reverse: reverse}"></span>
+                                                    <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in act_filter_options" ng-model="searchText.activity" style="max-width:18px;"></select>
                                                 </th>
-                                                <th ng-click="sortBy('company')"><a href=""> Company </a>
+                                                <th><a href="" ng-click="sortBy('company')"> Company </a>
                                                     <span class="sortorder" ng-show="propertyName === 'company'" ng-class="{reverse: reverse}"></span>
+                                                    <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in comp_filter_options" ng-model="searchText.company" style="max-width:18px;"></select>
                                                 </th>
-                                                <th ng-click="sortBy('location')"><a href=""> Location </a>
+                                                <th><a href="" ng-click="sortBy('location')"> Location </a>
                                                     <span class="sortorder" ng-show="propertyName === 'location'" ng-class="{reverse: reverse}"></span>
+                                                    <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in loc_filter_options" ng-model="searchText.location" style="max-width:18px;"></select>
                                                 </th>
-                                                <th ng-click="sortBy('food')"><a href=""> Food</a>
+                                                <th><a href="" ng-click="sortBy('food')"> Food</a>
                                                     <span class="sortorder" ng-show="propertyName === 'food'" ng-class="{reverse: reverse}"></span>
+                                                    <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in food_filter_options" ng-model="searchText.food" style="max-width:18px;"></select>
                                                 </th>
-                                                <th ng-click="sortBy('feel')"><a href=""> Feeling</a>
+                                                <th><a href="" ng-click="sortBy('feel')"> Feeling</a>
                                                     <span class="sortorder" ng-show="propertyName === 'feel'" ng-class="{reverse: reverse}"></span>
+                                                    <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in feel_filter_options" ng-model="searchText.feel" style="max-width:18px;"></select>
                                                 </th>
-                                                <th ng-click="sortBy('motivation')"><a href=""> Motivational Statement</a>
+                                                <th><a href="" ng-click="sortBy('motivation')"> Motivational Statement</a>
                                                     <span class="sortorder" ng-show="propertyName === 'motivation'" ng-class="{reverse: reverse}"></span>
                                                 </th>
                                             </tr>
@@ -875,6 +894,8 @@
     <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-sanitize.js"></script>
     <script src="../angular-chart.js/angular-chart.min.js"></script>
     
+    <!-- Moment js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
     <script src="../vendor/metisMenu/metisMenu.min.js"></script>

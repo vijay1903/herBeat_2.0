@@ -199,7 +199,7 @@ module.exports = function(app, conn) {
     });
 
     app.get('/api/searchusername', function(req, res) {
-        conn.query('select * from users where username = ? and email = ?',[req.query.username, req.query.email]
+        conn.query('select * from users where username = ? OR email = ?',[req.query.username, req.query.email]
         , function (error, result) {
             if (error)
             {
@@ -215,8 +215,8 @@ module.exports = function(app, conn) {
     });
 
     app.post('/api/setpassword', function(req, res) {
-        conn.query('UPDATE users SET password = ? WHERE username = ?;',
-        [bcrypt.hashSync(req.query.password, null, null),req.query.username]
+        conn.query('UPDATE users SET password = ? WHERE username = ? OR email = ?;',
+        [bcrypt.hashSync(req.query.password, null, null),req.query.username,req.query.email]
         , function (error, result) {
             if (error)
             {

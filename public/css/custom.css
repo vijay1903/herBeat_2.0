@@ -4,7 +4,7 @@
 
 .sidenav {
     height: 100%;
-    width: 200px;
+    width: 200px;  
     position: fixed;
     text-align: left;
     z-index: 1;
@@ -23,7 +23,8 @@
 }
 
 .sidenav a:hover {
-    color: #f1f1f1;
+    color: white;
+    background-color: lightblue;
 }
 
 .main {
@@ -68,9 +69,13 @@
     pointer-events:none;
 }
 
-/* .chartAreaWrapperHorizontal {
-    
-} */
+.chartAreaWrapperHorizontal {
+    padding: 5px;
+    height: 500px;
+    overflow-y: scroll;
+}
+
+
 .sortorder:after {
     content: '\25b2';   
   }
@@ -129,4 +134,40 @@
     padding : 20px;
     box-shadow: 1px 1px 50px silver;
     border-radius: 10px;
+}
+.ema_table {
+    table-layout: fixed; 
+    width: 100%;
+    overflow: scroll;
+}
+.ema_table > thead > tr > th, tbody > tr > td {
+    border-bottom : 1px solid #ddd;
+    border-top : 1px solid #ddd;
+    padding: 2px;
+}
+
+.ema_table > tbody > tr > td{
+    /* width:70px; */
+    overflow: hidden;
+}
+.ema_table > tr:hover {
+    background-color: #f5f5f5;
+}
+
+button:disabled {
+    pointer-events: none;
+    background: rgb(226, 225, 225);
+}
+
+.goal_1{
+    background-color: white;
+}
+.goal_1:hover{
+    background-color: lightblue;
+}
+.goal_2{
+    background-color: lightgrey;
+}
+.goal_2:hover{
+    background-color: lightblue;
 }

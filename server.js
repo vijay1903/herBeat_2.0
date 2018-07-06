@@ -11,7 +11,8 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser'); 
 var methodOverride = require('method-override'); 
 
-
+var moment = require('moment');
+moment().format();
 
 var app = express(); 
 
