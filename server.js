@@ -1,11 +1,11 @@
 var express = require('express');
 var session  = require('express-session');
-var cookieParser = require('cookie-parser');
+// var cookieParser = require('cookie-parser');
 
 var mysql = require('mysql');
 var port = process.env.PORT || 8080;
 
-var routes = require('./routes/routes');
+// var routes = require('./routes/routes');
 
 var morgan = require('morgan'); 
 var bodyParser = require('body-parser'); 

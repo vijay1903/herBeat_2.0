@@ -6,5 +6,6 @@ module.exports = {
         'password': 'root'
     },
 	'database': 'herbeat',
-    'users_table': 'users'
+    'users_table': 'users',
+    'patients_messages_table': 'patients_messages'
 };

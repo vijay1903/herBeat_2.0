@@ -257,6 +257,57 @@ module.exports = function(app, conn) {
         });
     });
 
+    app.post('/api/changename', function(req, res) {
+        conn.query('UPDATE users SET full_name = ? WHERE username = ?',
+        [req.query.fullname, req.query.username]
+        , function (error, result) {
+            if (error)
+            {
+                console.log(error);
+            }
+            else
+            {
+                res.json(result);
+                console.log(result);
+                console.log('Searched username from users table.');
+            }
+        });
+    });
+
+    app.post('/api/changeemail', function(req, res) {
+        conn.query('UPDATE users SET email = ? WHERE username = ?',
+        [req.query.email, req.query.username]
+        , function (error, result) {
+            if (error)
+            {
+                console.log(error);
+            }
+            else
+            {
+                res.json(result);
+                console.log(result);
+                console.log('Searched username from users table.');
+            }
+        });
+    });
+
+    app.post('/api/changenumber', function(req, res) {
+        conn.query('UPDATE users SET number = ? WHERE username = ?',
+        [req.query.number, req.query.username]
+        , function (error, result) {
+            if (error)
+            {
+                console.log(error);
+            }
+            else
+            {
+                res.json(result);
+                console.log(result);
+                console.log('Searched username from users table.');
+            }
+        });
+    });
+
 
 
 };

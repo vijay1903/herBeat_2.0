@@ -50,23 +50,25 @@
         <input type="hidden" id="user_id" ng-model="userId" value=<%=user.id%>>
         <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" role="navigation" style="margin-bottom: 0">
-            <a class="navbar-brand" style="color: black"><img src="../img/logo.png" alt="Herbeat logo" style="width: 30px; height: 30px;"> HerBeat</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <div class="container-fluid">
+                <a class="navbar-brand" style="color: black"><img src="../img/logo.png" alt="Herbeat logo" style="width: 30px; height: 30px;"> HerBeat</a>
+                <button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
             <div class="container">
                 
             </div>
-            <div class="col-auto" ng-controller="navCtrl">
-                From <input type="date" id="startDate" ng-model="start" style="padding-right: 5px; width:160px;">
-                 to <input type="date" id="endDate" ng-model="end" style="padding-right: 5px; width:160px;">
-                 <button type="submit" ng-click="date_change()"><i class="fas fa-search"></i></button>
+            <div id="datepicker" class="col-auto" ng-controller="navCtrl">
+                From <input type="date" id="startDate" ng-model="start" style="padding-right: 5px; width:auto;">
+                 to <input type="date" id="endDate" ng-model="end" style="padding-right: 5px; width:auto;">
+                 <button class="btn btn-sm btn-primary" type="submit" ng-click="date_change()"><i class="fas fa-search"></i></button>
                  <!-- {{start | date :  "dd.MM.yyyy hh:mm a"}} and {{end | date :  "dd.MM.yyyy hh:mm a"}} -->
                  <!-- <input id="e1" name="e1"> -->
             </div>
             <!-- /.navbar-header -->                
-            <div class="btn-group" role="group">
-                <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="btn-group float-right" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-user fa-fw"></i> 
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupDrop1">
@@ -86,13 +88,13 @@
                     <a class="nav-link" id="v-pills-tasks-tab" data-toggle="pill" href="#v-pills-tasks" role="tab" aria-controls="v-pills-tasks" aria-selected="false"><i class="fas fa-tasks fa-fw"></i> Your Goals</a>
                     <!-- <a class="nav-link" id="v-pills-watch-tab" data-toggle="pill" href="#v-pills-watch" role="tab" aria-controls="v-pills-watch" aria-selected="false"><i class="fas fa-battery-full fa-fw"></i>  Watch Status</a> -->
                     <a class="nav-link" id="v-pills-responses-tab" data-toggle="pill" href="#v-pills-responses" role="tab" aria-controls="v-pills-responses" aria-selected="false"><i class="fas fa-paper-plane"></i> Your responses</a>
-                    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="fas fa-comments fa-fw"></i> Messages</a>
+                    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="fas fa-comments fa-fw"></i> Received feedback</a>
                     <a class="nav-link" id="v-pills-info-tab" data-toggle="pill" href="#v-pills-info" role="tab" aria-controls="v-pills-info" aria-selected="false"><i class="fas fa-table fa-fw"></i> Detailed Info</a>
-                    <!-- <a class="nav-link" id="v-pills-issue-tab" data-toggle="pill" href="#v-pills-issue" role="tab" aria-controls="v-pills-issue" aria-selected="false"><i class="fas fa-exclamation-triangle fa-fw"></i> Report Issue</a> -->
+                    <a class="nav-link" id="v-pills-issue-tab" data-toggle="pill" href="#v-pills-issue" role="tab" aria-controls="v-pills-issue" aria-selected="false"><i class="fas fa-exclamation-triangle fa-fw"></i>Messages</a>
                     </div>
                 </div>
             </div>
-            <div class="col-10 container-fluid main">
+            <div class="col-auto container-fluid main">
                 <div class="tab-content" id="v-pills-tabContent">
                     <div class="tab-pane fade active show" id="v-pills-dash" role="tabcard" aria-labelledby="v-pills-dash-tab">
                         <br>
@@ -187,11 +189,11 @@
 
 
                                 <div class="card border-primary text-left">
-                                    <div class="card-header"><span class="badge badge-success" style="font-size: 16px;" ng-model="msg_num">{{msg_num}}</span> Messages</div>
+                                    <div class="card-header"><span class="badge badge-success" style="font-size: 16px;" ng-model="msg_num">{{msg_num}}</span> Received Feedbacks</div>
                                     <div class="card-body text-primary" style="font-size: 12px; padding:2px">   
                                         <div style="overflow: auto; height: 130px;">
                                             <p style="padding:10px; font-size: 16px;" ng-model="card_message_4" ng-hide="card_4">{{card_message_4}}</p>
-                                            <center ng-show="card_4"> Most recent {{(msg_num >= 5)?5:msg_num}} messages</center>
+                                            <center ng-show="card_4"> Most recent {{(msg_num >= 5)?5:msg_num}} feedbacks.</center>
                                             <table class="table table-responsive"  ng-show="card_4">
                                                 <thead style="position:relative;top:0px;">
                                                     <tr  style="padding-top: 2px; padding-bottom: 2px;">
@@ -244,7 +246,7 @@
                                                 </button>
                                             </li>
                                             <li class="page-item">
-                                                <select class="form-control" ng-model="heart_range" ng-change="change_range({{heart_range}});">
+                                                <select class="form-control" ng-model="heart_range" ng-change="change_range();">
                                                     <option>Monthly</option>
                                                     <option>Weekly</option>
                                                     <option>Daily</option>
@@ -254,21 +256,21 @@
                                     </div>
                                     <div class="card-text">
                                         <div class="chartWrapper">
-                                            <div class="chartAreaWrapper" height="500">
+                                            <div class="chartAreaWrapper">
                                                 <div style="height: 500px;" ng-hide="card_5">
                                                     <p ng-model="card_message_5">{{card_message_5}}</p>
                                                 </div>
                                                 <canvas id="bar" class="chart chart-bar" chart-data="data"
                                                 chart-labels="labels" chart-series="series" chart-options="options" 
                                                 chart-colors= "chart_color"                                               
-                                                ng-model="heart_width" ng-model="heart_scale" width="10000" height="600" ng-show="card_5">
+                                                ng-model="heart_width" ng-model="heart_scale" width="10000" height="400%" ng-show="card_5">
                                                 </canvas>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="card-footer">
                                         <p ng-model="heart_start_date" ng-model="heart_end_date">{{heart_start_date | date : "MMM dd"}} to {{heart_end_date | date : "MMM dd"}}</p>
-                                        <button class="btn btn-warning" id="view_heart" ng-disabled="!card_5">View Details <i class="fas fa-arrow-circle-right"></i></button>
+                                        <button class="btn btn-sm btn-primary" id="view_heart" ng-disabled="!card_5">View Details <i class="fas fa-arrow-circle-right"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -413,10 +415,10 @@
                                                 </button>
                                             </li>
                                             <li class="page-item">
-                                                <select class="form-control" ng-model="bar_range" ng-change="change_bar_range({{bar_range}});">
+                                                <select class="form-control" ng-model="bar_range" ng-change="change_bar_range();">
                                                     <option>Monthly</option>
                                                     <option>Weekly</option>
-                                                    <option>Daily</option>
+                                                    <!-- <option>Daily</option> -->
                                                 </select>
                                             </li>
                                         </ul>
@@ -427,7 +429,7 @@
                                                 <p ng-model="card_message_6" ng-hide="card_6">{{card_message_6}}</p>
                                                 <canvas id="horizon_bar" class="chart-horizontal-bar" chart-data="data_bar"
                                                 chart-labels="labels_bar" chart-series="series_bar" chart-options="options_bar" chart-colors="chart_color_bar"
-                                                width="1050" height="1000" ng-show="card_6">
+                                                width="100%" height="1000" ng-show="card_6">
                                                 </canvas>
                                             </div>
                                         </div>
@@ -437,7 +439,7 @@
                                     </div>
                                     <div class="card-footer">
                                         <p ng-model="all_goals_start_date" ng-model="all_goals_end_date">{{all_goals_start_date | date : "MMM dd"}} to {{all_goals_end_date | date : "MMM dd"}}</p>
-                                        <button class="btn btn-warning" id='view_goals_1' ng-disabled="!card_6">View Details <i class="fas fa-arrow-circle-right"></i></button>
+                                        <button class="btn btn-sm btn-primary" id='view_goals_1' ng-disabled="!card_6">View Details <i class="fas fa-arrow-circle-right"></i></button>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
@@ -667,53 +669,57 @@
                                     <button class="btn float-right" ng-click="resetFilter();">Clear filter</button>
                                 </div>
                                 <div class="card-body">
-                                    <table class="ema_table">
-                                        <thead>
-                                            <tr>
-                                                <th ng-click="sortBy('response_date')"><a href=""> Date of response</a>
-                                                    <span class="sortorder" ng-show="propertyName === 'response_date'" ng-class="{reverse: reverse}"></span>
-                                                </th>
-                                                <th ng-click="sortBy('response_date')"><a href=""> Time of response</a>
-                                                    <span class="sortorder" ng-show="propertyName === 'response_date'" ng-class="{reverse: reverse}"></span>
-                                                </th>
-                                                <th><a href="" ng-click="sortBy('activity')"> Activity</a>
-                                                    <span class="sortorder" ng-show="propertyName === 'activity'" ng-class="{reverse: reverse}"></span>
-                                                    <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in act_filter_options" ng-model="searchText.activity" style="max-width:18px;"></select>
-                                                </th>
-                                                <th><a href="" ng-click="sortBy('company')"> Company </a>
-                                                    <span class="sortorder" ng-show="propertyName === 'company'" ng-class="{reverse: reverse}"></span>
-                                                    <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in comp_filter_options" ng-model="searchText.company" style="max-width:18px;"></select>
-                                                </th>
-                                                <th><a href="" ng-click="sortBy('location')"> Location </a>
-                                                    <span class="sortorder" ng-show="propertyName === 'location'" ng-class="{reverse: reverse}"></span>
-                                                    <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in loc_filter_options" ng-model="searchText.location" style="max-width:18px;"></select>
-                                                </th>
-                                                <th><a href="" ng-click="sortBy('food')"> Food</a>
-                                                    <span class="sortorder" ng-show="propertyName === 'food'" ng-class="{reverse: reverse}"></span>
-                                                    <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in food_filter_options" ng-model="searchText.food" style="max-width:18px;"></select>
-                                                </th>
-                                                <th><a href="" ng-click="sortBy('feel')"> Feeling</a>
-                                                    <span class="sortorder" ng-show="propertyName === 'feel'" ng-class="{reverse: reverse}"></span>
-                                                    <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in feel_filter_options" ng-model="searchText.feel" style="max-width:18px;"></select>
-                                                </th>
-                                                <th><a href="" ng-click="sortBy('motivation')"> Motivational Statement</a>
-                                                    <span class="sortorder" ng-show="propertyName === 'motivation'" ng-class="{reverse: reverse}"></span>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr ng-repeat="x in responses | orderBy:propertyName:reverse">
-                                                <td>{{x.response_date | date : 'yyyy-MM-dd'}}</td>
-                                                <td>{{x.response_date | date : 'hh:mm:ss a'}}</td>
-                                                <td>{{x.activity}}</td>
-                                                <td>{{x.company}}</td>
-                                                <td>{{x.location}}</td>
-                                                <td>{{x.food}}</td>
-                                                <td>{{x.feel}}</td>
-                                                <td style="overflow-x: hidden;">{{x.motivation}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div id="ema_wrapper">
+                                        <div id="table_wrapper">
+                                            <table class="ema_table">
+                                                <thead>
+                                                    <tr>
+                                                        <th ng-click="sortBy('response_date')"><a href=""> Date </a>
+                                                            <span class="sortorder" ng-show="propertyName === 'response_date'" ng-class="{reverse: reverse}"></span>
+                                                        </th>
+                                                        <th ng-click="sortBy('response_date')"><a href=""> Time </a>
+                                                            <span class="sortorder" ng-show="propertyName === 'response_date'" ng-class="{reverse: reverse}"></span>
+                                                        </th>
+                                                        <th><a href="" ng-click="sortBy('activity')"> Activity</a>
+                                                            <span class="sortorder" ng-show="propertyName === 'activity'" ng-class="{reverse: reverse}"></span>
+                                                            <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in act_filter_options" ng-model="searchText.activity" style="max-width:18px;"></select>
+                                                        </th>
+                                                        <th><a href="" ng-click="sortBy('company')"> Company </a>
+                                                            <span class="sortorder" ng-show="propertyName === 'company'" ng-class="{reverse: reverse}"></span>
+                                                            <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in comp_filter_options" ng-model="searchText.company" style="max-width:18px;"></select>
+                                                        </th>
+                                                        <th><a href="" ng-click="sortBy('location')"> Location </a>
+                                                            <span class="sortorder" ng-show="propertyName === 'location'" ng-class="{reverse: reverse}"></span>
+                                                            <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in loc_filter_options" ng-model="searchText.location" style="max-width:18px;"></select>
+                                                        </th>
+                                                        <th><a href="" ng-click="sortBy('food')"> Food</a>
+                                                            <span class="sortorder" ng-show="propertyName === 'food'" ng-class="{reverse: reverse}"></span>
+                                                            <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in food_filter_options" ng-model="searchText.food" style="max-width:18px;"></select>
+                                                        </th>
+                                                        <th><a href="" ng-click="sortBy('feel')"> Feeling</a>
+                                                            <span class="sortorder" ng-show="propertyName === 'feel'" ng-class="{reverse: reverse}"></span>
+                                                            <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in feel_filter_options" ng-model="searchText.feel" style="max-width:18px;"></select>
+                                                        </th>
+                                                        <th><a href="" ng-click="sortBy('motivation')"> Motivational Statement</a>
+                                                            <span class="sortorder" ng-show="propertyName === 'motivation'" ng-class="{reverse: reverse}"></span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="x in responses | orderBy:propertyName:reverse">
+                                                        <td>{{x.response_date | date : 'yyyy-MM-dd'}}</td>
+                                                        <td>{{x.response_date | date : 'hh:mm:ss a'}}</td>
+                                                        <td>{{x.activity}}</td>
+                                                        <td>{{x.company}}</td>
+                                                        <td>{{x.location}}</td>
+                                                        <td>{{x.food}}</td>
+                                                        <td>{{x.feel}}</td>
+                                                        <td style="overflow-x: hidden;">{{x.motivation}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-footer">
 
@@ -727,7 +733,7 @@
                                 <br>
                                 <div class="card" ng-controller="cardCtrl">
                                     <div class="card-header">
-                                        Your messages 
+                                        Received feedbacks 
                                     </div>
                                     <div class="card-body chartAreaWrapperHorizontal">
                                         <table class="table table-hover">
@@ -853,7 +859,7 @@
                     <div class="tab-pane fade" id="v-pills-issue" role="tabcard" aria-labelledby="v-pills-issue-tab">
                         <div class="container">
                             <div class="card">
-                                <div class="card-header">Whats the issue?</div>
+                                <div class="card-header">Messages</div>
                                 <div class="card-body">
                                 <form action="mailto:vijayv@mail.usf.edu" method="post" enctype="text/plain">
                                         <input type="text" name="Issue" placeholder="I am having isssue with ..." style="height:100px;width: 1000px; vertical-align: top;">
@@ -918,7 +924,7 @@
     <script src="../data/flot-data.js"></script> -->
 
      <!-- Custom scripts for this template -->
-    <script src="js/custom.js"></script>
+    <script src="../js/custom.js"></script>
 
     <!-- angular controller javascript -->
     <script src="./controllers/dashboardController.js"></script>

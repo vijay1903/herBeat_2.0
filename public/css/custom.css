@@ -31,10 +31,65 @@
     margin-left: 200px;
     padding: 0px 10px;
 }
+@media screen and (max-width: 1000px) {
+
+    .main {
+      width: 100%; /* The width is 100%, when the viewport is 800px or smaller */
+      margin-left: auto;
+    }
+    .sidenav {
+        padding-top: 5px;
+        width: 100%;
+        position: relative;
+        height: auto;
+    }
+    #datepicker {
+        width: 85%;
+        font-size: 15px;
+    }
+    #datepicker input{
+        width:80px;
+    }
+    button, .card-body, p{
+        font-size: 10px!important;
+        padding-bottom:5px;
+
+    }
+    /* #ema_wrapper {
+        position: relative;
+    }
+    
+    #ema_wrapper > table {
+        position: absolute;
+        left: 0;
+        top: 0;
+        pointer-events:none;
+    }
+    
+    #table_wrapper {
+        padding: 1px;
+        width: 75vw;
+        overflow-x: scroll;
+    } */
+    /* #ema_wrapper {
+        width:250%;
+        
+    }
+    #table_wrapper{
+        width:100%;
+        overflow-x: scroll;
+    }
+    .ema_table {
+        overflow-x: scroll;
+    } */
+
+    #setting_sidebar, #setting_navbar_empty {
+        display : none;
+    }
+  }
 
 @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
+    
 }
 
 .chartWrapper {
@@ -50,7 +105,7 @@
 
 .chartAreaWrapper {
     padding: 5px;
-    width: 1050px;
+    width: 75vw;
     overflow-x: scroll;
 }
 
@@ -58,7 +113,7 @@
 
 .chartWrapperHorizontal {
     position: relative;
-    height: 500px;
+    height: 50vh;
     overflow-y: scroll;
 }
 
@@ -71,7 +126,7 @@
 
 .chartAreaWrapperHorizontal {
     padding: 5px;
-    height: 500px;
+    height: 50vh;
     overflow-y: scroll;
 }
 
@@ -170,4 +225,8 @@ button:disabled {
 }
 .goal_2:hover{
     background-color: lightblue;
+}
+
+#setting_sidebar{
+    top:18px;
 }
