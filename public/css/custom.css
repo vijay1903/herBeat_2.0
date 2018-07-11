@@ -268,3 +268,79 @@ button:disabled {
 .custom_dropdown:hover .custom_dropdown-content {display: block;}
 
 .custom_dropdown:hover .custom_dropbtn {background-color: lightslategray;}
+.chatAreaWrapper{
+    /* position:relative;
+    height:60vh;
+    left:0;
+    right:0; */
+    position: relative;
+    height: 50vh;
+}
+.chatArea {
+    overflow-y: auto;
+    position : absolute;
+    left:0;
+    right:0;
+    overflow:auto;
+    top:0;
+    bottom:0;
+    /* padding: 5px;
+    height: 50vh;
+    overflow-y: auto;
+    position: absolute;
+    left: 0;
+    top: 0; */
+}
+
+.chat{
+    width:90%;
+    border: #818181;
+    border-radius: 10px;
+    position: relative;
+    padding:10px;
+    margin:10px;
+    font-size:15px;
+    vertical-align: center;
+    /* display:block; */
+}
+
+.received{
+    background-color: lightgrey;
+    float:left;
+    margin-left:10px;
+    margin-right:60px;
+}
+.sent{
+    background-color: lightskyblue;
+    float:right;
+    text-align: right;
+    margin-right:10px;
+    margin-left:60px;
+}
+
+.sent:after {
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 0.5em solid transparent;
+	border-left-color: lightblue;
+	border-right: 0;
+	margin-top: -0.5em;
+	margin-right: -0.5em;
+}
+.received:before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 0.5em solid transparent;
+	border-right-color: lightgrey;
+	border-left: 0;
+	margin-top: -0.5em;
+	margin-left: -0.5em;
+}

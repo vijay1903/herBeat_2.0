@@ -7,5 +7,5 @@ module.exports = {
     },
 	'database': 'herbeat',
     'users_table': 'users',
-    'patients_messages_table': 'patients_messages'
+    'chat_messages_table': 'chat_messages'
 };

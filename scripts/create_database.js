@@ -25,9 +25,10 @@ CREATE TABLE `' + dbconfig.database + '`.`' + dbconfig.users_table + '` ( \
 )');
 
 connection.query('\
-CREATE TABLE `' + dbconfig.database + '`.`' + dbconfig.patients_messages_table + '` ( \
+CREATE TABLE `' + dbconfig.database + '`.`' + dbconfig.chat_messages_table + '` ( \
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
-    `username` VARCHAR(30), \
+    `sender` VARCHAR(30), \
+    `receiver` VARCHAR(30), \
     `message` VARCHAR(255), \
     `sent_time` TIMESTAMP, \
     `read_time` TIMESTAMP, \

@@ -897,19 +897,28 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="v-pills-issue" role="tabcard" aria-labelledby="v-pills-issue-tab">
-                        <div class="container">
+                        <div class="container" ng-controller="chatCtrl">
                             <div class="card">
-                                <div class="card-header">Messages</div>
+                                <div class="card-header">
+                                    Messages <span class="badge badge-success" ng-model="message_count">{{message_count}}</span>
+                                    <button id="refresh" class="btn btn-small float-right" ng-click="refresh();"><i id="sync" class="fas fa-sync"></i></button>
+                                </div>
                                 <div class="card-body">
-                                <form action="mailto:vijayv@mail.usf.edu" method="post" enctype="text/plain">
-                                        <input type="text" name="Issue" placeholder="I am having isssue with ..." style="height:100px;width: 1000px; vertical-align: top;">
-                                        <input type="hidden" name="Username" value=<%=user.username%>>
-                                        <input type="hidden" name="Email" value=<%=user.email%>>
-                                        <input type="hidden" name="User Id" value=<%=user.id%>>
+                                    <div class="chatAreaWrapper">
+                                        <div id="myChat" class="chatArea">
+                                            <div ng-class="(x.sender==username?'chat sent':'chat received')" ng-repeat="x in chats">
+                                                {{x.message}}
+                                                <br>
+                                                <sub><i ng-class="(x.read_time != null)?'fas fa-check-square':'fas fa-check'" ng-show="(x.sender==username?true:false)"></i> {{x.sent_time | date: 'short'}}</sub>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-footer">
-                                    <button class="btn btn-primary" type="submit" style="float: right">Submit</button> 
-                                </form>
+                                    <form ng-submit="sendMessage();">
+                                        <input type="text" name="message" class="chat" ng-model="chat" placeholder="Type message" style="width: 90%; vertical-align: center;" required>
+                                        <button class="btn btn-primary" type="submit">Send</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -970,7 +979,6 @@
     <!-- angular controller javascript -->
     <script src="./controllers/dashboardController.js"></script>
 	
-
 </body>
 
 

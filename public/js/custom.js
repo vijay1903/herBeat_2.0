@@ -208,3 +208,7 @@ function showPage() {
   document.getElementById("dashboard").style.display = "initial";
 }
 
+$(document).ready(function(){
+  $('#myChat').animate({
+      scrollTop: $('#myChat')[0].scrollHeight}, 1000);
+});

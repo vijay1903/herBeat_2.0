@@ -4,7 +4,7 @@ var app = angular.module("myApp",['chart.js']);
 
 
 app.controller('navCtrl', function($rootScope, $scope) {
-    var midnight = new Date('04/02/2018');
+    var midnight = new Date();
     midnight.setHours(0,0,0,0);
     $rootScope.start_date = midnight;
     $rootScope.end_date = new Date();
@@ -1219,3 +1219,55 @@ app.controller("barCtrl", function($rootScope, $scope, $filter, $http, $timeout)
 //         tables($rootScope.start_date,$rootScope.end_date);
 //     });
 // });
+
+
+app.controller('chatCtrl', function($scope,$filter,$http){
+    $scope.username = document.getElementById('user_username').value;
+    $scope.chat_class = 'chat sent';
+    function updateScroll(c){
+        // var element = document.getElementById("myChat");
+        // element.scrollTop = c;
+        $("#myChat").animate({scrollTop: c},1500);
+    }
+    
+    $scope.refresh = function(){
+        chat();
+    }
+    var chat = function(){
+        // updateScroll($scope.message_count*80);
+        $http({
+            url:"/api/getchatmessages",
+            method:'GET',
+            params:{username:$scope.username}
+        })
+        .success(function(data){
+            if(data.length){
+                $scope.chats = data;
+                $scope.message_count = data.length;
+                updateScroll($scope.message_count*80);
+            }
+        })
+        .error(function(error){
+            console.log('Error', error)
+        });
+
+        $scope.sendMessage = function(){
+            $http({
+                url:"/api/sendchatmessages",
+                method:'POST',
+                params:{message:$scope.chat,sender:$scope.username,receiver:"health_coach"}
+            })
+            .success(function(data){
+                    // $scope.chats = data;
+                    $scope.chat = '';
+                    chat();
+                    updateScroll($scope.message_count*80);
+            })
+            .error(function(error){
+                console.log('Error', error)
+            });
+        }
+    }
+    // setInterval(chat,3000);
+    chat();
+});

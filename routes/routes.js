@@ -308,6 +308,43 @@ module.exports = function(app, conn) {
         });
     });
 
+    app.get('/api/getchatmessages', function(req, res) {
+        conn.query('SET SQL_SAFE_UPDATES=0');
+        conn.query('select * from chat_messages where sender = ? OR receiver = ? order by sent_time;',
+        [req.query.username, req.query.username]
+        , function (error, result) {
+            if (error)
+            {
+                console.log(error);
+            }
+            else
+            {   
+                res.send(result);
+                console.log(result);
+                console.log('Fetched chat messages.');
+            }
+        });
+        conn.query('UPDATE chat_messages SET read_time = CURRENT_TIMESTAMP() WHERE receiver = ?;',
+        [req.query.username]);
+        conn.query('SET SQL_SAFE_UPDATES=1;');
+    });
+
+    app.post('/api/sendchatmessages', function(req, res) {
+        conn.query('INSERT INTO chat_messages (message, sender, sent_time, receiver, read_time) values (?,?,CURRENT_TIMESTAMP(),?,null)',
+        [req.query.message, req.query.sender, req.query.receiver]
+        , function (error, result) {
+            if (error)
+            {
+                console.log(error);
+            }
+            else
+            {
+                res.json(result);
+                console.log(result);
+                console.log('Searched chats from chats table.');
+            }
+        });
+    });
 
 
 };
