@@ -686,9 +686,9 @@
                                                             <div class="custom_dropdown">
                                                                 <button class="custom_dropbtn"><i class="fas fa-caret-down"></i></button>
                                                                 <div class="custom_dropdown-content">
-                                                                    <a href="#" ng-click="clicked('act',act_filter_options,'selectAll');">Select All</a>
-                                                                    <a href="#" ng-click="clicked('act',act_filter_options,'deselectAll')">De-select All</a>
-                                                                    <a href="#" ng-repeat="x in act_filter_options track by $index" ng-click="x.flag=!x.flag; clicked('act',act_filter_options);"><i ng-class="x.flag?'fas fa-check':'fas fa-times'"></i> {{x.label}}</a>
+                                                                    <a href="#" ng-click="clicked(act_filter_options,'selectAll');">Select All</a>
+                                                                    <a href="#" ng-click="clicked(act_filter_options,'deselectAll')">De-select All</a>
+                                                                    <a href="#" ng-repeat="x in act_filter_options track by $index" ng-click="x.flag=!x.flag; clicked(act_filter_options);"><i ng-class="x.flag?'fas fa-check':'fas fa-times'"></i> {{x.label}}</a>
                                                                 </div>
                                                             </div>
                                                         </th>
@@ -698,9 +698,9 @@
                                                             <div class="custom_dropdown">
                                                                 <button class="custom_dropbtn"><i class="fas fa-caret-down"></i></button>
                                                                 <div class="custom_dropdown-content">
-                                                                    <a href="#" ng-click="clicked('comp',comp_filter_options,'selectAll');">Select All</a>
-                                                                    <a href="#" ng-click="clicked('comp',comp_filter_options,'deselectAll');">De-select All</a>    
-                                                                    <a href="#" ng-repeat="x in comp_filter_options track by $index" ng-click="x.flag=!x.flag; clicked('comp',comp_filter_options);"><i ng-class="x.flag?'fas fa-check':'fas fa-times'"></i>  {{x.label}}</a>
+                                                                    <a href="#" ng-click="clicked(comp_filter_options,'selectAll');">Select All</a>
+                                                                    <a href="#" ng-click="clicked(comp_filter_options,'deselectAll');">De-select All</a>    
+                                                                    <a href="#" ng-repeat="x in comp_filter_options track by $index" ng-click="x.flag=!x.flag; clicked(comp_filter_options);"><i ng-class="x.flag?'fas fa-check':'fas fa-times'"></i>  {{x.label}}</a>
                                                                 </div>
                                                             </div>
                                                         </th>
@@ -710,9 +710,9 @@
                                                             <div class="custom_dropdown">
                                                                 <button class="custom_dropbtn"><i class="fas fa-caret-down"></i></button>
                                                                 <div class="custom_dropdown-content">
-                                                                    <a href="#" ng-click="clicked('loc',loc_filter_options,'selectAll');">Select All</a>
-                                                                    <a href="#" ng-click="clicked('loc',loc_filter_options,'deselectAll');">De-select All</a>    
-                                                                    <a href="#" ng-repeat="x in loc_filter_options track by $index" ng-click="x.flag=!x.flag; clicked('loc',loc_filter_options);"><i ng-class="x.flag?'fas fa-check':'fas fa-times'"></i>  {{x.label}}</a>
+                                                                    <a href="#" ng-click="clicked(loc_filter_options,'selectAll');">Select All</a>
+                                                                    <a href="#" ng-click="clicked(loc_filter_options,'deselectAll');">De-select All</a>    
+                                                                    <a href="#" ng-repeat="x in loc_filter_options track by $index" ng-click="x.flag=!x.flag; clicked(loc_filter_options);"><i ng-class="x.flag?'fas fa-check':'fas fa-times'"></i>  {{x.label}}</a>
                                                                 </div>
                                                             </div>                                                            
                                                         </th>
@@ -722,9 +722,9 @@
                                                             <div class="custom_dropdown">
                                                                 <button class="custom_dropbtn"><i class="fas fa-caret-down"></i></button>
                                                                 <div class="custom_dropdown-content">
-                                                                    <a href="#" ng-click="clicked('food',food_filter_options,'selectAll');">Select All</a>
-                                                                    <a href="#" ng-click="clicked('food',food_filter_options,'deselectAll');">De-select All</a>    
-                                                                    <a href="#" ng-repeat="x in food_filter_options track by $index" ng-click="x.flag=!x.flag; clicked('food',food_filter_options);"><i ng-class="x.flag?'fas fa-check':'fas fa-times'"></i>  {{x.label}}</a>
+                                                                    <a href="#" ng-click="clicked(food_filter_options,'selectAll');">Select All</a>
+                                                                    <a href="#" ng-click="clicked(food_filter_options,'deselectAll');">De-select All</a>    
+                                                                    <a href="#" ng-repeat="x in food_filter_options track by $index" ng-click="x.flag=!x.flag; clicked(food_filter_options);"><i ng-class="x.flag?'fas fa-check':'fas fa-times'"></i>  {{x.label}}</a>
                                                                 </div>
                                                             </div>
                                                         </th>
@@ -734,9 +734,9 @@
                                                             <div class="custom_dropdown">
                                                                 <button class="custom_dropbtn"><i class="fas fa-caret-down"></i></button>
                                                                 <div class="custom_dropdown-content">
-                                                                    <a href="#" ng-click="clicked('feel',feel_filter_options,'selectAll');">Select All</a>
-                                                                    <a href="#" ng-click="clicked('feel',feel_filter_options,'deselectAll');">De-select All</a>    
-                                                                    <a href="#" ng-repeat="x in feel_filter_options track by $index" ng-click="x.flag=!x.flag; clicked('feel',feel_filter_options);"><i ng-class="x.flag?'fas fa-check':'fas fa-times'"></i>  {{x.label}}</a>
+                                                                    <a href="#" ng-click="clicked(feel_filter_options,'selectAll');">Select All</a>
+                                                                    <a href="#" ng-click="clicked(feel_filter_options,'deselectAll');">De-select All</a>    
+                                                                    <a href="#" ng-repeat="x in feel_filter_options track by $index" ng-click="x.flag=!x.flag; clicked(feel_filter_options);"><i ng-class="x.flag?'fas fa-check':'fas fa-times'"></i>  {{x.label}}</a>
                                                                 </div>
                                                             </div>
                                                         </th>

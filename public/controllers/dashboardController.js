@@ -242,8 +242,8 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                 
                 if($scope.all) {
                     var temp = [];
-                    switch(category) {
-                        case "act":{
+                    // switch(category) {
+                        // case "act":{
                             temp = [];
                             for(var a in $scope.act_filter_options){
                                 $scope.searchText['activity'] = $scope.act_filter_options[a].label;
@@ -252,9 +252,9 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                                 }
                             }
                             out = temp;
-                            break;
-                        }
-                        case "comp":{
+                            // break;
+                        // }
+                        // case "comp":{
                             temp = [];
                             for(var a in $scope.comp_filter_options){
                                 $scope.searchText['company'] = $scope.comp_filter_options[a].label;
@@ -263,9 +263,9 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                                 }
                             }
                             out = temp;
-                            break;
-                        }
-                        case "loc":{
+                            // break;
+                        // }
+                        // case "loc":{
                             temp = [];
                             for(var a in $scope.loc_filter_options){
                                 $scope.searchText['location'] = $scope.loc_filter_options[a].label;
@@ -274,9 +274,9 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                                 }
                             }
                             out = temp;
-                            break;
-                        }
-                        case "food":{
+                            // break;
+                        // }
+                        // case "food":{
                             temp = [];
                             for(var a in $scope.food_filter_options){
                                 $scope.searchText['food'] = $scope.food_filter_options[a].label;
@@ -285,9 +285,9 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                                 }
                             }  
                             out = temp;
-                            break;
-                        }
-                        case "feel":{
+                            // break;
+                        // }
+                        // case "feel":{
                             temp = [];
                             for(var a in $scope.feel_filter_options){
                                 $scope.searchText['feel'] = $scope.feel_filter_options[a].label;
@@ -296,53 +296,64 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                                 }
                             }
                             out = temp;
-                            break;
-                        }
-                        default : {
-                            out = data;
+                            // break;
+                        // }
+                        // default : {
+                            // out = data;
                             // $scope.selectAll($scope.act_filter_options);
                             // $scope.selectAll($scope.comp_filter_options);
                             // $scope.selectAll($scope.loc_filter_options);
                             // $scope.selectAll($scope.food_filter_options);
                             // $scope.selectAll($scope.feel_filter_options);
-                            break;
-                        }
-                    }
+                            // break;
+                        // }
+                    // }
                     $scope.responses = out;
                     $scope.searchCount = data.length; 
                 } else { 
                     $scope.responses = []; 
                 }
             }
-            
+            var resetAll = function(item){
+                for(var i in item){
+                    item[i].flag = true;
+                }
+            }
             $scope.resetFilter = function(){
-                $scope.searchText = {};
+                $scope.searchText = [];
+                out = data;
+                resetAll($scope.act_filter_options);
+                resetAll($scope.comp_filter_options);
+                resetAll($scope.loc_filter_options);
+                resetAll($scope.food_filter_options);
+                resetAll($scope.feel_filter_options);              
                 $scope.searchBy();
+
             }
             
-            $scope.clicked = function(category,item,type) {
+            $scope.clicked = function(item,type) {
                 if(type == 'selectAll'){
                     out = data;
                     for(var x in item){
                         item[x].flag = true;
                     }
                     $scope.all = true;
-                    $scope.searchBy(category);
+                    $scope.searchBy();
                 } else if(type == "deselectAll") {
                     for(var x in item){
                         item[x].flag = false;
                     }
                     $scope.all = false;
-                    $scope.searchBy(category);
+                    $scope.searchBy();
                 } else {
                     // if(!$scope.all){
-                        // out = data;
+                        out = data;
                     // }
                     $scope.all = true;
-                    $scope.searchBy(category);
+                    $scope.searchBy();
                 }
                 
-                console.log("Clicked!!");
+                // console.log("Clicked!!");
             }
             $scope.searchBy();
             $scope.radar_options = {
