@@ -682,23 +682,63 @@
                                                         </th>
                                                         <th><a href="" ng-click="sortBy('activity')"> Activity</a>
                                                             <span class="sortorder" ng-show="propertyName === 'activity'" ng-class="{reverse: reverse}"></span>
-                                                            <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in act_filter_options" ng-model="searchText.activity" style="max-width:18px;"></select>
+                                                            <!-- <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in act_filter_options" ng-model="searchText.activity" style="max-width:18px;"></select> -->
+                                                            <div class="custom_dropdown">
+                                                                <button class="custom_dropbtn"><i class="fas fa-caret-down"></i></button>
+                                                                <div class="custom_dropdown-content">
+                                                                    <a href="#" ng-click="clicked('act',act_filter_options,'selectAll');">Select All</a>
+                                                                    <a href="#" ng-click="clicked('act',act_filter_options,'deselectAll')">De-select All</a>
+                                                                    <a href="#" ng-repeat="x in act_filter_options track by $index" ng-click="x.flag=!x.flag; clicked('act',act_filter_options);"><i ng-class="x.flag?'fas fa-check':'fas fa-times'"></i> {{x.label}}</a>
+                                                                </div>
+                                                            </div>
                                                         </th>
                                                         <th><a href="" ng-click="sortBy('company')"> Company </a>
                                                             <span class="sortorder" ng-show="propertyName === 'company'" ng-class="{reverse: reverse}"></span>
-                                                            <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in comp_filter_options" ng-model="searchText.company" style="max-width:18px;"></select>
+                                                            <!-- <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in comp_filter_options" ng-model="searchText.company" style="max-width:18px;"></select> -->
+                                                            <div class="custom_dropdown">
+                                                                <button class="custom_dropbtn"><i class="fas fa-caret-down"></i></button>
+                                                                <div class="custom_dropdown-content">
+                                                                    <a href="#" ng-click="clicked('comp',comp_filter_options,'selectAll');">Select All</a>
+                                                                    <a href="#" ng-click="clicked('comp',comp_filter_options,'deselectAll');">De-select All</a>    
+                                                                    <a href="#" ng-repeat="x in comp_filter_options track by $index" ng-click="x.flag=!x.flag; clicked('comp',comp_filter_options);"><i ng-class="x.flag?'fas fa-check':'fas fa-times'"></i>  {{x.label}}</a>
+                                                                </div>
+                                                            </div>
                                                         </th>
                                                         <th><a href="" ng-click="sortBy('location')"> Location </a>
                                                             <span class="sortorder" ng-show="propertyName === 'location'" ng-class="{reverse: reverse}"></span>
-                                                            <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in loc_filter_options" ng-model="searchText.location" style="max-width:18px;"></select>
+                                                            <!-- <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in loc_filter_options" ng-model="searchText.location" style="max-width:18px;"></select> -->
+                                                            <div class="custom_dropdown">
+                                                                <button class="custom_dropbtn"><i class="fas fa-caret-down"></i></button>
+                                                                <div class="custom_dropdown-content">
+                                                                    <a href="#" ng-click="clicked('loc',loc_filter_options,'selectAll');">Select All</a>
+                                                                    <a href="#" ng-click="clicked('loc',loc_filter_options,'deselectAll');">De-select All</a>    
+                                                                    <a href="#" ng-repeat="x in loc_filter_options track by $index" ng-click="x.flag=!x.flag; clicked('loc',loc_filter_options);"><i ng-class="x.flag?'fas fa-check':'fas fa-times'"></i>  {{x.label}}</a>
+                                                                </div>
+                                                            </div>                                                            
                                                         </th>
                                                         <th><a href="" ng-click="sortBy('food')"> Food</a>
                                                             <span class="sortorder" ng-show="propertyName === 'food'" ng-class="{reverse: reverse}"></span>
-                                                            <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in food_filter_options" ng-model="searchText.food" style="max-width:18px;"></select>
+                                                            <!-- <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in food_filter_options" ng-model="searchText.food" style="max-width:18px;"></select> -->
+                                                            <div class="custom_dropdown">
+                                                                <button class="custom_dropbtn"><i class="fas fa-caret-down"></i></button>
+                                                                <div class="custom_dropdown-content">
+                                                                    <a href="#" ng-click="clicked('food',food_filter_options,'selectAll');">Select All</a>
+                                                                    <a href="#" ng-click="clicked('food',food_filter_options,'deselectAll');">De-select All</a>    
+                                                                    <a href="#" ng-repeat="x in food_filter_options track by $index" ng-click="x.flag=!x.flag; clicked('food',food_filter_options);"><i ng-class="x.flag?'fas fa-check':'fas fa-times'"></i>  {{x.label}}</a>
+                                                                </div>
+                                                            </div>
                                                         </th>
                                                         <th><a href="" ng-click="sortBy('feel')"> Feeling</a>
                                                             <span class="sortorder" ng-show="propertyName === 'feel'" ng-class="{reverse: reverse}"></span>
-                                                            <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in feel_filter_options" ng-model="searchText.feel" style="max-width:18px;"></select>
+                                                            <!-- <select name="activity" id="activity" ng-change="searchBy()" ng-options="i for i in feel_filter_options" ng-model="searchText.feel" style="max-width:18px;"></select> -->
+                                                            <div class="custom_dropdown">
+                                                                <button class="custom_dropbtn"><i class="fas fa-caret-down"></i></button>
+                                                                <div class="custom_dropdown-content">
+                                                                    <a href="#" ng-click="clicked('feel',feel_filter_options,'selectAll');">Select All</a>
+                                                                    <a href="#" ng-click="clicked('feel',feel_filter_options,'deselectAll');">De-select All</a>    
+                                                                    <a href="#" ng-repeat="x in feel_filter_options track by $index" ng-click="x.flag=!x.flag; clicked('feel',feel_filter_options);"><i ng-class="x.flag?'fas fa-check':'fas fa-times'"></i>  {{x.label}}</a>
+                                                                </div>
+                                                            </div>
                                                         </th>
                                                         <th><a href="" ng-click="sortBy('motivation')"> Motivational Statement</a>
                                                             <span class="sortorder" ng-show="propertyName === 'motivation'" ng-class="{reverse: reverse}"></span>
@@ -706,7 +746,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr ng-repeat="x in responses | orderBy:propertyName:reverse">
+                                                    <tr ng-repeat="x in responses| orderBy:propertyName:reverse">
                                                         <td>{{x.response_date | date : 'yyyy-MM-dd'}}</td>
                                                         <td>{{x.response_date | date : 'hh:mm:ss a'}}</td>
                                                         <td>{{x.activity}}</td>
@@ -892,6 +932,7 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="../vendor/bootstrap4/js/bootstrap.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script> -->
 
     <!--Angular scripts-->
     <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>

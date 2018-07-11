@@ -187,27 +187,164 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                 $scope.card_3 = false;
                 $scope.card_message_3 = "No data for this range.";
             }
-            $scope.searchText = '';
+            $scope.searchText = {};
+            $scope.all = true;
             // $scope.searchCat = ["response_date","activity","company","location","food","feel"];
-            $scope.act_filter_options = ["jogging","standing","walking","sitting","bicycling","None of the above"];
-            $scope.comp_filter_options = ["Alone", "With Spouse", "With Children", "With friends", "With Co-worker", "None of the above"];
-            $scope.loc_filter_options = ["In House", "at recreation center", "at park", "at restaurant", "None of the place", "at gym"];
-            $scope.feel_filter_options = ["Very Positive","Positive","Neutral","Negative","Very Negative"];
-            $scope.food_filter_options = ["Protein","Vegetable","Whole Grain","One Drink","Fruit","None of the Above","Sweet and Sugary Drink","Salty Snack","SeveralDrink","Fried food","Didn' Eat anything last hour"];
-            $scope.searchBy = function(){
-                if($scope.searchText == ''){
-                    $scope.responses = data;
-                    $scope.searchCount = data.length;
-                } else {
-                    $scope.responses = $filter('filter')(data,$scope.searchText,true);
-                    $scope.searchCount = $scope.responses.length;
+            $scope.act_filter_options = [{label:"jogging", flag:true},{label:"standing", flag:true},{label:"walking", flag:true},{label:"sitting", flag:true},{label:"bicycling", flag:true},{label:"None of the above", flag:true}];
+            $scope.comp_filter_options = [{label:"Alone",flag:true},{label:"With Spouse",flag:true},{label:"With Children",flag:true},{label:"With friends",flag:true},{label:"With Co-worker",flag:true},{label:"None of the above",flag:true}];
+            $scope.loc_filter_options = [{label:"In House",flag:true},{label:"at recreation center",flag:true},{label:"at park",flag:true},{label:"at restaurant",flag:true},{label:"None of the place",flag:true},{label:"at gym",flag:true}];
+            $scope.feel_filter_options = [{label:"Very Positive",flag:true},{label:"Positive",flag:true},{label:"Neutral",flag:true},{label:"Negative",flag:true},{label:"Very Negative",flag:true}];
+            $scope.food_filter_options = [{label:"Protein",flag:true},{label:"Vegetable",flag:true},{label:"Whole Grain",flag:true},{label:"One Drink",flag:true},{label:"Fruit",flag:true},{label:"None of the Above",flag:true},{label:"Sweet and Sugary Drink",flag:true},{label:"Salty Snack",flag:true},{label:"SeveralDrink",flag:true},{label:"Fried food",flag:true},{label:"Didn' Eat anything last hour",flag:true}];
+            // var filter_arr = [];
+            // filter_arr['activity'] = [];
+            // filter_arr['company'] = [];
+            // filter_arr['location'] = [];
+            // filter_arr['food'] = [];
+            // filter_arr['feel'] = [];
+            // $scope.searchText['activity'] = ["jogging","standing","walking","sitting","bicycling","None of the above"];
+            // $scope.searchText['company'] = ["Alone", "With Spouse", "With Children", "With friends", "With Co-worker", "None of the above"];
+            // $scope.searchText['location'] = ["In House", "at recreation center", "at park", "at restaurant", "None of the place", "at gym"];
+            // $scope.searchText['food'] = ["Protein","Vegetable","Whole Grain","One Drink","Fruit","None of the Above","Sweet and Sugary Drink","Salty Snack","SeveralDrink","Fried food","Didn' Eat anything last hour"];
+            // $scope.searchText['feel'] = ["Very Positive","Positive","Neutral","Negative","Very Negative"];
+            
+            var out = data;
+            $scope.searchBy = function(category){
+                // if($scope.searchText == ''){
+                //     $scope.responses = data;
+                //     $scope.searchCount = data.length;
+                // } else {
+                //     $scope.responses = [];
+                //     console.log($scope.searchText);
+                //     $scope.responses = $filter('filter')(data,$scope.searchText,true);
+                //     // if((filter_arr.activity).includes($scope.searchText.activity)){
+                //     //     filter_arr.activity.pop($scope.searchText.activity);
+                //     //     $scope.searchText = '';
+                //     // } else {
+                //     //     filter_arr.activity.push($scope.searchText.activity);
+                //     //     $scope.searchText = '';
+                //     // }
+                //     // $scope.responses = $filter('filter')(data,filter_arr[0])
+                //     // console.log(filter_arr);
+                //     $scope.searchCount = $scope.responses.length;
+                // }
+
+                Array.prototype.unique = function() {
+                    var a = this.concat();
+                    for(var i=0; i<a.length; ++i) {
+                        for(var j=i+1; j<a.length; ++j) {
+                            if(a[i] === a[j])
+                                a.splice(j--, 1);
+                        }
+                    }
+                
+                    return a;
+                };
+                
+                if($scope.all) {
+                    var temp = [];
+                    switch(category) {
+                        case "act":{
+                            temp = [];
+                            for(var a in $scope.act_filter_options){
+                                $scope.searchText['activity'] = $scope.act_filter_options[a].label;
+                                if($scope.act_filter_options[a].flag){
+                                    temp = temp.concat($filter('filter')(out,$scope.searchText,true)).unique();
+                                }
+                            }
+                            out = temp;
+                            break;
+                        }
+                        case "comp":{
+                            temp = [];
+                            for(var a in $scope.comp_filter_options){
+                                $scope.searchText['company'] = $scope.comp_filter_options[a].label;
+                                if($scope.comp_filter_options[a].flag){
+                                    temp = temp.concat($filter('filter')(out,$scope.searchText,true)).unique();
+                                }
+                            }
+                            out = temp;
+                            break;
+                        }
+                        case "loc":{
+                            temp = [];
+                            for(var a in $scope.loc_filter_options){
+                                $scope.searchText['location'] = $scope.loc_filter_options[a].label;
+                                if($scope.loc_filter_options[a].flag){
+                                    temp = temp.concat($filter('filter')(out,$scope.searchText,true)).unique();
+                                }
+                            }
+                            out = temp;
+                            break;
+                        }
+                        case "food":{
+                            temp = [];
+                            for(var a in $scope.food_filter_options){
+                                $scope.searchText['food'] = $scope.food_filter_options[a].label;
+                                if($scope.food_filter_options[a].flag){
+                                    temp = temp.concat($filter('filter')(out,$scope.searchText,true)).unique();
+                                }
+                            }  
+                            out = temp;
+                            break;
+                        }
+                        case "feel":{
+                            temp = [];
+                            for(var a in $scope.feel_filter_options){
+                                $scope.searchText['feel'] = $scope.feel_filter_options[a].label;
+                                if($scope.feel_filter_options[a].flag){
+                                    temp = temp.concat($filter('filter')(out,$scope.searchText,true)).unique();
+                                }
+                            }
+                            out = temp;
+                            break;
+                        }
+                        default : {
+                            out = data;
+                            // $scope.selectAll($scope.act_filter_options);
+                            // $scope.selectAll($scope.comp_filter_options);
+                            // $scope.selectAll($scope.loc_filter_options);
+                            // $scope.selectAll($scope.food_filter_options);
+                            // $scope.selectAll($scope.feel_filter_options);
+                            break;
+                        }
+                    }
+                    $scope.responses = out;
+                    $scope.searchCount = data.length; 
+                } else { 
+                    $scope.responses = []; 
                 }
             }
-            $scope.searchBy();
+            
             $scope.resetFilter = function(){
-                $scope.searchText = '';
+                $scope.searchText = {};
                 $scope.searchBy();
             }
+            
+            $scope.clicked = function(category,item,type) {
+                if(type == 'selectAll'){
+                    out = data;
+                    for(var x in item){
+                        item[x].flag = true;
+                    }
+                    $scope.all = true;
+                    $scope.searchBy(category);
+                } else if(type == "deselectAll") {
+                    for(var x in item){
+                        item[x].flag = false;
+                    }
+                    $scope.all = false;
+                    $scope.searchBy(category);
+                } else {
+                    // if(!$scope.all){
+                        // out = data;
+                    // }
+                    $scope.all = true;
+                    $scope.searchBy(category);
+                }
+                
+                console.log("Clicked!!");
+            }
+            $scope.searchBy();
             $scope.radar_options = {
                 scale: {
                     ticks:{
