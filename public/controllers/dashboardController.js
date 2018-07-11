@@ -476,7 +476,14 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
     cards($rootScope.start_date,$rootScope.end_date);
     $scope.$on('datechange', function(event, args){
         cards($rootScope.start_date,$rootScope.end_date);
-    });   
+    });
+    // $scope.all_color="#0000ff";
+    // $scope.change_color = function(){
+    //     var color = $scope.all_color;
+    //     document.getElementsByClassName('card').style.borderColor = color;
+    //     document.getElementsByClassName('btn').style.backgroundColor = color;
+    //     document.getElementsByClassName('btn').style.pointHoverBackgroundColor = rgba(color, 0.5); 
+    // }
 });
 
 app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){

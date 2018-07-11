@@ -52,7 +52,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" role="navigation" style="margin-bottom: 0">
             <div class="container-fluid">
                 <a class="navbar-brand" style="color: black"><img src="../img/logo.png" alt="Herbeat logo" style="width: 30px; height: 30px;"> HerBeat</a>
-                <button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button id="collapse_toggle" class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
@@ -68,7 +68,7 @@
             </div>
             <!-- /.navbar-header -->                
             <div class="btn-group float-right" role="group">
-                <button id="btnGroupDrop1" type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button id="btnGroupDrop1" type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-user fa-fw"></i> 
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupDrop1">
@@ -80,17 +80,17 @@
         </nav>
         <div id="loader"></div>
         <div id="overlay"></div>
-        <div class="row" id="dashboard"  style="display:none;" class="animate-bottom">
+        <div class="row" id="dashboard" class="animate-bottom">
             <div class="sidenav collapse navbar-collapse" id="navbarSupportedContent">
                 <div class="col-auto">
                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <a class="nav-link active show" id="v-pills-dash-tab" data-toggle="pill" href="#v-pills-dash" role="tab" aria-controls="v-pills-dash" aria-selected="true"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</a>
                     <a class="nav-link" id="v-pills-tasks-tab" data-toggle="pill" href="#v-pills-tasks" role="tab" aria-controls="v-pills-tasks" aria-selected="false"><i class="fas fa-tasks fa-fw"></i> Your Goals</a>
                     <!-- <a class="nav-link" id="v-pills-watch-tab" data-toggle="pill" href="#v-pills-watch" role="tab" aria-controls="v-pills-watch" aria-selected="false"><i class="fas fa-battery-full fa-fw"></i>  Watch Status</a> -->
-                    <a class="nav-link" id="v-pills-responses-tab" data-toggle="pill" href="#v-pills-responses" role="tab" aria-controls="v-pills-responses" aria-selected="false"><i class="fas fa-paper-plane"></i> Your responses</a>
-                    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="fas fa-comments fa-fw"></i> Received feedback</a>
+                    <a class="nav-link" id="v-pills-responses-tab" data-toggle="pill" href="#v-pills-responses" role="tab" aria-controls="v-pills-responses" aria-selected="false"><i class="far fa-smile"></i> Your responses</a>
+                    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="fas fa-bell fa-fw"></i> Feedback</a>
                     <a class="nav-link" id="v-pills-info-tab" data-toggle="pill" href="#v-pills-info" role="tab" aria-controls="v-pills-info" aria-selected="false"><i class="fas fa-table fa-fw"></i> Detailed Info</a>
-                    <a class="nav-link" id="v-pills-issue-tab" data-toggle="pill" href="#v-pills-issue" role="tab" aria-controls="v-pills-issue" aria-selected="false"><i class="fas fa-exclamation-triangle fa-fw"></i>Messages</a>
+                    <a class="nav-link" id="v-pills-issue-tab" data-toggle="pill" href="#v-pills-issue" role="tab" aria-controls="v-pills-issue" aria-selected="false"><i class="fas fa-comments fa-fw"></i> Messages</a>
                     </div>
                 </div>
             </div>
@@ -98,11 +98,12 @@
                 <div class="tab-content" id="v-pills-tabContent">
                     <div class="tab-pane fade active show" id="v-pills-dash" role="tabcard" aria-labelledby="v-pills-dash-tab">
                         <br>
-                        <div class="container"  ng-controller="cardCtrl">
-                            <div class="card border-primary">
-                                <div class="card-body text-primary" style="font-size: 16px;">
+                        <div class="container-fluid"  ng-controller="cardCtrl">
+                            <div class="card">
+                                <div class="card-body" style="font-size: 16px;">
                                     <div class="container">
                                         <h4 style="text-transform: capitalize;">Welcome <%=user.full_name%>!</h4>
+                                        <!-- <input type="color" class="float-right" ng-model="all_color" ng-change="change_color();"></h4> -->
                                     </div>                                    
                                 </div>
                             </div>
@@ -111,11 +112,11 @@
                             <!-- /.row -->
 
                             <div class="card-deck">
-                                <div class="card border-primary text-left">
+                                <div class="card text-left">
                                     <div class="card-header">
                                         <span class="badge badge-success" style="font-size: 16px;" ng-model="count">{{count}}</span> Goals
                                     </div>
-                                    <div class="card-body text-primary" style="font-size: 16px;">
+                                    <div class="card-body" style="font-size: 16px;">
                                         <p ng-model="card_message_1" ng-hide="card_1">{{card_message_1}}</p>
                                         <p ng-model="max" ng-show="card_1">Max: {{max}} mins.</p>
                                         <p ng-model="avg" ng-show="card_1">Avg: {{avg}} mins.</p>
@@ -132,9 +133,9 @@
                                         </div>
                                 </div>
 
-                                <div class="card border-primary text-left">
-                                    <div class="card-header"><a href="#"><i class="fas fa-chart-bar"></i></a> Activities</div>
-                                    <div class="card-body text-primary text-left" style="font-size: 16px;">
+                                <div class="card text-left">
+                                    <div class="card-header"><a href="#radar_chart"><i class="fas fa-chart-bar"></i></a> Activities</div>
+                                    <div class="card-body text-left" style="font-size: 16px;">
                                         <p ng-hide="card_1" ng-model="card_message_2">{{card_message_2}}</p>
                                         <table ng-show="card_2">
                                             <tr>
@@ -170,9 +171,9 @@
 
 
 
-                                <div class="card border-primary text-left">
+                                <div class="card text-left">
                                     <div class="card-header">EMA Response</div>
-                                    <div class="card-body text-primary" style="font-size: 16px;">
+                                    <div class="card-body" style="font-size: 16px;">
                                         <p ng-model="card_message_3" ng-hide="card_3">{{card_message_3}}</p>
                                         <h1 ng-model="res_num" ng-model="res_den" ng-show="card_3">{{res_num}}/{{res_den}}</h1>
                                         
@@ -188,9 +189,9 @@
                                 </div>
 
 
-                                <div class="card border-primary text-left">
+                                <div class="card text-left">
                                     <div class="card-header"><span class="badge badge-success" style="font-size: 16px;" ng-model="msg_num">{{msg_num}}</span> Received Feedbacks</div>
-                                    <div class="card-body text-primary" style="font-size: 12px; padding:2px">   
+                                    <div class="card-body" style="font-size: 12px; padding:2px">   
                                         <div style="overflow: auto; height: 130px;">
                                             <p style="padding:10px; font-size: 16px;" ng-model="card_message_4" ng-hide="card_4">{{card_message_4}}</p>
                                             <center ng-show="card_4"> Most recent {{(msg_num >= 5)?5:msg_num}} feedbacks.</center>
@@ -215,7 +216,7 @@
                                         <div class="card-footer">
                                             <p ng-model="msg_start_date" ng-model="msg_end_date">{{msg_start_date | date : "MMM dd"}} to {{msg_end_date | date: 'MMM dd'}}</p>
                                             <button class="btn btn-sm btn-primary" id="view_messages" ng-disabled="!card_4">
-                                                <span>View all messages</span>
+                                                <span>View all feedbacks</span>
                                                 <span><i class="fas fa-arrow-circle-right"></i></span>
                                             </button>
                                         </div>
@@ -225,10 +226,10 @@
 
                         <br>
                         <!-- /.row -->
-                        <div class="container" ng-controller="chartCtrl">
+                        <div class="container-fluid" ng-controller="chartCtrl">
                             <div class="card-deck">
 
-                                <div class="card border-primary">
+                                <div class="card">
                                     <div class="card-header">
                                         <i class="fas fa-file-medical-alt"></i> Heartrate 
                                         <ul class="pagination float-right">
@@ -238,7 +239,7 @@
                                                 <span class="sr-only">Previous</span>
                                             </button>
                                             </li>
-                                            <li class="page-item" ng-repeat="x in heart_options track by $index"><button class="page-link">{{x}}</button></li>
+                                            <li class="page-item" ng-repeat="x in heart_options track by $index"><button class="page-link" style="pointer-events: none;">{{x}}</button></li>
                                             <li class="page-item">
                                                 <button class="page-link" ng-click="nextPage()" aria-label="Next" ng-disabled="next">
                                                 <span aria-hidden="true">&raquo;</span>
@@ -278,8 +279,8 @@
                         <!-- /.row -->
 
                         <br>
-                        <div class="container" ng-controller="cardCtrl">
-                            <div class="card  border-primary">
+                        <div class="container-fluid" ng-controller="cardCtrl">
+                            <div class="card" id="radar_chart">
                                 <div class="card-header"><i class="fas fa-chart-area fa-fw"></i> Your Activities from EMA Response
                                     <!-- <ul class="pagination float-right">
                                         <li class="page-item">
@@ -306,7 +307,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="card-deck">
-                                        <div class="card border-primary">
+                                        <div class="card">
                                             <div class="card-header">
                                                 Activities
                                             </div>
@@ -316,7 +317,7 @@
                                                 chart-options="radar_options"></canvas>
                                             </div>
                                         </div>
-                                        <div class="card border-primary">
+                                        <div class="card">
                                             <div class="card-header">
                                                 Feelings
                                             </div>
@@ -330,7 +331,7 @@
                                     </div>
                                     <br>
                                     <div class="card-deck">
-                                        <div class="card border-primary">
+                                        <div class="card">
                                             <div class="card-header">
                                                 Location
                                             </div>
@@ -341,7 +342,7 @@
                                                 </canvas>
                                             </div>
                                         </div>
-                                        <div class="card border-primary">
+                                        <div class="card">
                                             <div class="card-header">
                                                 Company
                                             </div>
@@ -355,7 +356,7 @@
                                     </div>
                                     <br>
                                     <div class="card-deck">
-                                        <div class="card border-primary">
+                                        <div class="card">
                                             <div class="card-header">
                                                 Food : Unhealthy
                                             </div>
@@ -366,7 +367,7 @@
                                                     </canvas>
                                             </div>
                                         </div>
-                                        <div class="card border-primary">
+                                        <div class="card">
                                             <div class="card-header">
                                                 Food : Healthy
                                             </div>
@@ -394,10 +395,10 @@
                         <!-- /.row -->
 
                         <br>
-                        <div class="container" ng-controller="barCtrl">
+                        <div class="container-fluid" ng-controller="barCtrl">
                             <div class="card-deck">
 
-                                <div class="card border-primary">
+                                <div class="card">
                                     <div class="card-header">
                                         <i class="fas fa-chart-pie fa-fw"></i> Activity Chart 
                                         <ul class="pagination float-right">
@@ -407,7 +408,7 @@
                                                 <span class="sr-only">Previous</span>
                                                 </button>
                                             </li>
-                                            <li class="page-item" ng-repeat="x in bar_options"><button class="page-link" href="#">{{x}}</button></li>
+                                            <li class="page-item" ng-repeat="x in bar_options"><button class="page-link" style="pointer-events: none;">{{x}}</button></li>
                                             <li class="page-item">
                                                 <button class="page-link" ng-click="nextBarPage()" aria-label="Next" ng-disabled="next_bar">
                                                 <span aria-hidden="true">&raquo;</span>
@@ -449,9 +450,9 @@
                             <!-- /.row -->
     
                         <br>
-                        <!-- <div class="container">
+                        <!-- <div class="container-fluid">
                             <div class="card-deck">
-                                <div class="card border-primary">
+                                <div class="card">
                                     <div class="card-header">
                                         <i class="fas fa-comments fa-fw"></i> Chat
                                     </div>
@@ -537,12 +538,12 @@
 
                     </div>
                     <div class="tab-pane fade" id="v-pills-tasks" role="tabcard" aria-labelledby="v-pills-tasks-tab">
-                        <div class="container" ng-controller="cardCtrl">
-                            <div class="card outline-primary">
+                        <div class="container-fluid" ng-controller="cardCtrl">
+                            <br>
+                            <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Your goals
-                                        <button class="btn btn-sm btn-primary float-right" id = "view_goals_2"> View table</button>
-                                    </h4>
+                                    Your goals
+                                    <button class="btn btn-sm btn-primary float-right" id = "view_goals_2"> View table</button>
                                 </div>
                                 <div class="card-body">
                                     <table class="table" id="goals_table">
@@ -585,7 +586,7 @@
                     </div>
 
                     <div class="tab-pane fade" id="v-pills-watch" role="tabcard" aria-labelledby="v-pills-watch-tab">
-                        <div class="container">
+                        <div class="container-fluid">
                             <div class="card-deck">
                                 <div class="card">
                                     <div class="card-header">
@@ -597,11 +598,11 @@
                                         </div>
                                     </div>
                                     <div class="card-footer">
-                                        <!-- <button class="btn" id="randomizeData_bc">Randomize Data</button>
-                                        <button class="btn" id="addDataset_bc">Add Dataset</button>
-                                        <button class="btn" id="removeDataset_bc">Remove Dataset</button>
-                                        <button class="btn" id="addData_bc">Extend Range</button>
-                                        <button class="btn" id="removeData_bc">Shrink Range</button> -->
+                                        <!-- <button class="btn btn-primary" id="randomizeData_bc">Randomize Data</button>
+                                        <button class="btn btn-primary" id="addDataset_bc">Add Dataset</button>
+                                        <button class="btn btn-primary" id="removeDataset_bc">Remove Dataset</button>
+                                        <button class="btn btn-primary" id="addData_bc">Extend Range</button>
+                                        <button class="btn btn-primary" id="removeData_bc">Shrink Range</button> -->
                                         <button class="btn btn-warning">View Details <i class="fas fa-arrow-circle-right"></i></button>
                                     </div>
                                 </div>
@@ -609,7 +610,7 @@
                         </div>
 
                         <br>
-                        <div class="container">
+                        <div class="container-fluid">
                             <div class="card-deck">
                                 <div class="card">
                                     <div class="card-header">
@@ -621,11 +622,11 @@
                                             </div>
                                         </div>
                                         <div class="card-footer">
-                                            <!-- <button class="btn" id="randomizeData_bc">Randomize Data</button>
-                                            <button class="btn" id="addDataset_bc">Add Dataset</button>
-                                            <button class="btn" id="removeDataset_bc">Remove Dataset</button>
-                                            <button class="btn" id="addData_bc">Extend Range</button>
-                                            <button class="btn" id="removeData_bc">Shrink Range</button> -->
+                                            <!-- <button class="btn btn-primary" id="randomizeData_bc">Randomize Data</button>
+                                            <button class="btn btn-primary" id="addDataset_bc">Add Dataset</button>
+                                            <button class="btn btn-primary" id="removeDataset_bc">Remove Dataset</button>
+                                            <button class="btn btn-primary" id="addData_bc">Extend Range</button>
+                                            <button class="btn btn-primary" id="removeData_bc">Shrink Range</button> -->
                                             <button class="btn btn-warning">View Details <i class="fas fa-arrow-circle-right"></i></button>
                                         </div>
                                 </div>
@@ -633,7 +634,7 @@
                         </div>
 
                         <br>
-                        <div class="container">
+                        <div class="container-fluid">
                                 <div class="card-deck">
                                     <div class="card">
                                         <div class="card-header">
@@ -645,11 +646,11 @@
                                                 </div>
                                             </div>
                                             <div class="card-footer">
-                                                <!-- <button class="btn" id="randomizeData_bc">Randomize Data</button>
-                                                <button class="btn" id="addDataset_bc">Add Dataset</button>
-                                                <button class="btn" id="removeDataset_bc">Remove Dataset</button>
-                                                <button class="btn" id="addData_bc">Extend Range</button>
-                                                <button class="btn" id="removeData_bc">Shrink Range</button> -->
+                                                <!-- <button class="btn btn-primary" id="randomizeData_bc">Randomize Data</button>
+                                                <button class="btn btn-primary" id="addDataset_bc">Add Dataset</button>
+                                                <button class="btn btn-primary" id="removeDataset_bc">Remove Dataset</button>
+                                                <button class="btn btn-primary" id="addData_bc">Extend Range</button>
+                                                <button class="btn btn-primary" id="removeData_bc">Shrink Range</button> -->
                                                 <button class="btn btn-warning">View Details <i class="fas fa-arrow-circle-right"></i></button>
                                             </div>
                                     </div>
@@ -657,7 +658,7 @@
                             </div>
                     </div>
                     <div class="tab-pane fade" id="v-pills-responses" role="tabcard" aria-labelledby="v-pills-responses-tab">
-                        <div class="container">
+                        <div class="container-fluid">
                             <br>
                             <div class="card" ng-controller="cardCtrl">
                                 <div class="card-header">EMA Responses
@@ -769,7 +770,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="v-pills-messages" role="tabcard" aria-labelledby="v-pills-messages-tab">
-                        <div class="container">
+                        <div class="container-fluid">
                                 <br>
                                 <div class="card" ng-controller="cardCtrl">
                                     <div class="card-header">
@@ -806,7 +807,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="v-pills-info" role="tabcard" aria-labelledby="v-pills-info-tab">
-                        <div class="container">
+                        <div class="container-fluid">
                             <br>
                             <div class="card" ng-controller="cardCtrl">
                                 <div class="card-header">
@@ -897,11 +898,11 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="v-pills-issue" role="tabcard" aria-labelledby="v-pills-issue-tab">
-                        <div class="container" ng-controller="chatCtrl">
+                        <div class="container-fluid" ng-controller="chatCtrl">
                             <div class="card">
                                 <div class="card-header">
                                     Messages <span class="badge badge-success" ng-model="message_count">{{message_count}}</span>
-                                    <button id="refresh" class="btn btn-small float-right" ng-click="refresh();"><i id="sync" class="fas fa-sync"></i></button>
+                                    <button id="refresh" class="btn btn-sm btn-primary float-right" ng-click="refresh();"><i id="sync" class="fas fa-sync"></i></button>
                                 </div>
                                 <div class="card-body">
                                     <div class="chatAreaWrapper">
@@ -917,7 +918,7 @@
                                 <div class="card-footer">
                                     <form ng-submit="sendMessage();">
                                         <input type="text" name="message" class="chat" ng-model="chat" placeholder="Type message" style="width: 90%; vertical-align: center;" required>
-                                        <button class="btn btn-primary" type="submit">Send</button>
+                                        <button class="btn btn-primary" type="submit"><i class="fas fa-paper-plane"></i></button>
                                     </form>
                                 </div>
                             </div>

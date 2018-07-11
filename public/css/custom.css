@@ -24,7 +24,7 @@
 
 .sidenav a:hover {
     color: white;
-    background-color: lightblue;
+    background-color: rgba(55, 173, 241, 0.74);
 }
 
 .main {
@@ -50,10 +50,9 @@
     #datepicker input{
         width:80px;
     }
-    button, .card-body, p{
+    .btn, .card, p{
         font-size: 10px!important;
         padding-bottom:5px;
-
     }
     /* #ema_wrapper {
         position: relative;
@@ -105,7 +104,7 @@
 
 .chartAreaWrapper {
     padding: 5px;
-    width: 75vw;
+    width: 80vw;
     overflow-x: scroll;
 }
 
@@ -148,9 +147,10 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 1;
     cursor: pointer;
+    /* opacity:0.5; */
 }
 #loader {
     position: absolute;
@@ -344,3 +344,18 @@ button:disabled {
 	margin-top: -0.5em;
 	margin-left: -0.5em;
 }
+
+.card {
+    border: solid 1px blue;
+    box-shadow: 2px 2px 20px silver;
+    color:black;
+}
+#ema_wrapper .ema_wrapper{
+    height:60vh;
+}
+
+#table_wrapper .table_wrapper{
+    height: 60vh;
+    overflow: scroll;
+}
+

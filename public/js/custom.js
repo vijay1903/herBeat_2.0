@@ -208,7 +208,11 @@ function showPage() {
   document.getElementById("dashboard").style.display = "initial";
 }
 
-$(document).ready(function(){
-  $('#myChat').animate({
-      scrollTop: $('#myChat')[0].scrollHeight}, 1000);
+// $(document).ready(function(){
+//   $('#myChat').animate({
+//       scrollTop: $('#myChat')[0].scrollHeight}, 1000);
+// });
+
+$('#collapse_toggle').on('click',function() {
+  $('#dashboard').scrollTop(0);
 });
