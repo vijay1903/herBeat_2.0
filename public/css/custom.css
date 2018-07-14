@@ -47,12 +47,15 @@
         width: 85%;
         font-size: 15px;
     }
-    #datepicker input{
+    #datepicker div{
         width:80px;
     }
     .btn, .card, p{
         font-size: 10px!important;
         padding-bottom:5px;
+    }
+    .page-item {
+        font-size: 3vw!important;
     }
     /* #ema_wrapper {
         position: relative;
@@ -358,4 +361,5 @@ button:disabled {
     height: 60vh;
     overflow: scroll;
 }
+
 

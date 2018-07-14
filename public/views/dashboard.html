@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="../css/custom.css">
     
     <!-- for date range -->
+    <link rel="stylesheet" href="../vendor/daterangepicker/daterangepicker.css">
         <!-- <link href="../vendor/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet">
         <link href="../vendor/jquery-ui-daterangepicker/jquery.comiseo.daterangepicker.css" rel="stylesheet">
      -->
@@ -59,12 +60,15 @@
             <div class="container">
                 
             </div>
-            <div id="datepicker" class="col-auto" ng-controller="navCtrl">
-                From <input type="date" id="startDate" ng-model="start" style="padding-right: 5px; width:auto;">
-                 to <input type="date" id="endDate" ng-model="end" style="padding-right: 5px; width:auto;">
-                 <button class="btn btn-sm btn-primary" type="submit" ng-click="date_change()"><i class="fas fa-search"></i></button>
-                 <!-- {{start | date :  "dd.MM.yyyy hh:mm a"}} and {{end | date :  "dd.MM.yyyy hh:mm a"}} -->
-                 <!-- <input id="e1" name="e1"> -->
+            
+            <div id="datepicker" class="col-auto" ng-controller="navCtrl" style="display: inherit;">
+                <!-- From <input type="date" id="startDate" ng-model="start" style="padding-right: 5px; width:auto;">
+                 to <input type="date" id="endDate" ng-model="end" style="padding-right: 5px; width:auto;"> -->
+                 <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                        <i class="fa fa-calendar"></i>&nbsp;
+                        <span></span> <i class="fa fa-caret-down"></i>
+                </div>&nbsp;
+                <button class="btn btn-sm btn-primary" ng-click="date_change()"><i class="fas fa-search"></i></button>
             </div>
             <!-- /.navbar-header -->                
             <div class="btn-group float-right" role="group">
@@ -216,7 +220,7 @@
                                         <div class="card-footer">
                                             <p ng-model="msg_start_date" ng-model="msg_end_date">{{msg_start_date | date : "MMM dd"}} to {{msg_end_date | date: 'MMM dd'}}</p>
                                             <button class="btn btn-sm btn-primary" id="view_messages" ng-disabled="!card_4">
-                                                <span>View all feedbacks</span>
+                                                <span>View all</span>
                                                 <span><i class="fas fa-arrow-circle-right"></i></span>
                                             </button>
                                         </div>
@@ -247,11 +251,13 @@
                                                 </button>
                                             </li>
                                             <li class="page-item">
-                                                <select class="form-control" ng-model="heart_range" ng-change="change_range();">
-                                                    <option>Monthly</option>
-                                                    <option>Weekly</option>
-                                                    <option>Daily</option>
-                                                </select>
+                                                <button class="btn btn-sm">
+                                                    <select ng-model="heart_range" ng-change="change_range();">
+                                                        <option>Monthly</option>
+                                                        <option>Weekly</option>
+                                                        <option>Daily</option>
+                                                    </select>
+                                                </button>
                                             </li>
                                         </ul>
                                     </div>
@@ -416,11 +422,12 @@
                                                 </button>
                                             </li>
                                             <li class="page-item">
-                                                <select class="form-control" ng-model="bar_range" ng-change="change_bar_range();">
-                                                    <option>Monthly</option>
-                                                    <option>Weekly</option>
-                                                    <!-- <option>Daily</option> -->
-                                                </select>
+                                                <button class="btn btn-sm">
+                                                    <select ng-model="bar_range" ng-change="change_bar_range();">
+                                                        <option>Monthly</option>
+                                                        <option>Weekly</option>
+                                                    </select>
+                                                </button>
                                             </li>
                                         </ul>
                                     </div>
@@ -910,7 +917,7 @@
                                             <div ng-class="(x.sender==username?'chat sent':'chat received')" ng-repeat="x in chats">
                                                 {{x.message}}
                                                 <br>
-                                                <sub><i ng-class="(x.read_time != null)?'fas fa-check-square':'fas fa-check'" ng-show="(x.sender==username?true:false)"></i> {{x.sent_time | date: 'short'}}</sub>
+                                                <sub><a data-toggle="tooltip" data-placement="bottom" title="Read at {{x.read_time | date : 'MMM dd yyyy hh:mm:ss a'}}"><i ng-class="(x.read_time != null)?'fas fa-check-square':'far fa-check-square'" ng-show="(x.sender==username?true:false)"></i></a> {{x.sent_time | date: 'MMM dd yyyy hh:mm:ss a'}}</sub>
                                             </div>
                                         </div>
                                     </div>
@@ -935,7 +942,7 @@
     <!-- jQuery -->
     <script src="../vendor/jquery/jquery.min.js"></script>
     
-    <!-- for date range picker -->
+    
     <!-- <script src="../vendor/jquery-ui-1.12.1/jquery-ui.min.js"></script>
     <script src="../js/moment.js"></script>
     <script src="../vendor/jquery-ui-daterangepicker/jquery.comiseo.daterangepicker.js"></script> -->
@@ -979,7 +986,8 @@
 
     <!-- angular controller javascript -->
     <script src="./controllers/dashboardController.js"></script>
-	
+        <!-- for date range picker -->
+    <script src="../vendor/daterangepicker/daterangepicker.js"></script>
 </body>
 
 

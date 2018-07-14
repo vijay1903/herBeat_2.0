@@ -216,3 +216,37 @@ function showPage() {
 $('#collapse_toggle').on('click',function() {
   $('#dashboard').scrollTop(0);
 });
+
+
+// var range_start, range_end;
+
+// $(function() {
+
+//   var start = moment().hour(0).minute(0).second(0);
+//   var end = moment();
+  
+//   function cb(start, end) {
+//       $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+//       // range_start = start;
+//       // range_end = end;
+//       console.log('data : ', start._d, end._d);
+//   }
+//   // console.log(range_start, range_end);
+//   $('#reportrange').daterangepicker({
+//       startDate: start,
+//       endDate: end,
+//       minDate: moment('2018-04-02').format('YYYY-MM-DD'),
+//       maxDate: moment(),
+//       ranges: {
+//          'Today': [moment(), moment()],
+//          'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+//          'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+//          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+//          'This Month': [moment().startOf('month'), moment().endOf('month')],
+//          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+//       }
+//   }, cb);
+
+//   cb(start, end);
+
+// });

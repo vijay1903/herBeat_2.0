@@ -11,17 +11,59 @@ app.controller('navCtrl', function($rootScope, $scope) {
     $scope.start = midnight;
     $scope.end = new Date();
 
+    $(function() {
+
+        var start = moment().hour(0).minute(0).second(0);
+        var end = moment();
+        
+        function cb(start, end) {
+            $('#reportrange span').html(start.format('MMM DD, YYYY') + ' - ' + end.format('MMM DD, YYYY'));
+            $rootScope.start_date = new Date(start._d);
+            $rootScope.end_date = new Date(end._d);
+        }
+        $('#reportrange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            opens: 'left',
+            minDate: moment('2018-04-02'),
+            maxDate: moment(),
+            ranges: {
+               'Today': [moment(), moment()],
+               'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+               'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+               'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+               'This Month': [moment().startOf('month'), moment().endOf('month')],
+               'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, cb);
+      
+        cb(start, end);
+    });
+    console.log($rootScope.start_date,$rootScope.end_date);
+
+    // var max_date = moment().format('YYYY-MM-DD');
+    // // (new Date() >= $scope.end)? moment().format('YYYY-MM-DD'):$scope.end;
+    // var min_date = "2018-04-02";
+    // // ($scope.start > new Date("2018-04-02","YYYY-MM-DD"))?$scope.start:"2018-04-02";
+    // document.getElementById("startDate").setAttribute("min",min_date);
+    // document.getElementById("startDate").setAttribute("max",max_date);
+    // document.getElementById("endDate").setAttribute("min",min_date);
+    // document.getElementById("endDate").setAttribute("max",max_date);
 
     // $scope.search = function(){
     //     $rootScope.start_date = $scope.start;
     //     $rootScope.end_date = $scope.end;
     //     // return $rootScope.start_date, $rootScope.end_date;
-    // };
+    // }
 
-    $scope.date_change = function(newVal){
-        $rootScope.start_date = $scope.start;
-        $rootScope.end_date = $scope.end; 
-        $rootScope.$broadcast('datechange',{});
+    $scope.date_change = function(){
+        if($rootScope.start_date>$rootScope.end_date){
+            window.alert('Invalid date range selected. Start date must be before the end date.');
+        } else {
+            // $rootScope.start_date = $scope.start;
+            // $rootScope.end_date = $scope.end; 
+            $rootScope.$broadcast('datechange',{});       
+        }
     };
 
 
@@ -1227,7 +1269,7 @@ app.controller('chatCtrl', function($scope,$filter,$http){
     function updateScroll(c){
         // var element = document.getElementById("myChat");
         // element.scrollTop = c;
-        $("#myChat").animate({scrollTop: c},1500);
+        $("#myChat").animate({scrollTop: c},500);
     }
     
     $scope.refresh = function(){
