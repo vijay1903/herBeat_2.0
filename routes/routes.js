@@ -326,7 +326,7 @@ module.exports = function(app, conn) {
         });
         conn.query('UPDATE chat_messages SET read_time = CURRENT_TIMESTAMP() WHERE receiver = ?;',
         [req.query.username]);
-        conn.query('SET SQL_SAFE_UPDATES=1;');
+        // conn.query('SET SQL_SAFE_UPDATES=1;');
     });
 
     app.post('/api/sendchatmessages', function(req, res) {

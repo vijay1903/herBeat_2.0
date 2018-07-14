@@ -2,7 +2,6 @@
 
 var app = angular.module("myApp",['chart.js']);
 
-
 app.controller('navCtrl', function($rootScope, $scope) {
     var midnight = new Date();
     midnight.setHours(0,0,0,0);
