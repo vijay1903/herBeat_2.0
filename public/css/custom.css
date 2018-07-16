@@ -307,6 +307,20 @@ button:disabled {
     /* display:block; */
 }
 
+.chat_input{
+    width: 95%;
+    float: right;
+    border: #818181;
+    border-radius: 10px;
+    position: relative;
+    padding:10px;
+    padding-right:60px;
+    margin:10px 10px 10px 10px;
+    font-size:15px;
+    vertical-align: center;
+    /* display:block; */
+}
+
 .received{
     background-color: lightgrey;
     float:left;
@@ -362,3 +376,9 @@ button:disabled {
     overflow: scroll;
 }
 
+.table_row_1{
+    background-color:lightgray!important;
+}
+.table_row_2{
+    background-color:whitesmoke!important;
+}

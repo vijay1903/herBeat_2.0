@@ -196,9 +196,9 @@
                                 <div class="card text-left">
                                     <div class="card-header"><span class="badge badge-success" style="font-size: 16px;" ng-model="msg_num">{{msg_num}}</span> Received Feedbacks</div>
                                     <div class="card-body" style="font-size: 12px; padding:2px">   
-                                        <div style="overflow: auto; height: 130px;">
+                                        <div style="overflow: auto; height: 170px;">
                                             <p style="padding:10px; font-size: 16px;" ng-model="card_message_4" ng-hide="card_4">{{card_message_4}}</p>
-                                            <center ng-show="card_4"> Most recent {{(msg_num >= 5)?5:msg_num}} feedbacks.</center>
+                                            <center ng-show="card_4"> Top {{(msg_num >= 5)?5:msg_num}} feedbacks.</center>
                                             <table class="table table-responsive"  ng-show="card_4">
                                                 <thead style="position:relative;top:0px;">
                                                     <tr  style="padding-top: 2px; padding-bottom: 2px;">
@@ -566,22 +566,20 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="x in goals">
-                                                <td style="width:250px;">
+                                                <td ng-class="date_row(x.goal_date)">
                                                     {{x.goal_date | date: 'MMM dd yyyy hh:mm:ss a'}}
                                                 </td>
                                                 <td>
                                                     Readiness :
                                                 <div class="progress">
-                                                    
-                                                    <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated" role="progressbar" ng-style="{width : ( {{x.readiness}}*10 + '%' ) }" aria-valuenow={{x.readiness}} aria-valuemin="0" aria-valuemax="10"> {{x.readiness}} / 10</div>
+                                                    <div class="progress-bar bg-warning progress-bar-striped" role="progressbar" ng-style="{width : ( {{x.readiness}}*10 + '%' ) }" aria-valuenow={{x.readiness}} aria-valuemin="0" aria-valuemax="10"> {{x.readiness}} / 10</div>
                                                 </div>Energy : 
                                                 <div class="progress">
-                                                    
-                                                    <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" ng-style="{width : ( {{x.energy}}*10 + '%' ) }" aria-valuenow={{x.energy}} aria-valuemin="0" aria-valuemax="10"> {{x.energy}} / 10</div>
+                                                    <div class="progress-bar bg-success progress-bar-striped" role="progressbar" ng-style="{width : ( {{x.energy}}*10 + '%' ) }" aria-valuenow={{x.energy}} aria-valuemin="0" aria-valuemax="10"> {{x.energy}} / 10</div>
                                                 </div>Walking goal :
                                                 <div class="progress">
                                                     
-                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" ng-style="{width : ( {{x.walk}} + '%' ) }" aria-valuenow={{x.walk}} aria-valuemin="0" aria-valuemax="100">{{x.walk}}</div>
+                                                    <div class="progress-bar progress-bar-striped" role="progressbar" ng-style="{width : ( {{x.walk}} + '%' ) }" aria-valuenow={{x.walk}} aria-valuemin="0" aria-valuemax="100">{{x.walk}}</div>
                                                 </div>
                                                 </td>
                                             </tr>
@@ -923,9 +921,9 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <form ng-submit="sendMessage();">
-                                        <input type="text" name="message" class="chat" ng-model="chat" placeholder="Type message" style="width: 90%; vertical-align: center;" required>
-                                        <button class="btn btn-primary" type="submit"><i class="fas fa-paper-plane"></i></button>
+                                    <form class="form-inline" ng-submit="sendMessage();">
+                                        <input type="text" name="message" class="chat_input" ng-model="chat" placeholder="Type message" required>
+                                        <button class="btn btn-primary" type="submit" style="margin-left: -55px; z-index: 1;"><i class="fas fa-paper-plane"></i></button>
                                     </form>
                                 </div>
                             </div>

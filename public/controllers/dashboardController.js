@@ -24,7 +24,7 @@ app.controller('navCtrl', function($rootScope, $scope) {
             startDate: start,
             endDate: end,
             opens: 'left',
-            minDate: moment('2018-04-02'),
+            minDate: moment('2018-01-01'),
             maxDate: moment(),
             ranges: {
                'Today': [moment(), moment()],
@@ -117,6 +117,17 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                 $scope.avg = $filter('number')(avg,2);
                 // for tables
                 $scope.goals = data;
+                var first_date = data[0].goal_date;
+                var flag = true;
+                $scope.date_row = function(date){
+                    if($filter('date')(date,'dd') != $filter('date')(first_date,'dd')) {
+                        
+                    // } else {
+                        first_date = date;
+                        flag = !flag;
+                    }
+                    return flag?"table_row_1":"table_row_2"
+                }
             } else {
                 $scope.card_1 = false;
                 $scope.card_message_1 = "No data for this range."
