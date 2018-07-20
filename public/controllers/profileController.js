@@ -43,6 +43,9 @@ app.controller("passCtrl", function($scope ,$http){
 app.controller("profileCtrl", function($scope ,$http){
     // $scope.username = "Zahar";
     $scope.username = document.getElementById("user_name").value;
+    $scope.name = document.getElementById("user_full_name").value;
+    $scope.email = document.getElementById("user_email").value;
+    $scope.number = document.getElementById("user_number").value;
     $scope.nameShow = true;
     $scope.emailShow = true;
     $scope.numberShow = true;

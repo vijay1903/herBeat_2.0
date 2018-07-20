@@ -346,6 +346,21 @@ module.exports = function(app, conn) {
         });
     });
 
+    app.get('/api/getallusers', function(req, res) {
+        conn.query('select * from users;'
+        , function (error, result) {
+            if (error)
+            {
+                console.log(error);
+            }
+            else
+            {   
+                res.send(result);
+                console.log(result);
+                console.log('Get all patients.');
+            }
+        });
+    });
 
 };
 

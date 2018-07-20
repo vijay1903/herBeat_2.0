@@ -47,6 +47,9 @@
 </head>
 <body>
     <input type="hidden" id="user_name" value=<%=user.username%>>
+    <input type="hidden" id="user_full_name" value=<%=user.full_name%>>
+    <input type="hidden" id="user_email" value=<%=user.email%>>
+    <input type="hidden" id="user_number" value=<%=user.number%>>
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" role="navigation" style="margin-bottom: 0">
             <p class="navbar-brand" style="color: black"><a href="/dashboard"><i class="fas fa-arrow-left"></i></a><img src="../img/logo.png" alt="Herbeat logo" style="width: 30px; height: 30px;"> HerBeat</p>
             <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,27 +75,27 @@
         <div class="container">
             
             <div>
-                Username : <input type="text" ng-model="username" value="{{username}}" placeholder="{{username}}" disabled>
+                Username : <input type="text" ng-model="username" value="{{username}}" placeholder={{username}} disabled>
             </div>
             
             <div>
                 <!-- <p ng-show="nameShow"><%=user.full_name%> </p> -->
                 <form ng-submit="change_fullname();">
-                    Name : <a href=""  ng-click="nameShow=false;"><input class="dis" type="text" ng-model="name" ng-disabled="nameShow" placeholder="<%=user.full_name%>" minlength="4"></a>
+                    Name : <a href=""  ng-click="nameShow=false;"><input class="dis" type="text" ng-model="name" ng-disabled="nameShow" placeholder={{name}} minlength="4"></a>
                 </form>
             </div>
             
             <div>
                 <!-- <p ng-show="emailShow"><%=user.email%></p> -->
                 <form ng-submit="change_email();">
-                    E-mail : <a href=""  ng-click="emailShow=false;"><input class="dis" type="text" ng-model="email" ng-disabled="emailShow" placeholder="<%=user.email%>" minlength="4"></a>                    
+                    E-mail : <a href=""  ng-click="emailShow=false;"><input class="dis" type="text" ng-model="email" ng-disabled="emailShow" placeholder={{email}} minlength="4"></a>                    
                 </form>
             </div>
             
             <div>
                 <!-- <p ng-show="numberShow"><%=user.number%></p> -->
                 <form ng-submit="change_number();">
-                    Contact Number : <a href=""  ng-click="numberShow=false;"><input class="dis" type="text" ng-model="number" ng-disabled="numberShow" placeholder="<%=user.number%>" minlength="10"></a>
+                    Contact Number : <a href=""  ng-click="numberShow=false;"><input class="dis" type="text" ng-model="number" ng-disabled="numberShow" placeholder={{number}} minlength="10"></a>
                 </form>
             </div>
         </div>

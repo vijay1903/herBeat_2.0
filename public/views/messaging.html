@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Messages</title>
+</head>
+<!-- Bootstrap Core CSS -->
+<link href="../vendor/bootstrap4/css/bootstrap.min.css" rel="stylesheet">
+<link href="../vendor/bootstrap4/css/bootstrap-grid.min.css" rel="stylesheet">
+<link href="../vendor/bootstrap4/css/bootstrap-reboot.min.css" rel="stylesheet">
+<!-- Custom Fonts -->
+<link href="../vendor/font-awesome/css/fontawesome-all.css" rel="stylesheet" type="text/css">
+<style>
+    .chat-head{
+        width:100%;
+        padding: 10px 20px;
+        margin:2px;
+        border-radius: 20px;
+        background-color: bisque;
+        font-size: 12px;
+    }
+    .chat-head:hover{
+        background-color: burlywood;
+    }
+    .chat-head:active{
+        background-color: burlywood;
+    }
+    .chatAreaWrapper{
+        /* position:relative;
+        height:60vh;
+        left:0;
+        right:0; */
+        position: relative;
+        height: 50vh;
+    }
+    .chatArea {
+        overflow-y: auto;
+        position : absolute;
+        left:0;
+        right:0;
+        overflow:auto;
+        top:0;
+        bottom:0;
+        /* padding: 5px;
+        height: 50vh;
+        overflow-y: auto;
+        position: absolute;
+        left: 0;
+        top: 0; */
+    }
+
+    .chat{
+        width:90%;
+        border: #818181;
+        border-radius: 10px;
+        position: relative;
+        padding:10px;
+        margin:10px;
+        font-size:15px;
+        vertical-align: center;
+        /* display:block; */
+    }
+
+    .chat_input{
+        width: 65%;
+        float: right;
+        border: #818181;
+        border-radius: 10px;
+        position: relative;
+        padding:10px;
+        padding-right:60px;
+        margin:5px 5px 5px 30%;
+        font-size:15px;
+        vertical-align: center;
+        border: blue 1px solid;
+        /* display:block; */
+    }
+
+    .received{
+        background-color: lightgrey;
+        float:left;
+        margin-left:10px;
+        margin-right:60px;
+    }
+    .sent{
+        background-color: lightskyblue;
+        float:right;
+        text-align: right;
+        margin-right:10px;
+        margin-left:60px;
+    }
+
+    .sent:after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 50%;
+        width: 0;
+        height: 0;
+        border: 0.5em solid transparent;
+        border-left-color: lightblue;
+        border-right: 0;
+        margin-top: -0.5em;
+        margin-right: -0.5em;
+    }
+    .received:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 0;
+        height: 0;
+        border: 0.5em solid transparent;
+        border-right-color: lightgrey;
+        border-left: 0;
+        margin-top: -0.5em;
+        margin-left: -0.5em;
+    }
+</style>
+<body>
+    <div class="container" ng-controller="messaging">
+        <div class="card" style="margin:40px; box-shadow: 1px 1px 50px silver; ">
+            <div class="card-header">
+                Chat Messages
+                <button class="btn btn-primary float-right" ng-click="refresh(username);"><i class="fas fa-sync"></i></button>
+            </div>
+            <div class="card-body">
+                <div class="row" style="height: 60vh;">
+                    <div class="col-3" style="border: black 1px solid; overflow-y: scroll;"> 
+                        <input type="text" ng-model="searchedName" style="width:100%; border-radius: 20px; padding:5px; margin:5px;" placeholder="Search name">
+                        <div ng-repeat="x in app_users | filter : searchedName | orderBy : 'full_name'">
+                            <button class="chat-head" ng-click="refresh(x.username);">{{x.full_name}}</button>  
+                        </div>
+                    </div>                      
+                    <div id="myChat" class="col-9" style="border: black 1px solid; overflow-y: scroll;">
+                        <div ng-class="(msg.sender==='health_coach'?'chat sent':'chat received')" ng-repeat="msg in messages">
+                            {{msg.message}}
+                            <br>
+                            <sub><a data-toggle="tooltip" data-placement="bottom" title="Read at {{msg.read_time | date : 'MMM dd yyyy hh:mm:ss a'}}"><i ng-class="(msg.read_time != null)?'fas fa-check-square':'far fa-check-square'" ng-show="(msg.sender=='health_coach'?true:false)"></i></a> {{msg.sent_time | date: 'MMM dd yyyy hh:mm:ss a'}}</sub>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <form class="form-inline" ng-submit="sendMessage();">
+                    <input type="text" ng-model="message" class="chat_input" placeholder="Type message...">
+                    <button class="btn btn-primary" type="submit" style="margin-left: -55px; z-index: 1;"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+
+</body>
+<!-- jQuery -->
+<script src="../vendor/jquery/jquery.min.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="../vendor/bootstrap4/js/bootstrap.min.js"></script>
+<!--Angular scripts-->
+<script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+<script src = "http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.js"></script>
+<script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.min.js"></script>
+<script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-sanitize.js"></script>
+<script>
+    var app = angular.module('app',[]);
+    app.controller('messaging',function($scope,$filter,$http){
+        $scope.username = "";
+        $scope.messages = [];
+        function updateScroll(c){
+            // var element = document.getElementById("myChat");
+            // element.scrollTop = c;
+            $("#myChat").animate({scrollTop: c},500);
+        }
+        
+        $scope.refresh = function(user){
+            $scope.searchedName = "";
+            $scope.username = user;
+            chat();
+        }
+        var chat = function(){
+            updateScroll($scope.message_count*80);
+            $http({
+                url:"/api/getallusers",
+                method:'GET',
+            })
+            .success(function(data){
+                if(data.length){
+                    $scope.app_users = data;
+                    $scope.message_count = $scope.messages.length;
+                    updateScroll($scope.message_count*80);
+                }
+            })
+            .error(function(error){
+                console.log('Error', error)
+            });
+
+            $http({
+                url:"/api/getchatmessages",
+                method:'GET',
+                params:{username:"health_coach"}
+            })
+            .success(function(data){
+                if(data.length){
+                    if($scope.username!=""){
+                        $scope.messages = $filter('filter')(data,$scope.username, true);
+                    }
+                }
+            })
+            .error(function(error){
+                console.log('Error', error)
+            });
+
+            $scope.sendMessage = function(){
+                $http({
+                    url:"/api/sendchatmessages",
+                    method:'POST',
+                    params:{message:$scope.message,receiver:$scope.username,sender:"health_coach"}
+                })
+                .success(function(data){
+                        // $scope.messages = data;
+                        $scope.message = '';
+                        chat();
+                        updateScroll($scope.message_count*80);
+                })
+                .error(function(error){
+                    console.log('Error', error)
+                });
+            }
+        }
+        // setInterval(chat,3000);
+        chat();
+    });
+</script>
+</html>

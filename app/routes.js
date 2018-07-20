@@ -108,32 +108,32 @@ module.exports = function(app, passport) {
 		}
 	});
 
-	app.get('/auth/facebook', passport.authenticate('facebook'));
+	// app.get('/auth/facebook', passport.authenticate('facebook'));
 
-	app.get('/auth/facebook/callback', 
-		passport.authenticate('facebook', { 
-			successRedirect: '/dashboard',
-			failureRedirect: '/' 
-		}));
+	// app.get('/auth/facebook/callback', 
+	// 	passport.authenticate('facebook', { 
+	// 		successRedirect: '/dashboard',
+	// 		failureRedirect: '/' 
+	// 	}));
 
-	app.get('/auth/twitter', 
-	passport.authenticate('twitter', { scope: ['email']}));
+	// app.get('/auth/twitter', 
+	// passport.authenticate('twitter', { scope: ['email']}));
 		
-	app.get('/auth/twitter/callback', 
-		passport.authenticate('twitter', {failureRedirect: '/'}),
-		function(req, res) {
-			res.redirect('/dashboard');
-		}
-	);
+	// app.get('/auth/twitter/callback', 
+	// 	passport.authenticate('twitter', {failureRedirect: '/'}),
+	// 	function(req, res) {
+	// 		res.redirect('/dashboard');
+	// 	}
+	// );
 
-	app.get('/auth/google',
-	passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'email'] }));
+	// app.get('/auth/google',
+	// passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'email'] }));
 
-	app.get('/auth/google/callback', 
-	passport.authenticate('google', { failureRedirect: '/' }),
-	function(req, res) {
-		res.redirect('/dashboard');
-	});
+	// app.get('/auth/google/callback', 
+	// passport.authenticate('google', { failureRedirect: '/' }),
+	// function(req, res) {
+	// 	res.redirect('/dashboard');
+	// });
 
 
 	app.get('/forgotpassword', function(req, res) {
@@ -156,5 +156,8 @@ module.exports = function(app, passport) {
 		res.redirect('/');
 	});
 	
+	app.get('/messaging', function(req, res) {
+		res.render('../public/views/messaging.html'); // load the messaging.html file
+	});
 };
 
