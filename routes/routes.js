@@ -311,7 +311,7 @@ module.exports = function(app, conn) {
     app.get('/api/getchatmessages', function(req, res) {
         conn.query('SET SQL_SAFE_UPDATES=0');
         conn.query('select * from chat_messages where sender = ? OR receiver = ? order by sent_time;',
-        [req.query.username, req.query.username]
+        [req.query.sender, req.query.receiver]
         , function (error, result) {
             if (error)
             {
