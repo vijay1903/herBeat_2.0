@@ -1,18 +1,25 @@
 .navbar{
     background-color: whitesmoke;
 }
-
 .sidenav {
+    vertical-align: center;
     height: 100%;
-    width: 200px;  
+    z-index:2;
+    width: 60px;  
     position: fixed;
     text-align: left;
-    z-index: 1;
     top: 0;
     left: 0;
-    background-color: whitesmoke;
+    background-color: rgba(255,255,255,0.85);
     overflow-x: hidden;
     padding-top: 60px;
+}
+#sideWrapper{
+    width:200px;
+}
+#navbarSupportedContent{
+    transition: 2s ease;
+    -webkit-transition: 2s ease;
 }
 
 .sidenav a {
@@ -20,28 +27,46 @@
     text-decoration: none;
     color: #818181;
     display: block;
+    border-radius:7.25rem!important;
+}
+.fa-fw {
+    vertical-align: middle!important;
 }
 
 .sidenav a:hover {
     color: white;
-    background-color: rgba(55, 173, 241, 0.74);
+    background-color: #007bff;
+    opacity: 0.5;
+    transition:0.3s;
 }
 
 .main {
-    margin-left: 200px;
+    margin-left: 60px;
     padding: 0px 10px;
 }
 @media screen and (max-width: 1000px) {
-
+    #datepicker{
+        padding:0px!important;
+    }
+    #reportrange{
+        padding:5px!important;
+    }
+    #sideWrapper{
+        width:100vw;
+    }
     .main {
       width: 100%; /* The width is 100%, when the viewport is 800px or smaller */
       margin-left: auto;
     }
     .sidenav {
-        padding-top: 5px;
+        /* padding-top: 8px; */
         width: 100%;
-        position: relative;
-        height: auto;
+        
+        height: 0px;
+        top:30px;
+        background-color: rgba(255,255,255,0.85);
+        transition: height 3s ease-in;
+        -webkit-transition: height 3s ease-in;
     }
     #datepicker {
         width: 85%;
@@ -107,7 +132,7 @@
 
 .chartAreaWrapper {
     padding: 5px;
-    width: 80vw;
+    width: 90vw;
     overflow-x: scroll;
 }
 
@@ -172,17 +197,16 @@
     animation: spin 2s linear infinite;
   }
   
-  @-webkit-keyframes spin {
+@-webkit-keyframes spin {
     0% { -webkit-transform: rotate(0deg); }
     100% { -webkit-transform: rotate(360deg); }
-  }
+}
   
-  @keyframes spin {
+@keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-  }
-  
-  
+}
+
 #dashboard{
     display:none;
 }

@@ -213,9 +213,9 @@ function showPage() {
 //       scrollTop: $('#myChat')[0].scrollHeight}, 1000);
 // });
 
-$('#collapse_toggle').on('click',function() {
-  $('#dashboard').scrollTop(0);
-});
+// $('#collapse_toggle').on('click',function() {
+//   $('#dashboard').scrollTop(0);
+// });
 
 
 // var range_start, range_end;
@@ -250,3 +250,20 @@ $('#collapse_toggle').on('click',function() {
 //   cb(start, end);
 
 // });
+
+function toggle_navbar() {
+  if(window.innerWidth < 900){
+    if(document.getElementById('navbarSupportedContent').style.height == '0px'){
+      document.getElementById('navbarSupportedContent').style.height = '100vh';
+    } else {
+      document.getElementById('navbarSupportedContent').style.height = '0px';
+    }
+  } else {
+    if(document.getElementById('navbarSupportedContent').style.width == '60px'){
+      document.getElementById('navbarSupportedContent').style.width = '200px';
+    } else {
+      document.getElementById('navbarSupportedContent').style.width = '60px';
+    }
+  }
+}
+
