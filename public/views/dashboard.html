@@ -128,7 +128,7 @@
                                         <!-- <h1 style="line-height: 0.5;margin-right:0px; " ng-model="count">{{count}}</h1> -->
                                     </div>
                                         <div class="card-footer">
-                                            <p style="line-height: 1.0;" ng-model="goals_start_date" ng-model="goals_end_date">{{goals_start_date | date : "MMM dd"}} to {{goals_end_date | date : "MMM dd"}}</p>
+                                            <p ng-model="goals_start_date" ng-model="goals_end_date">{{goals_start_date | date : "MMM dd"}} to {{goals_end_date | date : "MMM dd"}}</p>
                                             
                                             
                                             <button class="btn btn-sm btn-primary" id="view_goals" ng-disabled="!card_1">
@@ -165,7 +165,7 @@
                                         </table>
                                     </div>
                                         <div class="card-footer">
-                                            <p style="line-height: 1.0;" ng-model="per_start_date" ng-model="per_end_date">{{per_start_date | date : "MMM dd"}} to {{per_end_date | date : "MMM dd"}}</p>
+                                            <p ng-model="per_start_date" ng-model="per_end_date">{{per_start_date | date : "MMM dd"}} to {{per_end_date | date : "MMM dd"}}</p>
                                             <button class="btn btn-sm btn-primary" id='view_activities' ng-disabled="!card_2">
                                                 <span>View Details</span>
                                                 <span><i class="fas fa-arrow-circle-right"></i></span>
