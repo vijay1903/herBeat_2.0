@@ -406,3 +406,9 @@ button:disabled {
 .table_row_2{
     background-color:whitesmoke!important;
 }
+#setting_sidebar {
+    width:200px!important;
+}
+.setting_main {
+    margin-left:200px;
+}
