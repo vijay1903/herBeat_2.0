@@ -20,6 +20,8 @@ var passport = require('passport');
 var flash = require('connect-flash');
 // var FacebookStrategy = require('passport-facebook');
 
+// Service worker requirements
+
 // app.set('view engine', 'ejs');
 // app.engine('html', require('ejs').renderFile);
 

@@ -9,19 +9,19 @@
     "background_color": "#f9f9f9",
     "icons" :[
         {
-            "src": "logo_92.png",
-            "sizes": "92x92"
+            "src": "img/icons/logo_96.png",
+            "sizes": "96x96"
         },
         {
-            "src": "logo_144.png",
+            "src": "img/icons/logo_144.png",
             "sizes": "144x144"
         },
         {
-            "src": "logo_192.png",
+            "src": "img/icons/logo_192.png",
             "sizes": "192x192"
         },
         {
-            "src": "logo_512.png",
+            "src": "img/icons/logo_512.png",
             "sizes": "512x512"
         }
     ]
