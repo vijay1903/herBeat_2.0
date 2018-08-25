@@ -34,8 +34,6 @@ app.controller('forgotCtrl', function($scope, $http){
                                 params: {password: $scope.password, username: $scope.username, email:$scope.email}
                             })
                             .success(function(data) {
-                                // console.log(data);
-                                
                                 if (window.confirm('Password changed sucessfully! If you click "ok" you would be redirected to login . Cancel will load this page again. ')) 
                                 {
                                 window.location.href='/';

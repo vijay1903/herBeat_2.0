@@ -1,0 +1,28 @@
+{
+    "name" : "Hearbeat - Patient Dashboard",
+    "start_url" : "/",
+    "short_name" : "Herbeat",
+    "orientation": "portrait",
+    "scope": "/",
+    "display": "standalone",
+    "theme_color": "#c13f10",
+    "background_color": "#f9f9f9",
+    "icons" :[
+        {
+            "src": "logo_92.png",
+            "sizes": "92x92"
+        },
+        {
+            "src": "logo_144.png",
+            "sizes": "144x144"
+        },
+        {
+            "src": "logo_192.png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "logo_512.png",
+            "sizes": "512x512"
+        }
+    ]
+}
