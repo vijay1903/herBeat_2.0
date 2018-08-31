@@ -311,7 +311,7 @@ module.exports = function(app, conn) {
     app.get('/api/getchatmessages', function(req, res) {
         conn.query('SET SQL_SAFE_UPDATES=0');
         conn.query('select * from chat_messages where sender = ? OR receiver = ? order by sent_time;',
-        [req.query.sender, req.query.receiver]
+        [req.query.username, req.query.username]
         , function (error, result) {
             if (error)
             {
@@ -325,7 +325,7 @@ module.exports = function(app, conn) {
             }
         });
         conn.query('UPDATE chat_messages SET read_time = CURRENT_TIMESTAMP() WHERE receiver = ?;',
-        [req.query.username]);
+        [req.query.receiver]);
         // conn.query('SET SQL_SAFE_UPDATES=1;');
     });
 
@@ -346,21 +346,21 @@ module.exports = function(app, conn) {
         });
     });
 
-    app.get('/api/getallusers', function(req, res) {
-        conn.query('select * from users;'
-        , function (error, result) {
-            if (error)
-            {
-                console.log(error);
-            }
-            else
-            {   
-                res.send(result);
-                console.log(result);
-                console.log('Get all patients.');
-            }
-        });
-    });
+    // app.get('/api/getallusers', function(req, res) {
+    //     conn.query('select * from users;'
+    //     , function (error, result) {
+    //         if (error)
+    //         {
+    //             console.log(error);
+    //         }
+    //         else
+    //         {   
+    //             res.send(result);
+    //             console.log(result);
+    //             console.log('Get all patients.');
+    //         }
+    //     });
+    // });
 
 };
 

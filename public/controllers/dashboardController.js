@@ -1290,7 +1290,7 @@ app.controller('chatCtrl', function($scope,$filter,$http){
         $http({
             url:"/api/getchatmessages",
             method:'GET',
-            params:{sender:$scope.username,receiver:$scope.username}
+            params:{username:$scope.username}
         })
         .success(function(data){
             if(data.length){
@@ -1305,21 +1305,21 @@ app.controller('chatCtrl', function($scope,$filter,$http){
 
         $scope.sendMessage = function(){
 
-            $http({
-                url:"http://131.247.16.242:8888/api/sentpmessage",
-                method:'POST',
-                data:{message:$scope.chat,sender:$scope.username,receiver:"health_coach",date: new Date().toLocaleDateString().split('/')[2] + "-" + new Date().toLocaleDateString().split('/')[0] + "-" + new Date().toLocaleDateString().split('/')[1] + " " + new Date().toTimeString().slice(0, 8)}
-            })
-            .success(function(data){
-                    console.log("Message sent to remote api.!");
-                    // $scope.chats = data;
-                    // $scope.chat = '';
-                    // chat();
-                    // updateScroll($scope.message_count*80);
-            })
-            .error(function(error){
-                console.log('Error', error)
-            });
+            // $http({
+            //     url:"http://131.247.16.242:8888/api/sentpmessage",
+            //     method:'POST',
+            //     data:{message:$scope.chat,sender:$scope.username,receiver:"health_coach",date: new Date().toLocaleDateString().split('/')[2] + "-" + new Date().toLocaleDateString().split('/')[0] + "-" + new Date().toLocaleDateString().split('/')[1] + " " + new Date().toTimeString().slice(0, 8)}
+            // })
+            // .success(function(data){
+            //         console.log("Message sent to remote api.!");
+            //         // $scope.chats = data;
+            //         // $scope.chat = '';
+            //         // chat();
+            //         // updateScroll($scope.message_count*80);
+            // })
+            // .error(function(error){
+            //     console.log('Error', error)
+            // });
 
             $http({
                 url:"/api/sendchatmessages",

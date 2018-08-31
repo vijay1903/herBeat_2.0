@@ -1,29 +1,32 @@
-// if ('serviceWorker' in navigator) {
-//   window.addEventListener('load', function() {
-//     navigator.serviceWorker.register('service-worker.js').then(function(registration) {
-//       // Registration was successful
-//       console.log('ServiceWorker registration successful with scope: ', registration.scope);
-//     }, function(err) {
-//       // registration failed :(
-//       console.log('ServiceWorker registration failed: ', err);
-//     });
-//   });
-// }
-// var CACHE_NAME = 'my-site-cache-v1';
-// var urlsToCache = [
-//   '/'
-// ];
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+      // Registration was successful
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }, function(err) {
+      // registration failed :(
+      console.log('ServiceWorker registration failed: ', err);
+    });
+    navigator.serviceWorker.register('/service-worker.js', {
+      scope: '/public/'
+    });
+  });
+}
 
-// self.addEventListener('install', function(event) {
-//   // Perform install steps
-//   event.waitUntil(
-//     caches.open(CACHE_NAME)
-//       .then(function(cache) {
-//         console.log('Opened cache');
-//         return cache.addAll(urlsToCache);
-//       })
-//   );
-// });
+var cacheName = 'app-shell-cache-v1';
+var filesToCache = ['/', '/index.html','/style.css'];
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(cacheName).then(cache => {
+        console.log('Files cached : ' + filesToCache);
+        return cache.addAll(filesToCache);
+    }).then(() => {
+      console.log(cache);
+      return self.skipWaiting();
+    })
+  );
+});
+
 
 // self.addEventListener('fetch', function(event) {
 //   event.respondWith(
