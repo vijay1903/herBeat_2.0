@@ -412,3 +412,23 @@ button:disabled {
 .setting_main {
     margin-left:200px;
 }
+
+.notification {
+    animation: shake 0.1s ease-in 0s alternate 30;
+}
+
+@keyframes shake {
+    0% {transform:rotateZ(15deg)}
+    50% {transform:rotateZ(0deg)}
+    100% {transform:rotateZ(-15deg)}
+}
+
+
+.notification::after {
+    content: '';
+    background-color: red;
+    border-radius: 50%;
+    height: 7px;
+    width: 7px;
+    position: absolute;
+}

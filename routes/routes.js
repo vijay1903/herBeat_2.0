@@ -325,7 +325,7 @@ module.exports = function(app, conn) {
             }
         });
         conn.query('UPDATE chat_messages SET read_time = CURRENT_TIMESTAMP() WHERE receiver = ?;',
-        [req.query.receiver]);
+        [req.query.username]);
         // conn.query('SET SQL_SAFE_UPDATES=1;');
     });
 
@@ -361,6 +361,10 @@ module.exports = function(app, conn) {
     //         }
     //     });
     // });
+
+    app.get('/api/checkmessages', function(req,res){
+        res.redirect('/api/getchatmessges?username='+req.username);
+    });
 
 };
 

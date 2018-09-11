@@ -1,11 +1,11 @@
 // config/database.js
 module.exports = {
     'connection': {
-        'host': 'localhost',
-        'user': 'root',
-        'password': 'root'
+        'host': process.env.DB_HOST,
+        'user': process.env.DB_USER,
+        'password': process.env.DB_PASSWORD,
+        'database': process.env.DB_NAME,
     },
-	'database': 'herbeat',
     'users_table': 'users',
     'chat_messages_table': 'chat_messages'
 };

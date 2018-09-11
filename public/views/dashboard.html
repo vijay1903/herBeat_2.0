@@ -57,19 +57,22 @@
         <input type="hidden" id="user_email" ng-model="email" value=<%=user.email%>>
         <input type="hidden" id="user_id" ng-model="userId" value=<%=user.id%>>
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" role="navigation" style="margin-bottom: 0" ng-controller="navCtrl" >
             <div class="container" style="display:initial;">
                 <button class="btn btn-light" id="menu" type="button" onclick="toggle_navbar();">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand" style="color: black" href="/dashboard"><img src="../img/logo.png" alt="Herbeat logo"
-                        style="width: 30px; height: 30px;"> HerBeat</a>
+                <a class="navbar-brand" style="color: black" href="/dashboard">
+                    <img src="../img/logo.png" alt="Herbeat logo" style="width: 30px; height: 30px;"> HerBeat
+                </a>
+                <button class="btn btn-light" id="notificationBell" data-toggle="dropdown"  style="float:right;">
+                        <i class="fas fa-bell" style="font-size:30px;"></i>
+                </button>
             </div>
-            <div class="container">
+        
+            
 
-            </div>
-
-            <div id="datepicker" class="col-auto" ng-controller="navCtrl" style="display: inherit;">
+            <div id="datepicker" class="col-auto" style="display: inherit;">
                 <!-- From <input type="date" id="startDate" ng-model="start" style="padding-right: 5px; width:auto;">
                  to <input type="date" id="endDate" ng-model="end" style="padding-right: 5px; width:auto;"> -->
                 <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
@@ -78,6 +81,7 @@
                 </div>&nbsp;
                 <button class="btn btn-sm btn-primary" ng-click="date_change()"><i class="fas fa-search"></i></button>
             </div>
+          
             <!-- /.navbar-header -->
             <div class="btn-group float-right" role="group">
                 <button id="btnGroupDrop1" type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
@@ -984,7 +988,7 @@
                                                 <sub><a data-toggle="tooltip" data-placement="bottom" title="Read at {{x.read_time | date : 'MMM dd yyyy hh:mm:ss a'}}"><i
                                                             ng-class="(x.read_time != null)?'fas fa-check-square':'far fa-check-square'"
                                                             ng-show="(x.sender==username?true:false)"></i></a> {{x.sent_time
-                                                    | date: 'MMM dd yyyy hh:mm:ss a'}}</sub>
+                                                    | date: 'MMM dd yyyy hh:mm:ss a'}} by {{(x.sender == username)?'You':x.sender}}</sub>
                                             </div>
                                         </div>
                                     </div>

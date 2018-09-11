@@ -39,6 +39,8 @@ app.controller('navCtrl', function($rootScope, $scope) {
         cb(start, end);
     });
     console.log($rootScope.start_date,$rootScope.end_date);
+    
+
 
     // var max_date = moment().format('YYYY-MM-DD');
     // // (new Date() >= $scope.end)? moment().format('YYYY-MM-DD'):$scope.end;
@@ -1324,13 +1326,29 @@ app.controller('chatCtrl', function($scope,$filter,$http){
             $http({
                 url:"/api/sendchatmessages",
                 method:'POST',
-                params:{message:$scope.chat,sender:$scope.username,receiver:"health_coach"}
+                params:{message:$scope.chat,sender:$scope.username,receiver:"Vijay"}
             })
             .success(function(data){
                     // $scope.chats = data;
                     $scope.chat = '';
                     chat();
                     updateScroll($scope.message_count*80);
+            })
+            .error(function(error){
+                console.log('Error', error)
+            });
+
+            $http({
+                url:"http://131.247.16.242:8888/api/checkmessages",
+                method:'POST',
+                params:{receiver:'Vijay',sender:$scope.username} //Hard coded receiver to be removed
+            })
+            .success(function(data){
+                    // $scope.messages = data;
+                    // $scope.message = '';
+                    // chat();
+                    // updateScroll($scope.message_count*80);
+                    console.log("Message sent and receiver notified.")
             })
             .error(function(error){
                 console.log('Error', error)
