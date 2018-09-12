@@ -357,4 +357,31 @@ function toggle_navbar() {
   }
 }
 
+$('#v-pills-tasks-tab-2').on('click', function(){
+  $('#v-pills-tasks-tab').click();
+})
+$('#v-pills-dash-tab-2').on('click', function(){
+  $('#v-pills-dash-tab').click();
+})
+$('#v-pills-responses-tab-2').on('click', function(){
+  $('#v-pills-responses-tab').click();
+})
+$('#v-pills-messages-tab-2').on('click', function(){
+  $('#v-pills-messages-tab').click();
+})
+$('#v-pills-info-tab-2').on('click', function(){
+  $('#v-pills-info-tab').click();
+})
+$('#v-pills-issue-tab-2').on('click', function(){
+  $('#v-pills-issue-tab').click();
+})
+$('#notificationBell').on('click', function(){
+  $('#v-pills-issue-tab').click();
+  $('#notificationBell').removeClass = "notification";
+})
 
+function plusSlides(x){
+  var pos = document.getElementById('dock-list').scrollLeft;
+  var w = (screen.width)/4;
+  document.getElementById('dock-list').scrollLeft = pos+(w*x);
+}

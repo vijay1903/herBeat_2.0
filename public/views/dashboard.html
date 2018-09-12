@@ -95,6 +95,32 @@
                 </div>
             </div>
         </nav>
+
+        <nav class="dock" id="dock">
+            <ul class="dock-list" id="dock-list">
+                <li class="dock-item">
+                    <a class="dock-link" id="v-pills-dash-tab-2" href=""><i class="fas fa-tachometer-alt fa-fw fa-4x"></i>Dashboard</a>
+                </li>
+                <li class="dock-item">
+                    <a class="dock-link" id="v-pills-tasks-tab-2" href=""><i class="fas fa-tasks fa-fw fa-4x"></i>Tasks</a>
+                </li>
+                <li class="dock-item">
+                    <a class="dock-link" id="v-pills-responses-tab-2" href=""><i class="far fa-smile fa-fw fa-4x"></i>EMAs</a>
+                </li>
+                <li class="dock-item">
+                    <a class="dock-link" id="v-pills-messages-tab-2"  href=""><i class="fas fa-reply fa-fw fa-4x"></i>Feedbacks</a>
+                </li>
+                <li class="dock-item">
+                    <a class="dock-link" id="v-pills-info-tab-2" href=""><i class="fas fa-table fa-fw fa-4x"></i>Info</a>
+                </li>
+                <li class="dock-item">
+                    <a class="dock-link" id="v-pills-issue-tab-2" href=""><i class="fas fa-comments fa-fw fa-4x"></i>Chats</a>
+                </li>
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+            </ul>
+        </nav>
         <div id="loader"></div>
         <div id="overlay"></div>
         <div class="row" id="dashboard" class="animate-bottom">
@@ -109,7 +135,7 @@
                         <a class="nav-link" id="v-pills-responses-tab" data-toggle="pill" href="#v-pills-responses" role="tab" aria-controls="v-pills-responses"
                             aria-selected="false"><i class="far fa-smile fa-fw fa-2x"></i> Your responses</a>
                         <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages"
-                            aria-selected="false"><i class="fas fa-bell fa-fw fa-2x"></i> Feedback</a>
+                            aria-selected="false"><i class="fas fa-reply fa-fw fa-2x"></i> Feedback</a>
                         <a class="nav-link" id="v-pills-info-tab" data-toggle="pill" href="#v-pills-info" role="tab" aria-controls="v-pills-info"
                             aria-selected="false"><i class="fas fa-table fa-fw fa-2x"></i> Detailed Info</a>
                         <a class="nav-link" id="v-pills-issue-tab" data-toggle="pill" href="#v-pills-issue" role="tab" aria-controls="v-pills-issue"
@@ -1062,10 +1088,10 @@
     <script src="../vendor/daterangepicker/daterangepicker.js"></script>
     <script>
         // if (document.readyState == "complete") {
-            $(document).ready(function(){
-                window.alert("You can add this app to homescreen.");
-                console.log('snackbar');
-            });
+            // $(document).ready(function(){
+            //     window.alert("You can add this app to homescreen.");
+            //     console.log('snackbar');
+            // });
             
         // }
     </script>

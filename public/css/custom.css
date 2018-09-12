@@ -44,6 +44,35 @@
     margin-left: 60px;
     padding: 0px 10px;
 }
+
+.dock {
+    position: fixed;
+    bottom: 0;
+    z-index: 2;
+    background: rgba(245, 245, 245, 0.95);
+    display: none;
+}
+.dock-list{
+    width: 100vw;
+    display: inline-flex;
+    list-style-type: none;
+    font-size: 10px;
+    text-align: center;
+    overflow: scroll;
+    padding: 0px;
+    margin: 0px;
+}
+
+.dock-item {
+    padding:10px;
+    padding-left:5.5vw;
+    padding-right:5.5vw;
+}
+.dock-link{
+    width:25vw;
+    text-align: center;
+}
+
 @media screen and (max-width: 1000px) {
     #datepicker{
         padding:0px!important;
@@ -113,6 +142,9 @@
     #setting_sidebar, #setting_navbar_empty {
         display : none;
     }
+    .dock {
+        display: inherit;
+    }
   }
 
 @media screen and (max-height: 450px) {
@@ -127,7 +159,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    pointer-events:none;
+    pointer-events: none;
 }
 
 .chartAreaWrapper {
@@ -301,7 +333,7 @@ button:disabled {
     left:0;
     right:0; */
     position: relative;
-    height: 50vh;
+    height: 40vh;
 }
 .chatArea {
     overflow-y: auto;
@@ -432,3 +464,24 @@ button:disabled {
     width: 7px;
     position: absolute;
 }
+
+/* Next & previous buttons */
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 6px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+  }
+  
+  /* Position the "next button" to the right */
+  .next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+  }
