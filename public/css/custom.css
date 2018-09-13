@@ -53,6 +53,7 @@
     display: none;
 }
 .dock-list{
+    transition: scroll 2s linear;
     width: 100vw;
     display: inline-flex;
     list-style-type: none;
@@ -64,6 +65,7 @@
 }
 
 .dock-item {
+    box-shadow: #818181 1px 1px 25px;
     padding:10px;
     padding-left:5.5vw;
     padding-right:5.5vw;

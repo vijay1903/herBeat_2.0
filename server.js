@@ -1,6 +1,7 @@
 var express = require('express');
 var session  = require('express-session');
-// var cookieParser = require('cookie-parser');
+var cookieParser = require('cookie-parser');
+var MySQLStore = require('express-mysql-session')(session);
 
 var mysql = require('mysql');
 var port = process.env.PORT || 8889;
@@ -10,7 +11,6 @@ var port = process.env.PORT || 8889;
 var morgan = require('morgan'); 
 var bodyParser = require('body-parser'); 
 var methodOverride = require('method-override'); 
-
 var moment = require('moment');
 moment().format();
 
@@ -18,7 +18,21 @@ var app = express();
 require('dotenv').config();
 var passport = require('passport');
 var flash = require('connect-flash');
-// var FacebookStrategy = require('passport-facebook');
+
+// socket.io
+var server = require('http').Server(app);
+var socket = require('socket.io');
+var io = socket(server);
+
+io.on('connection', function (sock) {
+    console.log("Socket added to patient socket.io.",sock);
+    sock.on('sent message', function (data) {
+      console.log('Received a message from : ',data.user);
+      sock.broadcast.emit('received message', { data: data.user });
+    });
+});
+
+
 
 // Service worker requirements
 
@@ -27,15 +41,45 @@ var flash = require('connect-flash');
 
 require('./config/passport')(passport); // pass passport for configuration
 
-
-//connect to mysql
-var conn = mysql.createConnection({
+var options = {
     host: process.env.DB_HOST,
 	port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME
-});
+};
+var session_options = {
+    host: process.env.DB_HOST,
+	port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    schema: {
+        tableName: 'sessions_table',
+        columnNames: {
+            session_id: 'session_id',
+            expires: 'expires_column',
+            data: 'data_column'
+        }
+    }
+};
+
+
+
+//connect to mysql
+var conn = mysql.createConnection(options);
+var sessionStore = new MySQLStore(session_options);
+
+app.use(session({
+  secret: process.env.SECRET,
+  store: sessionStore,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { 
+      secure: false, 
+      maxAge: 7200000 // 2 hours
+    }
+}));
 
 conn.connect(function(err){
     if(err){
@@ -58,7 +102,7 @@ app.engine('html', require('ejs').renderFile);
 
 // required for passport
 app.use(session({
-	secret: 'vijayvishwakarmahasdonethis',
+	secret: process.env.SECRET,
 	resave: true,
 	saveUninitialized: true
  } )); // session secret
@@ -71,7 +115,6 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 require('./routes/routes.js')(app, conn);
 
-app.listen(port);
-console.log('Server at port : '+ port);
+server.listen(process.env.PORT || 8889);
 
-
+console.log('Node and socket.io server at port : '+ process.env.PORT || 8889);

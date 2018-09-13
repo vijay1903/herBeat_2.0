@@ -1,7 +1,9 @@
 "use strict";
 
 var app = angular.module("myApp",['chart.js']);
-
+var socket = io.connect('http://localhost:8888/');
+var local_socket = io.connect('http://localhost:8889/');
+console.log(socket, local_socket);
 app.controller('navCtrl', function($rootScope, $scope) {
     var midnight = new Date();
     midnight.setHours(0,0,0,0);
@@ -38,7 +40,7 @@ app.controller('navCtrl', function($rootScope, $scope) {
       
         cb(start, end);
     });
-    console.log($rootScope.start_date,$rootScope.end_date);
+    // console.log($rootScope.start_date,$rootScope.end_date);
     
 
 
@@ -1338,23 +1340,35 @@ app.controller('chatCtrl', function($scope,$filter,$http){
                 console.log('Error', error)
             });
 
-            $http({
-                url:"http://131.247.16.242:8888/api/checkmessages",
-                method:'POST',
-                params:{receiver:'Vijay',sender:$scope.username} //Hard coded receiver to be removed
-            })
-            .success(function(data){
-                    // $scope.messages = data;
-                    // $scope.message = '';
-                    // chat();
-                    // updateScroll($scope.message_count*80);
-                    console.log("Message sent and receiver notified.")
-            })
-            .error(function(error){
-                console.log('Error', error)
-            });
+            // $http({
+            //     url:"http://localhost:8888/api/checkmessages",
+            //     method:'POST',
+            //     params:{receiver:'Vijay',sender:$scope.username} //Hard coded receiver to be removed
+            // })
+            // .success(function(data){
+            //         // $scope.messages = data;
+            //         // $scope.message = '';
+            //         // chat();
+            //         // updateScroll($scope.message_count*80);
+            //         console.log("Message sent and receiver notified.")
+            // })
+            // .error(function(error){
+            //     console.log('Error', error)
+            // });
+            
+            
+            //Send a ping to health coach socket server
+            socket.emit('sent message', { user:$scope.username});
+
+            // when a message is received from health coach
         }
     }
     // setInterval(chat,3000);
     chat();
+});
+local_socket.on('received message', function (data) {
+    console.log('Received message from health coach: ',data.user);
+    $('#notificationBell').addClass('notification');
+    setTimeout(function(){$('#refresh').click()},500);
+
 });

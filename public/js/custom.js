@@ -376,9 +376,13 @@ $('#v-pills-issue-tab-2').on('click', function(){
   $('#v-pills-issue-tab').click();
 })
 $('#notificationBell').on('click', function(){
+  $('#notificationBell').removeClass('notification');
+  // console.log("Bell clicked");
   $('#v-pills-issue-tab').click();
-  $('#notificationBell').removeClass = "notification";
 })
+$('#v-pills-issue-tab').on('click',function(){
+  $('#notificationBell').removeClass("notification");
+});
 
 function plusSlides(x){
   var pos = document.getElementById('dock-list').scrollLeft;

@@ -1,4 +1,7 @@
+// require('server.js');
 var bcrypt = require('bcrypt-nodejs');
+// var io = require('socket.io')(server);
+
 
 
 module.exports = function(app, conn) {
@@ -13,8 +16,8 @@ module.exports = function(app, conn) {
             else
             {
                 res.json(result);
-                console.log(result);
-                console.log('Fetched goals from DB.');
+                // console.log(result);
+                // console.log('Fetched goals from DB.');
             }
         });
     });
@@ -29,8 +32,8 @@ module.exports = function(app, conn) {
             else
             {
                 res.json(result);
-                console.log(result);
-                console.log('Fetched performance from DB.');
+                // console.log(result);
+                // console.log('Fetched performance from DB.');
             }
         });
     });
@@ -45,8 +48,8 @@ module.exports = function(app, conn) {
             else
             {
                 res.json(result);
-                console.log(result);
-                console.log('Fetched total emas from DB.');
+                // console.log(result);
+                // console.log('Fetched total emas from DB.');
             }
         });
     });
@@ -61,8 +64,8 @@ module.exports = function(app, conn) {
             else
             {
                 res.json(result);
-                console.log(result);
-                console.log('Fetched ema response count from DB.');
+                // console.log(result);
+                // console.log('Fetched ema response count from DB.');
             }
         });
     });
@@ -77,8 +80,8 @@ module.exports = function(app, conn) {
             else
             {
                 res.json(result);
-                console.log(result);
-                console.log('Fetched message count from DB.');
+                // console.log(result);
+                // console.log('Fetched message count from DB.');
             }
         });
     });
@@ -93,8 +96,8 @@ module.exports = function(app, conn) {
             else
             {
                 res.json(result);
-                console.log(result);
-                console.log('Fetched heartrate from DB.');
+                // console.log(result);
+                // console.log('Fetched heartrate from DB.');
             }
         });
     });
@@ -111,7 +114,7 @@ module.exports = function(app, conn) {
     //         else
     //         {
     //             res.json(result);
-    //             console.log(result);
+                // console.log(result);
     //             console.log('Fetched ema user activity from DB.');
     //         }
     //     });
@@ -127,7 +130,7 @@ module.exports = function(app, conn) {
     //         else
     //         {
     //             res.json(result);
-    //             console.log(result);
+                // console.log(result);
     //             console.log('Fetched feelings from DB.');
     //         }
     //     });
@@ -143,7 +146,7 @@ module.exports = function(app, conn) {
     //         else
     //         {
     //             res.json(result);
-    //             console.log(result);
+                // console.log(result);
     //             console.log('Fetched location from DB.');
     //         }
     //     });
@@ -159,7 +162,7 @@ module.exports = function(app, conn) {
     //         else
     //         {
     //             res.json(result);
-    //             console.log(result);
+                // console.log(result);
     //             console.log('Fetched company from DB.');
     //         }
     //     });
@@ -175,8 +178,8 @@ module.exports = function(app, conn) {
             else
             {
                 res.json(result);
-                console.log(result);
-                console.log('Fetched walking set goals from DB.');
+                // console.log(result);
+                // console.log('Fetched walking set goals from DB.');
             }
         });
     });
@@ -192,8 +195,8 @@ module.exports = function(app, conn) {
             else
             {
                 res.json(result);
-                console.log(result);
-                console.log('Fetched walking get goals from DB.');
+                // console.log(result);
+                // console.log('Fetched walking get goals from DB.');
             }
         });
     });
@@ -208,8 +211,8 @@ module.exports = function(app, conn) {
             else
             {
                 res.json(result);
-                console.log(result);
-                console.log('Searched username from users table.');
+                // console.log(result);
+                // console.log('Searched username from users table.');
             }
         });
     });
@@ -225,8 +228,8 @@ module.exports = function(app, conn) {
             else
             {
                 res.json(result);
-                console.log(result);
-                console.log('Searched username from users table.');
+                // console.log(result);
+                // console.log('Searched username from users table.');
             }
         });
     });
@@ -243,16 +246,16 @@ module.exports = function(app, conn) {
                 if(result.length){
                     if(bcrypt.compareSync(req.query.password, result[0].password)) {
                         var answer = true;
-                        console.log('Password matched.');
+                        // console.log('Password matched.');
                     } 
                 } else {
                     var answer = false;
-                    console.log('Password no match.');
+                    // console.log('Password no match.');
                 }
                 
                 res.send(answer);
-                console.log(answer);
-                console.log('Searched username from users table.');
+                // console.log(answer);
+                // console.log('Searched username from users table.');
             }
         });
     });
@@ -268,8 +271,8 @@ module.exports = function(app, conn) {
             else
             {
                 res.json(result);
-                console.log(result);
-                console.log('Searched username from users table.');
+                // console.log(result);
+                // console.log('Searched username from users table.');
             }
         });
     });
@@ -285,8 +288,8 @@ module.exports = function(app, conn) {
             else
             {
                 res.json(result);
-                console.log(result);
-                console.log('Searched username from users table.');
+                // console.log(result);
+                // console.log('Searched username from users table.');
             }
         });
     });
@@ -302,8 +305,8 @@ module.exports = function(app, conn) {
             else
             {
                 res.json(result);
-                console.log(result);
-                console.log('Searched username from users table.');
+                // console.log(result);
+                // console.log('Searched username from users table.');
             }
         });
     });
@@ -320,8 +323,8 @@ module.exports = function(app, conn) {
             else
             {   
                 res.send(result);
-                console.log(result);
-                console.log('Fetched chat messages.');
+                // console.log(result);
+                // console.log('Fetched chat messages.');
             }
         });
         conn.query('UPDATE chat_messages SET read_time = CURRENT_TIMESTAMP() WHERE receiver = ?;',
@@ -340,31 +343,17 @@ module.exports = function(app, conn) {
             else
             {
                 res.json(result);
-                console.log(result);
-                console.log('Searched chats from chats table.');
+                // console.log(result);
+                // console.log('Searched chats from chats table.');
             }
         });
+        
     });
 
-    // app.get('/api/getallusers', function(req, res) {
-    //     conn.query('select * from users;'
-    //     , function (error, result) {
-    //         if (error)
-    //         {
-    //             console.log(error);
-    //         }
-    //         else
-    //         {   
-    //             res.send(result);
-    //             console.log(result);
-    //             console.log('Get all patients.');
-    //         }
-    //     });
+    // app.get('/api/checkmessages', function(req,res){
+    //     // res.redirect('/api/getchatmessges?username='+req.username);
+    //     console.log('message called from other user.....');
     // });
-
-    app.get('/api/checkmessages', function(req,res){
-        res.redirect('/api/getchatmessges?username='+req.username);
-    });
 
 };
 
