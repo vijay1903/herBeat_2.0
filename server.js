@@ -25,10 +25,11 @@ var socket = require('socket.io');
 var io = socket(server);
 
 io.on('connection', function (sock) {
-    console.log("Socket added to patient socket.io.",sock);
+    console.log("Socket added to patient socket.io.");
     sock.on('sent message', function (data) {
+        var sender = data.user;
       console.log('Received a message from : ',data.user);
-      sock.broadcast.emit('received message', { data: data.user });
+      sock.broadcast.emit('received message', { data2: sender});
     });
 });
 
@@ -118,3 +119,5 @@ require('./routes/routes.js')(app, conn);
 server.listen(process.env.PORT || 8889);
 
 console.log('Node and socket.io server at port : '+ process.env.PORT || 8889);
+
+

@@ -1,6 +1,6 @@
 {
     "name" : "Hearbeat - Patient Dashboard",
-    "start_url" : "/",
+    "start_url" : "/dashboard",
     "short_name" : "Herbeat",
     "orientation": "portrait",
     "scope": "/",

@@ -487,3 +487,41 @@ button:disabled {
     right: 0;
     border-radius: 3px 0 0 3px;
   }
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    /* border-bottom: 1px dotted black; */
+}
+
+.tooltip .tooltiptext {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1rem;
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    right: 110%;
+    margin-left: -60px;
+    
+    /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+    transition: opacity 1s;
+}
+.tooltiptext {
+    visibility: hidden;
+    opacity:0;
+}
+.tooltip {
+    opacity:1;
+}
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}

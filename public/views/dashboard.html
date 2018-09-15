@@ -47,7 +47,8 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.js"></script>
     <![endif]-->
-    
+    <!-- Custom scripts for service worker -->
+    <script src="../js/sw.js"></script>
 </head>
 
 <body onload="myFunction()" style="margin:0;">
@@ -66,7 +67,9 @@
                     <img src="../img/logo.png" alt="Herbeat logo" style="width: 30px; height: 30px;"> HerBeat
                 </a>
                 <button class="btn btn-light" id="notificationBell" data-toggle="dropdown"  style="float:right;">
-                        <i class="fas fa-bell" style="font-size:30px;"></i>
+                        <i class="fas fa-bell" style="font-size:30px;">
+                            <!-- <span class="tooltiptext" id="tooltipMessage"></span> -->
+                        </i>
                 </button>
             </div>
         
@@ -95,7 +98,7 @@
                 </div>
             </div>
         </nav>
-
+        <!-- Dock for Mobile devices -->
         <nav class="dock" id="dock">
             <ul class="dock-list" id="dock-list">
                 <li class="dock-item">
@@ -343,6 +346,62 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- /.row --><div class="container-fluid" ng-controller="barCtrl">
+                            <div class="card-deck">
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-pie fa-fw"></i> Activity Chart
+                                        <ul class="pagination float-right">
+                                            <li class="page-item">
+                                                <button class="page-link" ng-click="prevBarPage()" aria-label="Previous" ng-disabled="prev_bar">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                    <span class="sr-only">Previous</span>
+                                                </button>
+                                            </li>
+                                            <li class="page-item" ng-repeat="x in bar_options"><button class="page-link"
+                                                    style="pointer-events: none;">{{x}}</button></li>
+                                            <li class="page-item">
+                                                <button class="page-link" ng-click="nextBarPage()" aria-label="Next" ng-disabled="next_bar">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                    <span class="sr-only">Next</span>
+                                                </button>
+                                            </li>
+                                            <li class="page-item">
+                                                <button class="btn">
+                                                    <select ng-model="bar_range" ng-change="change_bar_range();">
+                                                        <option>Monthly</option>
+                                                        <option>Weekly</option>
+                                                    </select>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chartWrapperHorizontal">
+                                            <div class="chartAreaWrapperHorizontal" style="height:1000px;">
+                                                <p ng-model="card_message_6" ng-hide="card_6">{{card_message_6}}</p>
+                                                <canvas id="horizon_bar" class="chart-horizontal-bar" chart-data="data_bar" chart-labels="labels_bar" chart-series="series_bar"
+                                                    chart-options="options_bar" chart-colors="chart_color_bar" width="100%" height="1000"
+                                                    ng-show="card_6">
+                                                </canvas>
+                                            </div>
+                                        </div>
+                                        <!-- <canvas id="base" class="chart-horizontal-bar"
+                                            chart-data="data" chart-labels="labels" chart-options="options">
+                                            </canvas>  -->
+                                    </div>
+                                    <div class="card-footer">
+                                        <p ng-model="all_goals_start_date" ng-model="all_goals_end_date">{{all_goals_start_date
+                                            | date : "MMM dd"}} to {{all_goals_end_date | date : "MMM dd"}}</p>
+                                        <button class="btn btn-sm btn-primary" id='view_goals_1' ng-disabled="!card_6">View
+                                            Details <i class="fas fa-arrow-circle-right"></i></button>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+                            </div>
+                        </div>
                         <!-- /.row -->
 
                         <br>
@@ -458,63 +517,7 @@
                         <!-- /.row -->
 
                         <br>
-                        <div class="container-fluid" ng-controller="barCtrl">
-                            <div class="card-deck">
-
-                                <div class="card">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-pie fa-fw"></i> Activity Chart
-                                        <ul class="pagination float-right">
-                                            <li class="page-item">
-                                                <button class="page-link" ng-click="prevBarPage()" aria-label="Previous" ng-disabled="prev_bar">
-                                                    <span aria-hidden="true">&laquo;</span>
-                                                    <span class="sr-only">Previous</span>
-                                                </button>
-                                            </li>
-                                            <li class="page-item" ng-repeat="x in bar_options"><button class="page-link"
-                                                    style="pointer-events: none;">{{x}}</button></li>
-                                            <li class="page-item">
-                                                <button class="page-link" ng-click="nextBarPage()" aria-label="Next" ng-disabled="next_bar">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                    <span class="sr-only">Next</span>
-                                                </button>
-                                            </li>
-                                            <li class="page-item">
-                                                <button class="btn">
-                                                    <select ng-model="bar_range" ng-change="change_bar_range();">
-                                                        <option>Monthly</option>
-                                                        <option>Weekly</option>
-                                                    </select>
-                                                </button>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="chartWrapperHorizontal">
-                                            <div class="chartAreaWrapperHorizontal" style="height:1000px;">
-                                                <p ng-model="card_message_6" ng-hide="card_6">{{card_message_6}}</p>
-                                                <canvas id="horizon_bar" class="chart-horizontal-bar" chart-data="data_bar" chart-labels="labels_bar" chart-series="series_bar"
-                                                    chart-options="options_bar" chart-colors="chart_color_bar" width="100%" height="1000"
-                                                    ng-show="card_6">
-                                                </canvas>
-                                            </div>
-                                        </div>
-                                        <!-- <canvas id="base" class="chart-horizontal-bar"
-                                            chart-data="data" chart-labels="labels" chart-options="options">
-                                            </canvas>  -->
-                                    </div>
-                                    <div class="card-footer">
-                                        <p ng-model="all_goals_start_date" ng-model="all_goals_end_date">{{all_goals_start_date
-                                            | date : "MMM dd"}} to {{all_goals_end_date | date : "MMM dd"}}</p>
-                                        <button class="btn btn-sm btn-primary" id='view_goals_1' ng-disabled="!card_6">View
-                                            Details <i class="fas fa-arrow-circle-right"></i></button>
-                                    </div>
-                                    <!-- /.card-body -->
-                                </div>
-                                <!-- /.card -->
-                            </div>
-                        </div>
-                        <!-- /.row -->
+                        
 
                         <br>
                         <!-- <div class="container-fluid">

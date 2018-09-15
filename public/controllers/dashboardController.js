@@ -1328,7 +1328,7 @@ app.controller('chatCtrl', function($scope,$filter,$http){
             $http({
                 url:"/api/sendchatmessages",
                 method:'POST',
-                params:{message:$scope.chat,sender:$scope.username,receiver:"Vijay"}
+                params:{message:$scope.chat,sender:$scope.username,receiver:"Vijay"} //Receiver to be changed
             })
             .success(function(data){
                     // $scope.chats = data;
@@ -1369,6 +1369,7 @@ app.controller('chatCtrl', function($scope,$filter,$http){
 local_socket.on('received message', function (data) {
     console.log('Received message from health coach: ',data.user);
     $('#notificationBell').addClass('notification');
+    // $('#tooltipMessage').html(data.user+' sent you a message.');
     setTimeout(function(){$('#refresh').click()},500);
 
 });
