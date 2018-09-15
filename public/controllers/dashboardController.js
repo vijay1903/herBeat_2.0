@@ -1300,6 +1300,7 @@ app.controller('chatCtrl', function($scope,$filter,$http){
             if(data.length){
                 $scope.chats = data;
                 $scope.message_count = data.length;
+                socket.emit('read message', { user:$scope.username});
                 updateScroll($scope.message_count*80);
             }
         })
@@ -1367,9 +1368,18 @@ app.controller('chatCtrl', function($scope,$filter,$http){
     chat();
 });
 local_socket.on('received message', function (data) {
-    console.log('Received message from health coach: ',data.user);
+    console.log('Received message from health coach: ',data.data2);
     $('#notificationBell').addClass('notification');
     // $('#tooltipMessage').html(data.user+' sent you a message.');
+    displayNotification(data.data2+' sent you a message.');
     setTimeout(function(){$('#refresh').click()},500);
 
 });
+// local_socket.on('refresh message', function (data) {
+//     console.log('Message read by  health coach: ',data.data2);
+//     // $('#notificationBell').addClass('notification');
+//     // $('#tooltipMessage').html(data.user+' sent you a message.');
+//     // displayNotification(data.data2+' sent you a message.');
+//     setTimeout(function(){$('#refresh').click()},500);
+
+// });

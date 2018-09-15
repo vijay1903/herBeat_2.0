@@ -31,6 +31,11 @@ io.on('connection', function (sock) {
       console.log('Received a message from : ',data.user);
       sock.broadcast.emit('received message', { data2: sender});
     });
+    // sock.on('read message', function (data){
+    //   var sender = data.user;
+    //   console.log('Message read by : ',data.user);
+    //   sock.broadcast.emit('refresh message', { data2: sender});
+    // })
 });
 
 
