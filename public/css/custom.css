@@ -65,7 +65,7 @@
 }
 
 .dock-item {
-    box-shadow: #818181 1px 1px 25px;
+    /* box-shadow: #818181 1px 1px 25px; */
     padding:10px;
     padding-left:5.5vw;
     padding-right:5.5vw;
