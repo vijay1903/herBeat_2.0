@@ -25,11 +25,11 @@ var socket = require('socket.io');
 var io = socket(server);
 
 io.on('connection', function (sock) {
-    console.log("Socket added to patient socket.io.");
+    console.log("Socket added to patient socket.io.", sock.id);
     sock.on('sent message', function (data) {
         var sender = data.user;
-      console.log('Received a message from : ',data.user);
-      sock.broadcast.emit('received message', { data2: sender});
+      console.log('Received a message from : ',data.user, ' - ', data.message);
+      sock.broadcast.emit('received message', { data2: sender, msg2: data.message});
     });
     // sock.on('read message', function (data){
     //   var sender = data.user;

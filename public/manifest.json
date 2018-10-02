@@ -2,10 +2,10 @@
     "name" : "Hearbeat - Patient Dashboard",
     "start_url" : "/dashboard",
     "short_name" : "Herbeat",
-    "orientation": "portrait",
-    "scope": "/",
+    "orientation": "portrait-primary",
+    "scope": "/dashboard",
     "display": "standalone",
-    "theme_color": "#c13f10",
+    "theme_color": "#FB0154",
     "background_color": "#f9f9f9",
     "icons" :[
         {

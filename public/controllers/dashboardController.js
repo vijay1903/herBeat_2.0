@@ -1277,31 +1277,49 @@ app.controller("barCtrl", function($rootScope, $scope, $filter, $http, $timeout)
 // });
 
 
-app.controller('chatCtrl', function($scope,$filter,$http){
+app.controller('chatCtrl', function($rootScope,$scope,$filter,$http){
     $scope.username = document.getElementById('user_username').value;
     $scope.chat_class = 'chat sent';
-    function updateScroll(c){
-        // var element = document.getElementById("myChat");
-        // element.scrollTop = c;
-        $("#myChat").animate({scrollTop: c},500);
+    $scope.health_coach = '';
+    $http({
+        url:"/api/gethealthcoaches",
+        method:'GET',
+    })
+    .success(function(data){
+        if(data.length){
+            console.log(data);
+            $scope.health_coach = {'first_name':data[0].first_name};
+            $scope.health_coaches = data;
+        }
+    })
+    .error(function(error){
+        console.log('Error', error)
+    });
+    function updateScroll(){
+        $("#myChat").animate({scrollTop: $("#myChat")[0].scrollHeight},500);
     }
-    
+    $scope.changeHealthCoach = function(){
+        $scope.refresh();
+        updateScroll();
+    }
     $scope.refresh = function(){
         chat();
     }
     var chat = function(){
-        // updateScroll($scope.message_count*80);
+        
+        var receiver = $scope.health_coach;
+        // console.log(receiver.first_name);
         $http({
             url:"/api/getchatmessages",
             method:'GET',
-            params:{username:$scope.username}
+            params:{sender:$scope.username, receiver:receiver.first_name}
         })
         .success(function(data){
             if(data.length){
                 $scope.chats = data;
                 $scope.message_count = data.length;
                 socket.emit('read message', { user:$scope.username});
-                updateScroll($scope.message_count*80);
+                updateScroll();
             }
         })
         .error(function(error){
@@ -1320,7 +1338,7 @@ app.controller('chatCtrl', function($scope,$filter,$http){
             //         // $scope.chats = data;
             //         // $scope.chat = '';
             //         // chat();
-            //         // updateScroll($scope.message_count*80);
+            //         // updateScroll();
             // })
             // .error(function(error){
             //     console.log('Error', error)
@@ -1329,13 +1347,13 @@ app.controller('chatCtrl', function($scope,$filter,$http){
             $http({
                 url:"/api/sendchatmessages",
                 method:'POST',
-                params:{message:$scope.chat,sender:$scope.username,receiver:"Vijay"} //Receiver to be changed
+                params:{message:$scope.chat,sender:$scope.username,receiver:$scope.health_coach.first_name} //Receiver to be changed
             })
             .success(function(data){
                     // $scope.chats = data;
                     $scope.chat = '';
                     chat();
-                    updateScroll($scope.message_count*80);
+                    updateScroll();
             })
             .error(function(error){
                 console.log('Error', error)
@@ -1350,7 +1368,7 @@ app.controller('chatCtrl', function($scope,$filter,$http){
             //         // $scope.messages = data;
             //         // $scope.message = '';
             //         // chat();
-            //         // updateScroll($scope.message_count*80);
+            //         // updateScroll();
             //         console.log("Message sent and receiver notified.")
             // })
             // .error(function(error){
@@ -1359,19 +1377,20 @@ app.controller('chatCtrl', function($scope,$filter,$http){
             
             
             //Send a ping to health coach socket server
-            socket.emit('sent message', { user:$scope.username});
+            socket.emit('sent message', { user:$scope.username, message: $scope.chat});
 
             // when a message is received from health coach
         }
     }
     // setInterval(chat,3000);
+    // setTimeout(updateScroll(),1000);
     chat();
 });
 local_socket.on('received message', function (data) {
-    console.log('Received message from health coach: ',data.data2);
+    console.log('Received message from health coach: ',data.data2, data.msg2);
     $('#notificationBell').addClass('notification');
     // $('#tooltipMessage').html(data.user+' sent you a message.');
-    displayNotification(data.data2+' sent you a message.');
+    displayNotification(data.data2+' : '+data.msg2);
     setTimeout(function(){$('#refresh').click()},500);
 
 });

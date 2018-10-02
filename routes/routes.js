@@ -313,8 +313,8 @@ module.exports = function(app, conn) {
 
     app.get('/api/getchatmessages', function(req, res) {
         conn.query('SET SQL_SAFE_UPDATES=0');
-        conn.query('select * from chat_messages where sender = ? OR receiver = ? order by sent_time;',
-        [req.query.username, req.query.username]
+        conn.query('select * from chat_messages where (sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?) order by sent_time;',
+        [req.query.sender, req.query.receiver, req.query.receiver, req.query.sender]
         , function (error, result) {
             if (error)
             {
@@ -328,7 +328,7 @@ module.exports = function(app, conn) {
             }
         });
         conn.query('UPDATE chat_messages SET read_time = CURRENT_TIMESTAMP() WHERE receiver = ?;',
-        [req.query.username]);
+        [req.query.sender]);
         // conn.query('SET SQL_SAFE_UPDATES=1;');
     });
 
@@ -350,6 +350,19 @@ module.exports = function(app, conn) {
         
     });
 
+    app.get('/api/gethealthcoaches', function(req, res){
+        conn.query('select u_a.first_name from (select first_name, last_name from user_authentication) u_a inner join (select distinct sender from chat_messages) c on c.sender = u_a.first_name;'
+        ,function(err, result){
+            if(err) {
+                console.log(err);
+                return err;
+            }
+            if(result){
+                res.json(result);
+                console.log("all health coaches sending message : ",result)
+            }
+        })
+    })
     // app.get('/api/checkmessages', function(req,res){
     //     // res.redirect('/api/getchatmessges?username='+req.username);
     //     console.log('message called from other user.....');

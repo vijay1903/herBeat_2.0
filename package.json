@@ -30,7 +30,7 @@
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",
     "passport-twitter": "^1.0.4",
-    "popper.js": "^1.14.3",
+    "popper.js": "^1.14.4",
     "redis": "2.8.0",
     "sequelize": "4.23.2",
     "session": "^0.1.0",

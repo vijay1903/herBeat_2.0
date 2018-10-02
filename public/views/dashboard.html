@@ -20,7 +20,7 @@
 
 
     <!-- Bootstrap Core CSS -->
-    <link href="../vendor/bootstrap4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendor/bootstrap4/css/bootstrap.css" rel="stylesheet">
     <link href="../vendor/bootstrap4/css/bootstrap-grid.min.css" rel="stylesheet">
     <link href="../vendor/bootstrap4/css/bootstrap-reboot.min.css" rel="stylesheet">
 
@@ -149,8 +149,19 @@
             <div class="col-auto container-fluid main">
                 <div class="tab-content" id="v-pills-tabContent">
                     <div class="tab-pane fade active show" id="v-pills-dash" role="tabcard" aria-labelledby="v-pills-dash-tab">
-                        <br>
                         <div class="container-fluid" ng-controller="cardCtrl">
+                            <div class="card card-info" id="prompt">
+                                <div class="card-body">
+                                    <div class="card-title">
+                                        <h5>You want to install this app on your phone?</h5>
+                                    </div>
+                                        <button id="yes_btn" class="btn btn-primary btn-xs">Yes</button>
+                                        <button class="btn btn-warning btn-xs float-right" onclick="document.getElementById('prompt').style.display = 'none';">No</button>
+                                </div>
+                            </div>
+        
+                            <!-- /.row -->
+                            
                             <div class="card">
                                 <div class="card-body" style="font-size: 16px;">
                                     <div class="container">
@@ -259,7 +270,7 @@
                                         <div style="overflow: auto; height: 170px;">
                                             <p style="padding:10px; font-size: 16px;" ng-model="card_message_4" ng-hide="card_4">{{card_message_4}}</p>
                                             <center ng-show="card_4"> Top {{(msg_num >= 5)?5:msg_num}} feedbacks.</center>
-                                            <table class="table table-responsive" ng-show="card_4">
+                                            <table class="table table-hover" ng-show="card_4">
                                                 <thead style="position:relative;top:0px;">
                                                     <tr style="padding-top: 2px; padding-bottom: 2px;">
                                                         <th style="padding-top: 2px; padding-bottom: 2px;">Message</th>
@@ -270,7 +281,7 @@
                                                     <tr ng-repeat="m in messages | limitTo : 5">
                                                         <td style="padding-top: 2px; padding-bottom: 2px;">{{m.message}}</td>
                                                         <td style="padding-top: 2px; padding-bottom: 2px;">{{m.msg_time |
-                                                            date : 'MM/dd HH:MM'}}</td>
+                                                            date : 'MM/dd HH:MM a'}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -1005,8 +1016,15 @@
                             <div class="card">
                                 <div class="card-header">
                                     Messages <span class="badge badge-success" ng-model="message_count">{{message_count}}</span>
-                                    <button id="refresh" class="btn btn-sm btn-primary float-right" ng-click="refresh();"><i
-                                            id="sync" class="fas fa-sync"></i></button>
+                                    <div class="btn-group float-right">
+                                        <select name="health_coach" id="health coach" ng-change="changeHealthCoach();" ng-model="health_coach" ng-default="health_coach" ng-options="h.first_name for h in health_coaches">
+                                        </select>
+                                        <!-- {{health_coach}} -->
+                                        <button id="refresh" class="btn btn-sm btn-primary" ng-click="refresh();">
+                                            <i id="sync" class="fas fa-sync"></i>
+                                        </button>
+                                    </div>
+
                                 </div>
                                 <div class="card-body">
                                     <div class="chatAreaWrapper">
@@ -1017,16 +1035,17 @@
                                                 <sub><a data-toggle="tooltip" data-placement="bottom" title="Read at {{x.read_time | date : 'MMM dd yyyy hh:mm:ss a'}}"><i
                                                             ng-class="(x.read_time != null)?'fas fa-check-square':'far fa-check-square'"
                                                             ng-show="(x.sender==username?true:false)"></i></a> {{x.sent_time
-                                                    | date: 'MMM dd yyyy hh:mm:ss a'}} by {{(x.sender == username)?'You':x.sender}}</sub>
+                                                    | date: 'MMM dd yyyy hh:mm:ss a'}}</sub>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card-footer">
                                     <form class="form-inline" ng-submit="sendMessage();">
-                                        <input type="text" name="message" class="chat_input" ng-model="chat" placeholder="Type message" required>
-                                        <button class="btn btn-primary" type="submit" style="margin-left: -55px; z-index: 1;"><i
-                                                class="fas fa-paper-plane"></i></button>
+                                        <input id="chat_message" type="text" name="message" class="chat_input" ng-model="chat" placeholder="Type message" required>
+                                        <button class="btn btn-primary" type="submit" style="margin-left: -55px; z-index: 1;">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
                                     </form>
                                 </div>
                             </div>

@@ -300,3 +300,12 @@ function plusSlides(x){
   var w = (screen.width)/4;
   document.getElementById('dock-list').scrollLeft = pos+(w*x);
 }
+if(window.screen.width < 1000){
+  document.getElementById('chat_message').onfocus = function(){
+    document.getElementById('dock').style.display = 'none';
+  };
+
+  document.getElementById('chat_message').onfocusout = function(){
+    document.getElementById('dock').style.display = 'initial';
+  };
+}
