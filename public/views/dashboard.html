@@ -248,7 +248,13 @@
                                     <div class="card-header">EMA Response</div>
                                     <div class="card-body" style="font-size: 16px;">
                                         <p ng-model="card_message_3" ng-hide="card_3">{{card_message_3}}</p>
-                                        <h1 ng-model="res_num" ng-model="res_den" ng-show="card_3">{{res_num}}/{{res_den}}</h1>
+                                        <div ng-show="card_3">
+                                            <canvas id="doughnut" class="chart chart-doughnut"
+                                                chart-data="doughnut_data" chart-labels="doughnut_labels" chart-colors="doughnut_colors">
+                                            </canvas> 
+                                            <p ng-model="res_num" ng-model="res_den">{{res_num}}/{{res_den}}</p>
+                                        </div>
+                                        
 
                                         <!-- <p ng-model="res_time2">Data taken from : {{res_time2}}</p> -->
                                     </div>

@@ -1,9 +1,13 @@
 "use strict";
 
 var app = angular.module("myApp",['chart.js']);
-var socket = io.connect('http://localhost:8888/');
-var local_socket = io.connect('http://localhost:8889/');
-console.log(socket, local_socket);
+
+if(io){
+    var socket = io.connect('http://localhost:8888/');
+    var local_socket = io.connect('http://localhost:8889/');
+    console.log(socket, local_socket);
+}
+
 app.controller('navCtrl', function($rootScope, $scope) {
     var midnight = new Date();
     midnight.setHours(0,0,0,0);
@@ -40,24 +44,6 @@ app.controller('navCtrl', function($rootScope, $scope) {
       
         cb(start, end);
     });
-    // console.log($rootScope.start_date,$rootScope.end_date);
-    
-
-
-    // var max_date = moment().format('YYYY-MM-DD');
-    // // (new Date() >= $scope.end)? moment().format('YYYY-MM-DD'):$scope.end;
-    // var min_date = "2018-04-02";
-    // // ($scope.start > new Date("2018-04-02","YYYY-MM-DD"))?$scope.start:"2018-04-02";
-    // document.getElementById("startDate").setAttribute("min",min_date);
-    // document.getElementById("startDate").setAttribute("max",max_date);
-    // document.getElementById("endDate").setAttribute("min",min_date);
-    // document.getElementById("endDate").setAttribute("max",max_date);
-
-    // $scope.search = function(){
-    //     $rootScope.start_date = $scope.start;
-    //     $rootScope.end_date = $scope.end;
-    //     // return $rootScope.start_date, $rootScope.end_date;
-    // }
 
     $scope.date_change = function(){
         if($rootScope.start_date>$rootScope.end_date){
@@ -90,6 +76,7 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
         $scope.res_den = 0;
         $scope.res_num = 0;
         $scope.msg_num = 0;
+        $scope.doughnut_data = [0,0];
 
         $scope.card_start_date = start;
         $scope.card_end_date = end;
@@ -216,6 +203,9 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
             if(data.length){
                 $scope.card_3 = true;
                 $scope.res_den = data[0].count;
+                $scope.doughnut_labels = ["Responded", "Not responded"];
+                $scope.doughnut_data[1] = $scope.res_den;
+                $scope.doughnut_colors = ["#34f83e","#f83434"];                
             }
             else {
                 $scope.card_3 = false;
@@ -239,6 +229,7 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
             if(data.length){
                 $scope.card_3 = true;
                 $scope.res_num = data.length;
+                $scope.doughnut_data[0] = $scope.res_num;
             } else {
                 $scope.card_3 = false;
                 $scope.card_message_3 = "No data for this range.";
