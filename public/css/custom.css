@@ -99,7 +99,7 @@
 
 .chartWrapperHorizontal {
     position: relative;
-    height: 50vh;
+    height: 500px;
     overflow-y: scroll;
 }
 
@@ -177,7 +177,7 @@
     border-radius: 10px;
 }
 .ema_table {
-    table-layout: fixed; 
+    /* table-layout: fixed;  */
     width: 100%;
     overflow: scroll;
 }
@@ -352,6 +352,7 @@ button:disabled {
 }
 #ema_wrapper .ema_wrapper{
     height:60vh;
+    overflow: auto;
 }
 
 #table_wrapper .table_wrapper{
@@ -450,33 +451,113 @@ button:disabled {
     visibility: visible;
     opacity: 1;
 }
+.no-data-message {
+    text-align: center;
+}
+.logo {
+    animation: glow 2s linear 0s infinite;
+}
+
+.wrapper {
+    height: 100%;
+    width: 100%;
+}
+
+.crousel {
+    display: flex;
+    height: 100px;
+    padding: 0px 20px;
+    vertical-align: middle;
+}
+
+.crousel-item {
+    font-size: 10px;
+    transition: all 0.5s ease-in;
+    position: relative;
+    padding: 25px 0px;
+    text-align: center;
+}
+.crousel-item p {
+    margin:0px;
+}
+.crousel-item img {
+    height: 30px;
+    width: 30px;
+    transition: all 0.5s ease-in;
+}
+.active-crousel {
+    padding: 0px;
+    font-size: 20px;
+}
+.active-crousel img{
+    height: 80px;
+    width: 80px;
+}
+
+@keyframes glow {
+    0%{opacity:1;}
+    50%{opacity:0.6;}
+    100%{opacity:1;}
+}
+
+.fullscreen-div{
+    display: none;
+    height:100vh;
+    width:100vw;
+    z-index:10;
+    position: fixed;
+    top:10px;
+    left:10px;
+    padding:10px;
+}
+.fullscreen{
+    height:100vh;
+    width:100vw;
+    overflow: auto;
+}
+
+.fullscreen-dialog{
+    margin:0px;
+}
+.fullscreen-content{
+    height:100vh;
+    width:100vw;
+}
+.fullscreen-body {
+    margin: 10px 0px 0px 0px;
+}
 
 
-@media screen and (max-width: 1000px) {
+
+
+
+@media screen and (max-width: 600px) {
     #datepicker{
-        padding:0px!important;
+        padding:1px!important;
+        width: 80%;
+        font-size: 11px;
+    }
+    #btnGroupDrop1{
+        height: 35px;
+        width: 45px;
+        padding: 5px;
     }
     #prompt {
         position: fixed;
         top: 15vh;
-        /* display: initial; */
         z-index: 1;
         margin-right: 15px;
         transition: position 1s linear;
      }
-    #reportrange{
-        padding:5px!important;
-    }
     #sideWrapper{
         width:100vw;
     }
     .main {
-      width: 100%; /* The width is 100%, when the viewport is 800px or smaller */
-      margin-left: auto;
-      padding: 0px;
+        width: 100%; /* The width is 100%, when the viewport is 600px or smaller */
+        margin-left: auto;
+        padding: 0px;
     }
     .sidenav {
-        /* padding-top: 8px; */
         width: 100%;
         height: 0px;
         top:30px;
@@ -484,19 +565,21 @@ button:disabled {
         transition: height 3s ease-in;
         -webkit-transition: height 3s ease-in;
     }
-    #datepicker {
-        width: 85%;
-        font-size: 15px;
-    }
     #datepicker div{
-        width:80px;
+        width: 80px;
     }
     .btn, .card, p{
-        font-size: 10px!important;
-        padding-bottom:5px;
+        /* font-size: 10px!important; */
+        padding-bottom: 5px;
     }
-    .page-item {
-        font-size: 3vw!important;
+    .pagination .page-item{
+        font-size: 12px!important;
+    }
+    .page-link {
+        padding: 8px;
+    }
+    select{
+        font-size: 10px!important;
     }
     .chatAreaWrapper{
         height:35vh;
@@ -510,24 +593,21 @@ button:disabled {
         left: 0;
         top: 0;
         pointer-events:none;
-    }
+    }*/
     
     #table_wrapper {
         padding: 1px;
-        width: 75vw;
-        overflow-x: scroll;
-    } */
-    /* #ema_wrapper {
-        width:250%;
+        height: 100%;
+        font-size: 10px;
+        overflow: auto;
+    }
+    #ema_wrapper {
+        height:50vh;
         
-    }
-    #table_wrapper{
-        width:100%;
-        overflow-x: scroll;
-    }
+    } 
     .ema_table {
-        overflow-x: scroll;
-    } */
+        width:700px;
+    }
 
     #setting_sidebar, #setting_navbar_empty {
         display : none;
@@ -535,6 +615,17 @@ button:disabled {
     .dock {
         display: inherit;
     }
+    .fullscreen-dialog{
+        margin:0px;
+        overflow:auto;
+    }
+    .fullscreen-content{
+        height:100vh;
+        width:1000px;
+    }
+    /* .fullscreenGoals{
+        transform: rotateZ(90deg);
+    } */
   }
 
 @media screen and (max-height: 450px) {

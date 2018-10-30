@@ -21,22 +21,22 @@ var flash = require('connect-flash');
 
 // socket.io
 var server = require('http').Server(app);
-var socket = require('socket.io');
-var io = socket(server);
+// var socket = require('socket.io');
+// var io = socket(server);
 
-io.on('connection', function (sock) {
-    console.log("Socket added to patient socket.io.", sock.id);
-    sock.on('sent message', function (data) {
-        var sender = data.user;
-      console.log('Received a message from : ',data.user, ' - ', data.message);
-      sock.broadcast.emit('received message', { data2: sender, msg2: data.message});
-    });
-    // sock.on('read message', function (data){
-    //   var sender = data.user;
-    //   console.log('Message read by : ',data.user);
-    //   sock.broadcast.emit('refresh message', { data2: sender});
-    // })
-});
+// io.on('connection', function (sock) {
+//     console.log("Socket added to patient socket.io.", sock.id);
+//     sock.on('sent message', function (data) {
+//         var sender = data.user;
+//       console.log('Received a message from : ',data.user, ' - ', data.message);
+//       sock.broadcast.emit('received message', { data2: sender, msg2: data.message});
+//     });
+//     // sock.on('read message', function (data){
+//     //   var sender = data.user;
+//     //   console.log('Message read by : ',data.user);
+//     //   sock.broadcast.emit('refresh message', { data2: sender});
+//     // })
+// });
 
 
 
@@ -46,6 +46,7 @@ io.on('connection', function (sock) {
 // app.engine('html', require('ejs').renderFile);
 
 require('./config/passport')(passport); // pass passport for configuration
+
 
 var options = {
     host: process.env.DB_HOST,
@@ -123,6 +124,6 @@ require('./routes/routes.js')(app, conn);
 
 server.listen(process.env.PORT || 8889);
 
-console.log('Node and socket.io server at port : '+ process.env.PORT || 8889);
+// console.log('Node and socket.io server at port : '+ process.env.PORT || 8889);
 
 

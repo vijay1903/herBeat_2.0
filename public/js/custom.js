@@ -1,48 +1,4 @@
 
-// (function($) {
-//   "use strict"; // Start of use strict
-
-//   // Smooth scrolling using jQuery easing
-//   $('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function() {
-//     if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-//       var target = $(this.hash);
-//       target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-//       if (target.length) {
-//         $('html, body').animate({
-//           scrollTop: (target.offset().top - 48)
-//         }, 1000, "easeInOutExpo");
-//         return false;
-//       }
-//     }
-//   });
-//   // Closes responsive menu when a scroll trigger link is clicked
-//   $('.js-scroll-trigger').click(function() {
-//     $('.navbar-collapse').collapse('hide');
-//   });
-
-//   // Activate scrollspy to add active class to navbar items on scroll
-//   $('body').scrollspy({
-//     target: '#mainNav',
-//     offset: 54
-//   });
-
-//   // Collapse Navbar
-//   var navbarCollapse = function() {
-//     if ($("#mainNav").offset().top > 100) {
-//       $("#mainNav").addClass("navbar-shrink");
-//     } else {
-//       $("#mainNav").removeClass("navbar-shrink");
-//     }
-//   };
-//   // Collapse now if page is not at top
-//   navbarCollapse();
-//   // Collapse the navbar when page is scrolled
-//   $(window).scroll(navbarCollapse);
-  
-
-// })(jQuery); // End of use strict
-
-
 var check = function() {
   if (document.getElementById('password1').value == document.getElementById('password2').value) {
       document.getElementById('confirm_message').style.color = 'green';
@@ -254,16 +210,16 @@ function showPage() {
 
 function toggle_navbar() {
   if(window.innerWidth < 900){
-    if(document.getElementById('navbarSupportedContent').style.height == '0px'){
-      document.getElementById('navbarSupportedContent').style.height = '100vh';
-    } else {
+    if(document.getElementById('navbarSupportedContent').style.height == '100vh'){
       document.getElementById('navbarSupportedContent').style.height = '0px';
+    } else {
+      document.getElementById('navbarSupportedContent').style.height = '100vh';
     }
   } else {
-    if(document.getElementById('navbarSupportedContent').style.width == '60px'){
-      document.getElementById('navbarSupportedContent').style.width = '200px';
-    } else {
+    if(document.getElementById('navbarSupportedContent').style.width == '200px'){
       document.getElementById('navbarSupportedContent').style.width = '60px';
+    } else {
+      document.getElementById('navbarSupportedContent').style.width = '200px';
     }
   }
 }
@@ -308,4 +264,33 @@ if(window.screen.width < 1000){
   document.getElementById('chat_message').onfocusout = function(){
     document.getElementById('dock').style.display = 'initial';
   };
+}
+
+function activate(name){
+  var parent = document.getElementById(name).parentElement;
+  var children = parent.children;
+  for (let i = 0; i < children.length; i++) {
+      const element = children[i];
+      if(element.getAttribute('id') == name){
+          element.classList.add('active-crousel');
+      } else {
+          element.classList.remove('active-crousel');
+      }
+  }
+}
+
+function showGoals(){
+  var e = document.getElementById('goal_select');
+  var number =  e.options[e.selectedIndex].value;
+  var canvases = document.querySelector('#fullscreenGoalsModalBody').children;
+  for (let i = 0; i < canvases.length; i++) {
+    const c = canvases[i];
+    var id = '#fullscreenGoals'+i;
+    if(i == number){
+      document.querySelector(id).style.display = 'initial';
+    } else {
+      document.querySelector(id).style.display = 'none';
+    }
+  }
+
 }

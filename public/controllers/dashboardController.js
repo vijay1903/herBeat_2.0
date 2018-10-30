@@ -1,13 +1,25 @@
 "use strict";
 
 var app = angular.module("myApp",['chart.js']);
-
-if(io){
-    var socket = io.connect('http://localhost:8888/');
-    var local_socket = io.connect('http://localhost:8889/');
-    console.log(socket, local_socket);
-}
-
+// var socket, local_socket;
+// if(io != undefined){
+//     // console.log(io);
+//     var socket = io.connect('http://localhost:8888/');
+//     var local_socket = io.connect('http://localhost:8889/');
+//     // console.log(socket, local_socket);
+// } else {
+//     console.log('io not defined');
+// }
+Array.prototype.unique = function() {
+    var a = this.concat();
+    for(var i=0; i<a.length; ++i) {
+        for(var j=i+1; j<a.length; ++j) {
+            if(a[i] === a[j])
+                a.splice(j--, 1);
+        }
+    }
+    return a;
+};
 app.controller('navCtrl', function($rootScope, $scope) {
     var midnight = new Date();
     midnight.setHours(0,0,0,0);
@@ -54,8 +66,6 @@ app.controller('navCtrl', function($rootScope, $scope) {
             $rootScope.$broadcast('datechange',{});       
         }
     };
-
-
 });
 app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
     $scope.card_start_date = $rootScope.start_date;
@@ -108,6 +118,85 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                 $scope.avg = $filter('number')(avg,2);
                 // for tables
                 $scope.goals = data;
+                console.log(data);
+
+                // for full screen graph
+                $scope.goals_fullscreen_labels = [];
+                $scope.goals_fullscreen_data = [[],[],[]];
+                $scope.goals_fullscreen_chart_colors = [[],[],[]];
+                $scope.goals_fullscreen_series = ['Energy','Readiness','Walk'];
+                $scope.goals_fullscreen_options = {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    animation: {
+                        duration:500
+                    },
+                    scales: {
+                        xAxes: [{
+                            maxBarThickness : 20,
+                            ticks:{
+                                autoSkip : true,
+                                autoSkipPadding: 40,
+                                maxRotation : 0,
+                                display: true
+                            },
+                            display: true,
+                            min : 0 ,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Time'
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                // labelString: 'Heart rate'
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                display: true,
+                                suggestedMin: 10,
+                            }
+                        }]
+                    }
+                }
+                data.forEach(element => {
+                    console.log(element)
+                    $scope.goals_fullscreen_labels.push($filter('date')(element.goal_date,'MM-dd-yy HH:mm'));
+                    $scope.goals_fullscreen_data[0].push(element.energy);
+                    $scope.goals_fullscreen_chart_colors[0].push({
+                        backgroundColor: 'rgba(196, 23, 55, 1)',
+                        pointBackgroundColor: 'rgba(245, 168, 182, 1)',
+                        pointHoverBackgroundColor: 'rgba(238, 114, 136, 0.6)',
+                        borderColor: 'rgba(196, 23, 55, 1)',
+                        pointBorderColor: 'rgba(196, 23, 55, 1)',
+                        pointHoverBorderColor: 'rgba(229, 31, 68, 0.53)'
+                    });
+                    $scope.goals_fullscreen_data[1].push(element.readiness);
+                    $scope.goals_fullscreen_chart_colors[1].push({
+                        backgroundColor: 'rgba(23, 196, 55, 1)',
+                        pointBackgroundColor: 'rgba(168, 245, 182, 1)',
+                        pointHoverBackgroundColor: 'rgba(114, 238, 136, 0.6)',
+                        borderColor: 'rgba(23, 196, 55, 1)',
+                        pointBorderColor: 'rgba(23, 196, 55, 1)',
+                        pointHoverBorderColor: 'rgba(31, 229, 68, 0.53)'
+                    });
+                    $scope.goals_fullscreen_data[2].push(element.walk);
+                    $scope.goals_fullscreen_chart_colors[2].push({
+                        backgroundColor: 'rgba(23, 55, 196, 1)',
+                        pointBackgroundColor: 'rgba(168, 182, 245, 1)',
+                        pointHoverBackgroundColor: 'rgba(114, 136, 238, 0.6)',
+                        borderColor: 'rgba(23, 55, 196, 1)',
+                        pointBorderColor: 'rgba(23, 55, 196, 1)',
+                        pointHoverBorderColor: 'rgba(31, 68, 229, 0.53)'
+                    });
+                });
+
+                // console.log($scope.goals_fullscreen_labels ,$scope.goals_fullscreen_series,$scope.goals_fullscreen_data);
+
+
+
                 var first_date = data[0].goal_date;
                 var flag = true;
                 $scope.date_row = function(date){
@@ -184,7 +273,6 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                 $scope.card_2 = false;
                 $scope.card_message_2 = "No data for this range."
             }
-
             $scope.per_start_date = $scope.card_start_date;
             $scope.per_end_date = $scope.card_end_date;
             // $filter('date')(data[0].time,'medium');
@@ -275,17 +363,6 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                 //     $scope.searchCount = $scope.responses.length;
                 // }
 
-                Array.prototype.unique = function() {
-                    var a = this.concat();
-                    for(var i=0; i<a.length; ++i) {
-                        for(var j=i+1; j<a.length; ++j) {
-                            if(a[i] === a[j])
-                                a.splice(j--, 1);
-                        }
-                    }
-                
-                    return a;
-                };
                 
                 if($scope.all) {
                     var temp = [];
@@ -524,6 +601,9 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
     $scope.$on('datechange', function(event, args){
         cards($rootScope.start_date,$rootScope.end_date);
     });
+    $scope.enlarge = function(){
+        $scope.fullscreen_goals = true;
+    }
 });
 
 app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
@@ -532,7 +612,7 @@ app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
     $scope.heart_options = []
     $scope.heart_scale = 1;
     $scope.username = document.getElementById("user_username").value;
-    $scope.heart_range = "Monthly";
+    $scope.heart_range = "Weekly";
     $scope.change_range = function(){
         heart($rootScope.start_date,$rootScope.end_date);
     }
@@ -551,8 +631,6 @@ app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
             params: {username: $scope.username, start_date: $filter('date')($scope.heart_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.heart_end_date,'yyyy-MM-dd')}
         })
         .success(function(data) {
-            // console.log(data);
-           
             var range = 'MMM';
             switch ($scope.heart_range) {
                 case "Monthly":
@@ -625,10 +703,10 @@ app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
                 }
                 var x = counter_arr[current];
                 // console.log("in loop",dates[x],h_rate[x],counter_arr);
-                if($scope.heart_range == "Weekly"){
+                if($scope.heart_range == "Weekly" && dates[x] != undefined){
                     // console.log(dates[x][0]);
-                    var w_start = moment(dates[x][0],'MMM DD YYYY hh:mm a').week(counter_arr[current]).startOf('week').format('MMM DD YYYY');
-                    var w_end = moment(dates[x][0],'MMM DD YYYY hh:mm a').week(counter_arr[current]).endOf('week').format('MMM DD YYYY');
+                    var w_start = moment(dates[x][0],'MMM DD YYYY hh:mm a').week(counter_arr[current]).startOf('week').format('MM DD');
+                    var w_end = moment(dates[x][0],'MMM DD YYYY hh:mm a').week(counter_arr[current]).endOf('week').format('MM DD');
                     $scope.heart_options = [w_start + " to " + w_end];
                     // $scope.heart_options = [$filter('date')(dates[x][0], 'MM dd yyyy') + " - " + $filter('date')(dates[x][(dates[x].length)-1], 'MM dd yyyy')];
                 } else {
@@ -689,7 +767,7 @@ app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
 
         $scope.options = {
             responsive: false,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
             legend: {
                 position: 'top',
             },
@@ -702,12 +780,52 @@ app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
                     ticks:{
                         autoSkip : true,
                         autoSkipPadding: 40,
-                        maxRotation : 0
+                        maxRotation : 0,
+                        display: false
+                    },
+                    display: false,
+                    min : 0 ,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Time'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: false,
+                        labelString: 'Heart rate'
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        display: false
+                    }
+                }]
+            },
+        };
+        
+        $scope.heartrate_fullscreen_options =  {
+            responsive: true,
+            maintainAspectRatio: true,
+            legend: {
+                position: 'top',
+            },
+            animation: {
+                duration:500
+            },
+            scales: {
+                xAxes: [{
+                    maxBarThickness : 20,
+                    ticks:{
+                        autoSkip : true,
+                        autoSkipPadding: 40,
+                        maxRotation : 0,
+                        display: true
                     },
                     display: true,
                     min : 0 ,
                     scaleLabel: {
-                        display: false,
+                        display: true,
                         labelString: 'Time'
                     }
                 }],
@@ -718,12 +836,12 @@ app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
                         labelString: 'Heart rate'
                     },
                     ticks: {
-                        beginAtZero:true
+                        beginAtZero: true,
+                        display: true
                     }
                 }]
             },
         };
-        
 
 
     };
@@ -733,134 +851,6 @@ app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
         heart($rootScope.start_date,$rootScope.end_date);
     })
 });
-
-// app.controller('radarCtrl', function($rootScope, $scope, $filter, $http){
-//     $scope.activity_start_date = $rootScope.start_date;
-//     $scope.activity_end_date = $rootScope.end_date;
-//     $scope.username = document.getElementById("user_username").value;
-    
-//     var radar = function(start, end){
-//         $scope.activity_start_date = start;
-//         $scope.activity_end_date = end;
-        
-        
-
-
-        
-//         $http({
-//             url: '/api/getuseractivities',
-//             method: 'GET',
-//             params: {username: $scope.username, start_date: $filter('date')($scope.activity_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.activity_end_date,'yyyy-MM-dd')}
-//         })
-//         .success(function(data) {
-//             // console.log(data);
-//             var act_times = [0,0,0,0,0,0];
-//             var act = ["jogging","standing","walking","sitting","bicycling","None of the above"];
-//             var data = [];
-//             data = $rootScope.ema_responses;
-//             console.log("EMA Responses : ",$rootScope.ema_responses);
-//             for(var i = 0; i < data.length; i++){
-//                 for(var j = 0; j< 6 ; j++){
-//                     if(act[j] == data[i].activity){
-//                         act_times[j] = data[i].count;
-//                     }
-//                 }
-//             }
-//             // console.log(act, act_times);
-//             $scope.labels_act = act;
-//             $scope.data_act = act_times;
-//         })
-//         .error(function(error) {
-//             console.log('Error: ' + error);
-//         });
-//         $scope.chart_colors_act = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
-        
-//         $http({
-//             url: '/api/getuserfeelings',
-//             method: 'GET',
-//             params: {username: $scope.username, start_date: $filter('date')($scope.activity_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.activity_end_date,'yyyy-MM-dd')}
-//         })
-//         .success(function(data) {
-//             // console.log(data);
-//             var feel_times = [0,0,0,0,0];
-//             var feel = ["Very Positive","Positive","Neutral","Negative","Very Negative"];
-//             for(var i = 0; i < data.length; i++){
-//                 for(var j = 0; j< 5; j++){
-//                     if(feel[j] == data[i].feeling){
-//                         feel_times[j] = data[i].count;
-//                     }
-//                 }
-//             }
-//             // console.log(feel, feel_times);
-//             $scope.labels_feel = feel;
-//             $scope.data_feel = feel_times;
-//         })
-//         .error(function(error) {
-//             console.log('Error: ' + error);
-//         });
-//         $scope.chart_colors_feel = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
-
-//         $http({
-//             url: '/api/getuserlocations',
-//             method: 'GET',
-//             params: {username: $scope.username, start_date: $filter('date')($scope.activity_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.activity_end_date,'yyyy-MM-dd')}
-//         })
-//         .success(function(data) {
-//             // console.log(data);
-//             var loc_times = [0,0,0,0,0];
-//             var loc = ["In House", "at recreation center", "at park", "at restaurant", "None of the place"];
-//             for(var i = 0; i < data.length; i++){
-//                 for(var j = 0; j<5; j++){
-//                     if(loc[j] == data[i].location){
-//                         loc_times[j] = data[i].count;
-//                     }
-//                 }
-//             }
-//             // console.log(loc, loc_times);
-//             $scope.labels_loc = loc;
-//             $scope.data_loc = loc_times;
-//         })
-//         .error(function(error) {
-//             console.log('Error: ' + error);
-//         });
-//         $scope.chart_colors_loc = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
-        
-
-//         $http({
-//             url: '/api/getusercompany',
-//             method: 'GET',
-//             params: {username: $scope.username, start_date: $filter('date')($scope.activity_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.activity_end_date,'yyyy-MM-dd')}
-//         })
-//         .success(function(data) {
-//             // console.log(data);
-//             var comp_times = [0,0,0,0,0,0];
-//             var comp = ["Alone", "With Spouse", "With Children", "With friends", "With Co-worker", "None of the above"];
-//             for(var i = 0; i < data.length; i++){
-//                 for(var j = 0; j < 6; j++){
-//                     if(comp[j] == data[i].company){
-//                         comp_times[j] = data[i].count;
-//                     }
-//                 }
-//             }
-//             // console.log(comp, comp_times);
-//             $scope.labels_comp = comp;
-//             $scope.data_comp = comp_times;
-//         })
-//         .error(function(error) {
-//             console.log('Error: ' + error);
-//         });
-//         $scope.chart_colors_comp = [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
-        
-
-//     };
-//     radar($rootScope.start_date,$rootScope.end_date);
-
-//     $scope.$on('datechange', function(event, args){
-//         radar($rootScope.start_date,$rootScope.end_date);
-//     })
-    
-// });
-
 
 app.controller("barCtrl", function($rootScope, $scope, $filter, $http, $timeout) {
     $scope.all_goals_start_date = $rootScope.start_date;
@@ -881,8 +871,9 @@ app.controller("barCtrl", function($rootScope, $scope, $filter, $http, $timeout)
         scales: {
             xAxes: [{
                 ticks :{
-                    min:0,
-                    stepSize: 5
+                    min: 0,
+                    stepSize: 5,
+                    display: false
                 },
                 display: true,
                 position: 'top',
@@ -893,6 +884,9 @@ app.controller("barCtrl", function($rootScope, $scope, $filter, $http, $timeout)
             }],
             yAxes: [{
                 maxBarThickness : 20,
+                ticks:{
+                    display: false
+                },
                 display: true,
                 scaleLabel: {
                     display: true,
@@ -1129,8 +1123,8 @@ app.controller("barCtrl", function($rootScope, $scope, $filter, $http, $timeout)
                     temp_get_goals[counter] = [];
                 }
                 temp_dates[counter][l] = $filter('date')(formatted_dates[j],'yyyy-MM-dd');
-                temp_set_goals[counter][l] = set_goals[j];
-                temp_get_goals[counter][l] = get_goals[j];
+                temp_set_goals[counter][l] = (set_goals[j]!=undefined)?set_goals[j]:0;
+                temp_get_goals[counter][l] = (get_goals[j]!=undefined)?get_goals[j]:0;
             }
             // console.log(temp_dates,temp_get_goals,temp_set_goals);
             // var j = 0;
@@ -1184,10 +1178,10 @@ app.controller("barCtrl", function($rootScope, $scope, $filter, $http, $timeout)
                 }
                 var x = counter_arr[current];
                 // console.log("in loop",dates[x],h_rate[x],counter_arr);
-                if($scope.bar_range == "Weekly") {
+                if($scope.bar_range == "Weekly"  && dates[0] != undefined) {
                     // console.log(temp_dates[x][0]);
-                    var w_start = moment(temp_dates[x][0],'YYYY-MM-DD').week(counter_arr[current]).startOf('week').format('MMM DD YYYY');
-                    var w_end = moment(temp_dates[x][0],'YYYY-MM-DD').week(counter_arr[current]).endOf('week').format('MMM DD YYYY');
+                    var w_start = moment(temp_dates[x][0],'YYYY-MM-DD').week(counter_arr[current]).startOf('week').format('MM DD');
+                    var w_end = moment(temp_dates[x][0],'YYYY-MM-DD').week(counter_arr[current]).endOf('week').format('MM DD');
                     $scope.bar_options = [w_start + " to " + w_end];
                     // $scope.heart_options = [$filter('date')(dates[x][0], 'MM dd yyyy') + " - " + $filter('date')(dates[x][(dates[x].length)-1], 'MM dd yyyy')];
                 } else {
@@ -1239,86 +1233,113 @@ app.controller("barCtrl", function($rootScope, $scope, $filter, $http, $timeout)
     });
 });
 
-// app.controller("tables",function($rootScope, $scope, $http, $filter){
-//     // $scope.goals
-    
-
-//     var tables = function(start, end){
-//         $scope.table_start_date = start;
-//         $scope.table_end_date = end;
-//         $http({
-//             url:"/api/getusergoals",
-//             method:'get',
-//             params:{username:$scope.username, start_date: $filter('date')($scope.table_start_date,'yyyy-MM-dd'), end_date: $filter('date')($scope.table_end_date,'yyyy-MM-dd')}
-//         })
-//         .success(function(data){
-//             if(data.length){
-//                 $scope.goals = data;
-//             }
-//         })
-//         .error(function(error){
-//             console.log('Error', error)
-//         });
-//     }
-
-//     tables($rootScope.start_date,$rootScope.end_date);
-//     $scope.$on('datechange', function(event, args){
-//         tables($rootScope.start_date,$rootScope.end_date);
-//     });
-// });
-
-
 app.controller('chatCtrl', function($rootScope,$scope,$filter,$http){
     $scope.username = document.getElementById('user_username').value;
+    $scope.user_fullname = document.getElementById('user_fullname').value;
     $scope.chat_class = 'chat sent';
+    $scope.firebase_users = [];
+    $scope.health_coaches = [];
     $scope.health_coach = '';
+    $scope.group_id = '';
+    // createUser($scope.username,$scope.user_fullname);
+    
+    // getUsers();
     $http({
-        url:"/api/gethealthcoaches",
-        method:'GET',
+        url:'/api/getfirebaseusers',
+        method:'GET'
     })
     .success(function(data){
         if(data.length){
-            console.log(data);
-            $scope.health_coach = {'first_name':data[0].first_name};
-            $scope.health_coaches = data;
+            $scope.health_coaches = [];
+            data.forEach(user => {
+                if((user.name != $scope.user_fullname) && (user.patient!='true')){
+                    $scope.health_coaches.push(user);
+                }
+            });
         }
     })
     .error(function(error){
         console.log('Error', error)
     });
+
+    $http({
+        url:'/api/addfirebaseuser',
+        method:'POST',
+        params:{ username:$scope.username, name:$scope.user_fullname, patient:'true'}
+    }).success(function(result){
+        console.log(result);
+    }).error(function(err){
+        console.log(err);
+    })
+
     function updateScroll(){
-        $("#myChat").animate({scrollTop: $("#myChat")[0].scrollHeight},500);
+        document.querySelector("#myChat").scrollTo(0,document.querySelector("#myChat").scrollHeight);
+        // $("#myChat").animate({scrollTop: $("#myChat")[0].scrollHeight},500);
     }
     $scope.changeHealthCoach = function(){
-        $scope.refresh();
-        updateScroll();
+        var receiver = $scope.health_coach.username;
+        $scope.members = [receiver,$scope.username];
+        if(receiver != ''){
+            createGroup([receiver,$scope.username])
+            .then((id)=>{
+                // console.log(data);
+                $scope.group_id = id;
+                watchGroup(id);
+                getChats(id)
+                .then((messages)=>{
+                    if(messages != null){
+                        console.log(messages)
+                        $scope.chats = messages;
+                        // chat();
+                        updateScroll();
+                    }
+                })
+                // console.log($scope.group_id,$scope.members);
+            })
+        }
     }
     $scope.refresh = function(){
         chat();
     }
     var chat = function(){
-        
-        var receiver = $scope.health_coach;
+        // createGroup([receiver,$scope.username],receiver);
+        // getGroups($scope.username);
         // console.log(receiver.first_name);
-        $http({
-            url:"/api/getchatmessages",
-            method:'GET',
-            params:{sender:$scope.username, receiver:receiver.first_name}
-        })
-        .success(function(data){
-            if(data.length){
-                $scope.chats = data;
-                $scope.message_count = data.length;
-                socket.emit('read message', { user:$scope.username});
-                updateScroll();
-            }
-        })
-        .error(function(error){
-            console.log('Error', error)
-        });
+        // $http({
+        //     url:"/api/getchatmessages",
+        //     method:'GET',
+        //     params:{sender:$scope.username, receiver:receiver.first_name}
+        // })
+        // .success(function(data){
+        //     if(data.length){
+        //         $scope.chats = data;
+        //         $scope.message_count = data.length;
+        //         socket.emit('read message', { user:$scope.username});
+        //         updateScroll();
+        //     }
+        // })
+        // .error(function(error){
+        //     console.log('Error', error)
+        // });
 
         $scope.sendMessage = function(){
-
+            console.log('send message');
+            sendChat($scope.group_id,$scope.chat,$scope.username)
+            .then((result)=>{
+                if(result == true){
+                    console.log('message sent');
+                    $scope.chat = '';
+                    getChats($scope.group_id)
+                    .then((messages)=>{
+                        if(messages != null){
+                            $scope.chats = messages;
+                            updateScroll();
+                        }
+                    })
+                } else {
+                    console.log(result)
+                }
+            });
             // $http({
             //     url:"http://131.247.16.242:8888/api/sentpmessage",
             //     method:'POST',
@@ -1335,20 +1356,21 @@ app.controller('chatCtrl', function($rootScope,$scope,$filter,$http){
             //     console.log('Error', error)
             // });
 
-            $http({
-                url:"/api/sendchatmessages",
-                method:'POST',
-                params:{message:$scope.chat,sender:$scope.username,receiver:$scope.health_coach.first_name} //Receiver to be changed
-            })
-            .success(function(data){
-                    // $scope.chats = data;
-                    $scope.chat = '';
-                    chat();
-                    updateScroll();
-            })
-            .error(function(error){
-                console.log('Error', error)
-            });
+            // $http({
+            //     url:"/api/sendchatmessages",
+            //     method:'POST',
+            //     params:{message:$scope.chat,sender:$scope.username,receiver:$scope.health_coach.first_name} //Receiver to be changed
+            // })
+            // .success(function(data){
+            //         // $scope.chats = data;
+            //         $scope.chat = '';
+            //         chat();
+            //         updateScroll();
+            // })
+            // .error(function(error){
+            //     console.log('Error', error)
+            // });
+
 
             // $http({
             //     url:"http://localhost:8888/api/checkmessages",
@@ -1366,25 +1388,25 @@ app.controller('chatCtrl', function($rootScope,$scope,$filter,$http){
             //     console.log('Error', error)
             // });
             
-            
+// sendChat($scope.group_id,'test',$scope.username);
+
             //Send a ping to health coach socket server
-            socket.emit('sent message', { user:$scope.username, message: $scope.chat});
+            // socket.emit('sent message', { user:$scope.username, message: $scope.chat});
 
             // when a message is received from health coach
         }
     }
     // setInterval(chat,3000);
     // setTimeout(updateScroll(),1000);
-    chat();
+    // chat();
 });
-local_socket.on('received message', function (data) {
-    console.log('Received message from health coach: ',data.data2, data.msg2);
-    $('#notificationBell').addClass('notification');
-    // $('#tooltipMessage').html(data.user+' sent you a message.');
-    displayNotification(data.data2+' : '+data.msg2);
-    setTimeout(function(){$('#refresh').click()},500);
-
-});
+// local_socket.on('received message', function (data) {
+//     console.log('Received message from health coach: ',data.data2, data.msg2);
+//     $('#notificationBell').addClass('notification');
+//     // $('#tooltipMessage').html(data.user+' sent you a message.');
+//     displayNotification(data.data2+' : '+data.msg2);
+//     setTimeout(function(){$('#refresh').click()},500);
+// });
 // local_socket.on('refresh message', function (data) {
 //     console.log('Message read by  health coach: ',data.data2);
 //     // $('#notificationBell').addClass('notification');

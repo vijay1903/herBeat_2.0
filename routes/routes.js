@@ -178,7 +178,7 @@ module.exports = function(app, conn) {
             else
             {
                 res.json(result);
-                // console.log(result);
+                console.log(result);
                 // console.log('Fetched walking set goals from DB.');
             }
         });
@@ -363,10 +363,54 @@ module.exports = function(app, conn) {
             }
         })
     })
-    // app.get('/api/checkmessages', function(req,res){
-    //     // res.redirect('/api/getchatmessges?username='+req.username);
-    //     console.log('message called from other user.....');
-    // });
+
+    app.get('/api/getfirebaseusers', function(req,res){
+        conn.query('SELECT * FROM firebase_users',
+        function(err, result){
+            if(err){
+                console.log(err);
+            } else {
+                res.send(result);
+                console.log(result);
+            }
+        })
+    })
+
+    app.post('/api/addfirebaseuser', function(req,res){
+        conn.query('SELECT * FROM firebase_users WHERE username = ?',
+        [req.query.username],
+        function(err,result){
+            if(err){
+                console.log(err);
+            }
+            if(result.length == 0) {
+                conn.query('INSERT INTO firebase_users (username, name, patient) VALUES (?,?,?)',
+                [req.query.username, req.query.name, req.query.patient], 
+                function(err, result) {
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        res.json(result);
+                    }
+                })
+            } else {
+                res.send('user exist');
+            }
+            
+        })
+    })
+
+    app.get('/api/removefirebaseuser', function(req,res){
+        conn.query('DELETE FROM firebase_users WHERE username = ?',
+        [req.query.username], 
+        function(err, result) {
+            if(err) {
+                console.log(err);
+            } else {
+                res.send(result);
+            }
+        })
+    })
 
 };
 

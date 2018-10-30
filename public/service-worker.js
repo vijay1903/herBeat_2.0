@@ -2,6 +2,7 @@ var cacheName = 'herbeat-cache-v1';
 var filesToCache = 
 ['/',
 '/js/custom.js',
+'/js/firebase.js',
 '/js/sw.js',
 '/service-worker.js',
 '/manifest.json',
@@ -16,8 +17,8 @@ var filesToCache =
 '/img/logo.png',
 '/img/standing.jpg',
 '/img/steps.png',
-'/img/walking.jpg',
-'/socket.io/socket.io.js',
+'/img/walking.png',
+'/img/sitting.png',
 '/vendor/bootstrap4/css/bootstrap.min.css',
 '/vendor/bootstrap4/css/bootstrap-grid.min.css',
 '/vendor/bootstrap4/css/bootstrap-reboot.min.css',
@@ -46,6 +47,9 @@ self.addEventListener('install', (event) => {
         console.log('Files cached : ' + filesToCache);
         return cache.addAll(filesToCache);
     })
+    .catch((err)=>{
+      console.log("Error while installing.",err);
+    })
     // .then(() => {
     //   // console.log(cache);
     //   return self.skipWaiting();
@@ -67,12 +71,21 @@ self.addEventListener('activate', function(event) {
         })
       );
     })
+    .catch((err)=>{
+      console.log("Error activating service worker",err);
+    })
   );
 });
+
 self.addEventListener('fetch', function(event) {
   event.respondWith(
     caches.match(event.request)
       .then(function(response) {
+        
+        
+        // console.log(response);
+        
+        
         // Cache hit - return response
         if (response) {
           return response;
@@ -83,10 +96,19 @@ self.addEventListener('fetch', function(event) {
         // once by cache and once by the browser for fetch, we need
         // to clone the response.
         var fetchRequest = event.request.clone();
-
+        
+        
+        // console.log(event.request);
+        
+        
         return fetch(fetchRequest).then(
           function(response) {
             // Check if we received a valid response
+            
+            
+            // console.log(response);
+            
+            
             if(!response || response.status !== 200 || response.type !== 'basic') {
               return response;
             }
@@ -96,17 +118,33 @@ self.addEventListener('fetch', function(event) {
             // as well as the cache consuming the response, we need
             // to clone it so we have two streams.
             var responseToCache = response.clone();
-
             caches.open(cacheName)
               .then(function(cache) {
-                cache.put(event.request, responseToCache);
-              });
 
+
+                // console.log(cache);
+
+                cache.put(event.request, responseToCache)
+                .catch((err)=>{
+                  console.log(err);
+                });
+              })
+              .catch((err)=>{
+                console.log("Error putting to cache: ",err);
+              })
             return response;
-          }
-        );
+          })
+          .catch((err)=>{
+            console.log("Error returning fetch request promise: ",err);
+          });
       })
-    );
+      .catch((err)=>{
+        console.log("Error getting from cache: ",err);
+      })
+    )
+    // .catch((err)=>{
+    //   console.log('Error: ',err);
+    // });
 });
 
 

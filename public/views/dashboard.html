@@ -55,6 +55,7 @@
 
     <div id="Wrapper">
         <input type="hidden" id="user_username" ng-model="username" value=<%=user.username%>>
+        <input type="hidden" id="user_fullname" ng-model="fullname" value=<%=user.full_name%>>
         <input type="hidden" id="user_email" ng-model="email" value=<%=user.email%>>
         <input type="hidden" id="user_id" ng-model="userId" value=<%=user.id%>>
         <!-- Navigation -->
@@ -64,7 +65,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <a class="navbar-brand" style="color: black" href="/dashboard">
-                    <img src="../img/logo.png" alt="Herbeat logo" style="width: 30px; height: 30px;"> HerBeat
+                    <img class="logo" src="../img/logo.png" alt="Herbeat logo" style="width: 30px; height: 30px;"> HerBeat
                 </a>
                 <button class="btn btn-light" id="notificationBell" data-toggle="dropdown"  style="float:right;">
                         <i class="fas fa-bell" style="font-size:30px;">
@@ -78,9 +79,9 @@
             <div id="datepicker" class="col-auto" style="display: inherit;">
                 <!-- From <input type="date" id="startDate" ng-model="start" style="padding-right: 5px; width:auto;">
                  to <input type="date" id="endDate" ng-model="end" style="padding-right: 5px; width:auto;"> -->
-                <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                <div id="reportrange" style="background: #fff; cursor: pointer; padding: 6px 10px; border: 1px solid #ccc; width: 100%">
                     <i class="fa fa-calendar"></i>&nbsp;
-                    <span></span> <i class="fa fa-caret-down"></i>
+                    <span on></span> <i class="fa fa-caret-down"></i>
                 </div>&nbsp;
                 <button class="btn btn-sm btn-primary" ng-click="date_change()"><i class="fas fa-search"></i></button>
             </div>
@@ -165,8 +166,7 @@
                             <div class="card">
                                 <div class="card-body" style="font-size: 16px;">
                                     <div class="container">
-                                        <h4 style="text-transform: capitalize; text-align: center">Welcome
-                                            <%=user.full_name%>!
+                                        <h4 style="text-transform: capitalize; text-align: center; margin: 0px;">Welcome <%=user.full_name%>
                                         </h4>
                                         <!-- <input type="color" class="float-right" ng-model="all_color" ng-change="change_color();"></h4> -->
                                     </div>
@@ -181,38 +181,86 @@
                                     <div class="card-header">
                                         <span class="badge badge-success" style="font-size: 16px;" ng-model="count">{{count}}</span>
                                         Goals
+                                        <!-- <button class="btn btn-xs btn-outline-dark float-right" ng-click="enlarge()"></button> -->
+                                        <button type="button" class="btn btn-xs btn-outline-dark float-right" data-toggle="modal" data-target="#fullscreenGoalsModal">
+                                            <i class="fas fa-chart-bar"></i>
+                                        </button>
                                     </div>
                                     <div class="card-body" style="font-size: 16px;">
-                                        <p ng-model="card_message_1" ng-hide="card_1">{{card_message_1}}</p>
+                                        <p class="no-data-message"ng-model="card_message_1" ng-hide="card_1">{{card_message_1}}</p>
                                         <p ng-model="max" ng-show="card_1">Max: {{max}} mins.</p>
                                         <p ng-model="avg" ng-show="card_1">Avg: {{avg}} mins.</p>
-                                        <p ng-model="min" ng-show="card_1">Min : {{min}} mins.</p>
+                                        <p ng-model="min" ng-show="card_1">Min: {{min}} mins.</p>
                                         <!-- <h1 style="line-height: 0.5;margin-right:0px; " ng-model="count">{{count}}</h1> -->
                                     </div>
                                     <div class="card-footer">
-                                        <p ng-model="goals_start_date" ng-model="goals_end_date">{{goals_start_date | date
-                                            : "MMM dd"}} to {{goals_end_date | date : "MMM dd"}}</p>
-
-
-                                        <button class="btn btn-sm btn-primary" id="view_goals" ng-disabled="!card_1">
-                                            View Details <i class="fas fa-arrow-circle-right"></i>
-                                        </button>
+                                        <p ng-model="goals_start_date" ng-model="goals_end_date">{{(goals_start_date | date : "MMM dd")}}{{((goals_start_date| date : "MMM dd") != (goals_end_date| date : "MMM dd"))?(" to "+(goals_end_date | date : "MMM dd")):''}}
+                                            <button class="btn btn-sm btn-primary float-right" id="view_goals" ng-disabled="!card_1">
+                                                View Details <i class="fas fa-arrow-circle-right"></i>
+                                            </button>
+                                        </p>
                                     </div>
                                 </div>
-
+                                <!-- Full screen goals modal -->
+                                <div class="modal fade" id="fullscreenGoalsModal" tabindex="-1" role="dialog" aria-labelledby="fullscreenGoalsModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog fullscreen-dialog" role="document">
+                                        <div class="modal-content fullscreen-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" ng-model="full_screen_chart_title" id="fullscreenGoalsModalLabel">Goals</h4>
+                                                <select class="custom-select" name="goal_select" id="goal_select" style="width:100px" onchange="showGoals()">
+                                                    <option value="0">Energy</option>
+                                                    <option value="1">Readiness</option>
+                                                    <option value="2">Walking</option>
+                                                </select>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body fullscreen-body" id="fullscreenGoalsModalBody">
+                                                <canvas id="fullscreenGoals0" class="chart chart-bar"
+                                                chart-data="goals_fullscreen_data[0]" chart-labels="goals_fullscreen_labels"
+                                                chart-series="goals_fullscreen_series[0]" chart-options="goals_fullscreen_options" style="display:initial;"
+                                                chart-colors="goals_fullscreen_chart_colors[0]">
+                                                </canvas>
+                                                <canvas id="fullscreenGoals1" class="chart chart-bar"
+                                                chart-data="goals_fullscreen_data[1]" chart-labels="goals_fullscreen_labels"
+                                                chart-series="goals_fullscreen_series[1]" chart-options="goals_fullscreen_options" style="display:none;"
+                                                chart-colors="goals_fullscreen_chart_colors[1]">
+                                                </canvas>
+                                                <canvas id="fullscreenGoals2" class="chart chart-bar"
+                                                chart-data="goals_fullscreen_data[2]" chart-labels="goals_fullscreen_labels"
+                                                chart-series="goals_fullscreen_series[2]" chart-options="goals_fullscreen_options" style="display:none;"
+                                                chart-colors="goals_fullscreen_chart_colors[2]">
+                                                </canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/ Full screen goals modal -->
                                 <div class="card text-left">
-                                    <div class="card-header"><a href="#radar_chart"><i class="fas fa-chart-bar"></i></a>
-                                        Activities</div>
-                                    <div class="card-body text-left" style="font-size: 16px;">
-                                        <p ng-hide="card_1" ng-model="card_message_2">{{card_message_2}}</p>
-                                        <table ng-show="card_2">
+                                    <div class="card-header">
+                                        Activities
+                                        <button class="btn btn-xs btn-outline-dark float-right" onclick="location.href='#radar_chart'"><i class="fas fa-chart-bar"></i></button>
+                                    </div>
+                                    <div class="card-body text-left" style="font-size: 16px;overflow: auto;">
+                                        <p ng-hide="card_2" class="no-data-message"ng-model="card_message_2">{{card_message_2}}</p>
+                                        <div class="wrapper" ng-show="card_2">
+                                            <div class="crousel">
+                                                <div id="img_1" class="crousel-item" onclick="activate('img_1')"><img src="../img/sitting.png"><p ng-model="per_sitting"> {{per_sitting}}</p></div>
+                                                <div id="img_2" class="crousel-item" onclick="activate('img_2')"><img src="../img/walking.png"><p ng-model="per_walking"> {{per_walking}}</p></div>
+                                                <div id="img_3" class="crousel-item" onclick="activate('img_3')"><img src="../img/steps.png"><p ng-model="per_steps"> {{per_steps}}</p></div>
+                                                <div id="img_4" class="crousel-item" onclick="activate('img_4')"><img src="../img/distance.jpg"><p ng-model="per_distance"> {{per_distance}}</p></div>
+                                                <div id="img_5" class="crousel-item" onclick="activate('img_5')"><img src="../img/heart.png"><p ng-model="per_av_hr"> {{per_av_hr}}</p></div>
+                                            </div>
+                                        </div>
+                                        <!-- <table ng-show="card_2">
                                             <tr>
-                                                <td><img src="../img/standing.jpg" alt="standing logo" style="height:20px;"></td>
+                                                <td><img src="../img/sitting.png" alt="standing logo" style="height:20px;"></td>
                                                 <td style="vertical-align: middle;" ng-model="per_sitting"> {{per_sitting}}
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td><img src="../img/walking.jpg" alt="walking logo" style="height:20px;"></td>
+                                                <td><img src="../img/walking.png" alt="walking logo" style="height:20px;"></td>
                                                 <td style="vertical-align: middle;" ng-model="per_walking"> {{per_walking}}
                                                 </td>
                                             </tr>
@@ -230,15 +278,15 @@
                                                 <td><i class="fas fa-heartbeat"></i> </td>
                                                 <td style="vertical-align: middle;" ng-model="per_av_hr">{{per_av_hr}}</td>
                                             </tr>
-                                        </table>
+                                        </table> -->
                                     </div>
                                     <div class="card-footer">
-                                        <p ng-model="per_start_date" ng-model="per_end_date">{{per_start_date | date : "MMM
-                                            dd"}} to {{per_end_date | date : "MMM dd"}}</p>
-                                        <button class="btn btn-sm btn-primary" id='view_activities' ng-disabled="!card_2">
-                                            <span>View Details</span>
-                                            <span><i class="fas fa-arrow-circle-right"></i></span>
-                                        </button>
+                                        <p ng-model="per_start_date" ng-model="per_end_date">{{(per_start_date | date : "MMM dd")}}{{((per_start_date| date : "MMM dd") != (per_end_date| date : "MMM dd"))?(" to "+(per_end_date | date : "MMM dd")):''}}
+                                            <button class="btn btn-sm btn-primary float-right" id='view_activities' ng-disabled="!card_2">
+                                                <span>View Details</span>
+                                                <span><i class="fas fa-arrow-circle-right"></i></span>
+                                            </button>
+                                        </p>
                                     </div>
                                 </div>
 
@@ -247,7 +295,7 @@
                                 <div class="card text-left">
                                     <div class="card-header">EMA Response</div>
                                     <div class="card-body" style="font-size: 16px;">
-                                        <p ng-model="card_message_3" ng-hide="card_3">{{card_message_3}}</p>
+                                        <p class="no-data-message"ng-model="card_message_3" ng-hide="card_3">{{card_message_3}}</p>
                                         <div ng-show="card_3">
                                             <canvas id="doughnut" class="chart chart-doughnut"
                                                 chart-data="doughnut_data" chart-labels="doughnut_labels" chart-colors="doughnut_colors">
@@ -259,12 +307,12 @@
                                         <!-- <p ng-model="res_time2">Data taken from : {{res_time2}}</p> -->
                                     </div>
                                     <div class="card-footer">
-                                        <p ng-model="res_start_date" ng-model="res_end_date">{{res_start_date | date : "MMM
-                                            dd"}} to {{res_end_date | date : "MMM dd"}}</p>
-                                        <button class="btn btn-sm btn-primary" id='view_response' ng-disabled="!card_3">
-                                            <span>View Details</span>
-                                            <span><i class="fas fa-arrow-circle-right"></i></span>
-                                        </button>
+                                        <p ng-model="res_start_date" ng-model="res_end_date">{{(res_start_date | date : "MMM dd")}}{{((res_start_date| date : "MMM dd") != (res_end_date| date : "MMM dd"))?(" to "+(res_end_date | date : "MMM dd")):''}}
+                                            <button class="btn btn-sm btn-primary float-right" id='view_response' ng-disabled="!card_3">
+                                                <span>View Details</span>
+                                                <span><i class="fas fa-arrow-circle-right"></i></span>
+                                            </button>
+                                        </p>
                                     </div>
                                 </div>
 
@@ -274,7 +322,7 @@
                                         Received Feedbacks</div>
                                     <div class="card-body" style="font-size: 12px; padding:2px">
                                         <div style="overflow: auto; height: 170px;">
-                                            <p style="padding:10px; font-size: 16px;" ng-model="card_message_4" ng-hide="card_4">{{card_message_4}}</p>
+                                            <p style="padding:10px; font-size: 16px;" class="no-data-message"ng-model="card_message_4" ng-hide="card_4">{{card_message_4}}</p>
                                             <center ng-show="card_4"> Top {{(msg_num >= 5)?5:msg_num}} feedbacks.</center>
                                             <table class="table table-hover" ng-show="card_4">
                                                 <thead style="position:relative;top:0px;">
@@ -296,12 +344,12 @@
                                     </div>
 
                                     <div class="card-footer">
-                                        <p ng-model="msg_start_date" ng-model="msg_end_date">{{msg_start_date | date : "MMM
-                                            dd"}} to {{msg_end_date | date: 'MMM dd'}}</p>
-                                        <button class="btn btn-sm btn-primary" id="view_messages" ng-disabled="!card_4">
-                                            <span>View all</span>
-                                            <span><i class="fas fa-arrow-circle-right"></i></span>
-                                        </button>
+                                        <p ng-model="msg_start_date" ng-model="msg_end_date">{{(msg_start_date | date : "MMM dd")}}{{((msg_start_date| date : "MMM dd") != (msg_end_date| date : "MMM dd"))?(" to "+(msg_end_date | date : "MMM dd")):''}}
+                                            <button class="btn btn-sm btn-primary float-right" id="view_messages" ng-disabled="!card_4">
+                                                <span>View all</span>
+                                                <span><i class="fas fa-arrow-circle-right"></i></span>
+                                            </button>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -314,92 +362,124 @@
 
                                 <div class="card">
                                     <div class="card-header">
-                                        <i class="fas fa-file-medical-alt"></i> Heartrate
-                                        <ul class="pagination float-right">
-                                            <li class="page-item">
-                                                <button class="page-link" ng-click="prevPage()" aria-label="Previous" ng-disabled="prev">
-                                                    <span aria-hidden="true">&laquo;</span>
-                                                    <span class="sr-only">Previous</span>
-                                                </button>
-                                            </li>
-                                            <li class="page-item" ng-repeat="x in heart_options track by $index"><button
-                                                    class="page-link" style="pointer-events: none;">{{x}}</button></li>
-                                            <li class="page-item">
-                                                <button class="page-link" ng-click="nextPage()" aria-label="Next" ng-disabled="next">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                    <span class="sr-only">Next</span>
-                                                </button>
-                                            </li>
-                                            <li class="page-item">
-                                                <button class="btn">
-                                                    <select ng-model="heart_range" ng-change="change_range();">
+                                            <i class="fas fa-file-medical-alt"></i> Heartrate
+                                            <!-- <button type="button" class="btn btn-xs btn-outline-dark float-right" data-toggle="modal" data-target="#fullscreenHeartrateModal">
+                                                <i class="fas fa-expand"></i>
+                                            </button> -->
+                                        <div style="display: inline-flex; float:right">
+                                            <ul class="pagination">
+                                                <li class="page-item">
+                                                    <button class="page-link" ng-click="prevPage()" aria-label="Previous" ng-disabled="prev">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                        <span class="sr-only">Previous</span>
+                                                    </button>
+                                                </li>
+                                                <li class="page-item" ng-repeat="x in heart_options track by $index"><button
+                                                        class="page-link" style="pointer-events: none;">{{x}}</button></li>
+                                                <li class="page-item">
+                                                    <button class="page-link" ng-click="nextPage()" aria-label="Next" ng-disabled="next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                        <span class="sr-only">Next</span>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                            <ul class="pagination">
+                                                <li class="page-item">
+                                                    <select class="custom-select" ng-model="heart_range" ng-change="change_range();">
                                                         <option>Monthly</option>
                                                         <option>Weekly</option>
                                                         <option>Daily</option>
-                                                    </select>
-                                                </button>
-                                            </li>
-                                        </ul>
+                                                    </select>                                               
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                     <div class="card-text">
                                         <div class="chartWrapper">
                                             <div class="chartAreaWrapper">
                                                 <div style="height: 500px;" ng-hide="card_5">
-                                                    <p ng-model="card_message_5">{{card_message_5}}</p>
+                                                    <p class="no-data-message"ng-model="card_message_5">{{card_message_5}}</p>
                                                 </div>
                                                 <canvas id="bar" class="chart chart-bar" chart-data="data" chart-labels="labels" chart-series="series" chart-options="options"
                                                     chart-colors="chart_color" ng-model="heart_width" ng-model="heart_scale"
-                                                    width="10000" height="400%" ng-show="card_5">
+                                                    width="1290" height="400" ng-show="card_5">
                                                 </canvas>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="card-footer">
-                                        <p ng-model="heart_start_date" ng-model="heart_end_date">{{heart_start_date | date
-                                            : "MMM dd"}} to {{heart_end_date | date : "MMM dd"}}</p>
-                                        <button class="btn btn-sm btn-primary" id="view_heart" ng-disabled="!card_5">View
-                                            Details <i class="fas fa-arrow-circle-right"></i></button>
+                                        <p ng-model="heart_start_date" ng-model="heart_end_date">{{(heart_start_date | date : "MMM dd")}}{{((heart_start_date| date : "MMM dd") != (heart_end_date| date : "MMM dd"))?(" to "+(heart_end_date | date : "MMM dd")):''}}
+                                            <button class="btn btn-sm btn-primary float-right" id="view_heart" ng-disabled="!card_5">
+                                                View Details <i class="fas fa-arrow-circle-right"></i>
+                                            </button>
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- Full screen heartrate modal -->
+                            <div class="modal fade" id="fullscreenHeartrateModal" tabindex="-1" role="dialog" aria-labelledby="fullscreenHeartrateModalLabel" aria-hidden="true">
+                                <div class="modal-dialog fullscreen-dialog" role="document">
+                                    <div class="modal-content fullscreen-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="fullscreenHeartrateModalLabel">Heartrate</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <canvas id="fullscreenHeartrate" class="chart chart-bar"
+                                            chart-data="data" chart-labels="labels"
+                                            chart-series="series" chart-options="heartrate_fullscreen_options">
+                                            </canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <!--/ Full screen heartrate modal -->
                         </div>
-                        <!-- /.row --><div class="container-fluid" ng-controller="barCtrl">
+                        <br>
+                        <!-- /.row -->
+                        <div class="container-fluid" ng-controller="barCtrl">
                             <div class="card-deck">
 
                                 <div class="card">
                                     <div class="card-header">
-                                        <i class="fas fa-chart-pie fa-fw"></i> Activity Chart
-                                        <ul class="pagination float-right">
-                                            <li class="page-item">
-                                                <button class="page-link" ng-click="prevBarPage()" aria-label="Previous" ng-disabled="prev_bar">
-                                                    <span aria-hidden="true">&laquo;</span>
-                                                    <span class="sr-only">Previous</span>
-                                                </button>
-                                            </li>
-                                            <li class="page-item" ng-repeat="x in bar_options"><button class="page-link"
-                                                    style="pointer-events: none;">{{x}}</button></li>
-                                            <li class="page-item">
-                                                <button class="page-link" ng-click="nextBarPage()" aria-label="Next" ng-disabled="next_bar">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                    <span class="sr-only">Next</span>
-                                                </button>
-                                            </li>
-                                            <li class="page-item">
-                                                <button class="btn">
-                                                    <select ng-model="bar_range" ng-change="change_bar_range();">
+                                            <i class="fas fa-chart-pie fa-fw"></i> Activity Chart
+                                            <!-- <button class="btn btn-xs btn-outline-dark float-right"><i class="fas fa-expand"></i></button> -->
+                                        <div style="display: inline-flex; float:right">
+                                            <ul class="pagination">
+                                                <li class="page-item">
+                                                    <button class="page-link" ng-click="prevBarPage()" aria-label="Previous" ng-disabled="prev_bar">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                        <span class="sr-only">Previous</span>
+                                                    </button>
+                                                </li>
+                                                <li class="page-item" ng-repeat="x in bar_options"><button class="page-link"
+                                                        style="pointer-events: none;">{{x}}</button></li>
+                                                <li class="page-item">
+                                                    <button class="page-link" ng-click="nextBarPage()" aria-label="Next" ng-disabled="next_bar">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                        <span class="sr-only">Next</span>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                            <ul class="pagination">
+                                                <li class="page-item">
+                                                    <select class="custom-select" ng-model="bar_range" ng-change="change_bar_range();">
                                                         <option>Monthly</option>
                                                         <option>Weekly</option>
                                                     </select>
-                                                </button>
-                                            </li>
-                                        </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body" style="padding:0px;">
                                         <div class="chartWrapperHorizontal">
-                                            <div class="chartAreaWrapperHorizontal" style="height:1000px;">
-                                                <p ng-model="card_message_6" ng-hide="card_6">{{card_message_6}}</p>
+                                            <div class="chartAreaWrapperHorizontal" style="height:500px;">
+                                                <p class="no-data-message"ng-model="card_message_6" ng-hide="card_6">{{card_message_6}}</p>
                                                 <canvas id="horizon_bar" class="chart-horizontal-bar" chart-data="data_bar" chart-labels="labels_bar" chart-series="series_bar"
-                                                    chart-options="options_bar" chart-colors="chart_color_bar" width="100%" height="1000"
+                                                    chart-options="options_bar" chart-colors="chart_color_bar" width="100%" height="500"
                                                     ng-show="card_6">
                                                 </canvas>
                                             </div>
@@ -409,10 +489,11 @@
                                             </canvas>  -->
                                     </div>
                                     <div class="card-footer">
-                                        <p ng-model="all_goals_start_date" ng-model="all_goals_end_date">{{all_goals_start_date
-                                            | date : "MMM dd"}} to {{all_goals_end_date | date : "MMM dd"}}</p>
-                                        <button class="btn btn-sm btn-primary" id='view_goals_1' ng-disabled="!card_6">View
-                                            Details <i class="fas fa-arrow-circle-right"></i></button>
+                                        <p ng-model="all_goals_start_date" ng-model="all_goals_end_date">{{(all_goals_start_date | date : "MMM dd")}}{{((all_goals_start_date| date : "MMM dd") != (all_goals_end_date| date : "MMM dd"))?(" to "+(all_goals_end_date | date : "MMM dd")):''}}
+                                            <button class="btn btn-sm btn-primary float-right" id='view_goals_1' ng-disabled="!card_6">
+                                                View Details <i class="fas fa-arrow-circle-right"></i>
+                                            </button>
+                                        </p>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
@@ -421,7 +502,6 @@
                         </div>
                         <!-- /.row -->
 
-                        <br>
                         <div class="container-fluid" ng-controller="cardCtrl">
                             <div class="card" id="radar_chart">
                                 <div class="card-header"><i class="fas fa-chart-area fa-fw"></i> Your Activities from EMA
@@ -454,6 +534,7 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 Activities
+                                                <!-- <button class="btn btn-xs btn-outline-dark float-right"><i class="fas fa-expand"></i></button> -->
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_act" class="chart chart-radar" chart-data="data_act" chart-labels="labels_act" style="width:300px; height:600px"
@@ -463,6 +544,7 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 Feelings
+                                                <!-- <button class="btn btn-xs btn-outline-dark float-right"><i class="fas fa-expand"></i></button> -->
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_feel" class="chart chart-radar" chart-data="data_feel" chart-labels="labels_feel" style="width:300px; height:600px"
@@ -476,6 +558,7 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 Location
+                                                <!-- <button class="btn btn-xs btn-outline-dark float-right"><i class="fas fa-expand"></i></button> -->
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_loc" class="chart chart-radar" chart-data="data_loc" chart-labels="labels_loc" style="width:300px; height:600px"
@@ -486,6 +569,7 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 Company
+                                                <!-- <button class="btn btn-xs btn-outline-dark float-right"><i class="fas fa-expand"></i></button> -->
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_comp" class="chart chart-radar" chart-data="data_comp" chart-labels="labels_comp" style="width:300px; height:600px"
@@ -499,6 +583,7 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 Food : Unhealthy
+                                                <!-- <button class="btn btn-xs btn-outline-dark float-right"><i class="fas fa-expand"></i></button> -->
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_unhealthy" class="chart chart-radar" chart-data="data_unhealthy" chart-labels="labels_unhealthy" style="width:300px; height:600px"
@@ -509,6 +594,7 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 Food : Healthy
+                                                <!-- <button class="btn btn-xs btn-outline-dark float-right"><i class="fas fa-expand"></i></button> -->
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_healthy" class="chart chart-radar" chart-data="data_healthy" chart-labels="labels_healthy" style="width:300px; height:600px"
@@ -519,24 +605,17 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <p style="line-height: 1.0;" ng-model="card_start_date" ng-model="card_end_date">{{card_start_date
-                                        | date : "MMM dd"}} to {{card_end_date | date : "MMM dd"}}</p>
-
-
-                                    <button class="btn btn-sm btn-primary" id="view_response_1">
-                                        View Details <i class="fas fa-arrow-circle-right"></i>
-                                    </button>
+                                    <p style="line-height: 1.0;" ng-model="card_start_date" ng-model="card_end_date">{{(card_start_date | date : "MMM dd")}}{{((card_start_date| date : "MMM dd") != (card_end_date| date : "MMM dd"))?(" to "+(card_end_date | date : "MMM dd")):''}}
+                                        <button class="btn btn-sm btn-primary float-right" id="view_response_1">
+                                            View Details <i class="fas fa-arrow-circle-right"></i>
+                                        </button>
+                                    </p>
                                 </div>
                             </div>
                         </div>
 
-                        <br>
                         <!-- /.row -->
 
-                        <br>
-                        
-
-                        <br>
                         <!-- <div class="container-fluid">
                             <div class="card-deck">
                                 <div class="card">
@@ -749,7 +828,6 @@
                     </div>
                     <div class="tab-pane fade" id="v-pills-responses" role="tabcard" aria-labelledby="v-pills-responses-tab">
                         <div class="container-fluid">
-                            <br>
                             <div class="card" ng-controller="cardCtrl">
                                 <div class="card-header">EMA Responses
                                     <span class="badge badge-success" ng-model="searchCount">{{searchCount}}</span>
@@ -861,9 +939,9 @@
                                                                 </div>
                                                             </div>
                                                         </th>
-                                                        <th><a href="" ng-click="sortBy('motivation')"> Motivational Statement</a>
+                                                        <!-- <th><a href="" ng-click="sortBy('motivation')"> Motivational Statement</a>
                                                             <span class="sortorder" ng-show="propertyName === 'motivation'" ng-class="{reverse: reverse}"></span>
-                                                        </th>
+                                                        </th> -->
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -875,7 +953,7 @@
                                                         <td>{{x.location}}</td>
                                                         <td>{{x.food}}</td>
                                                         <td>{{x.feel}}</td>
-                                                        <td style="overflow-x: hidden;">{{x.motivation}}</td>
+                                                        <!-- <td style="overflow-x: hidden;">{{x.motivation}}</td> -->
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -928,7 +1006,6 @@
                     </div>
                     <div class="tab-pane fade" id="v-pills-info" role="tabcard" aria-labelledby="v-pills-info-tab">
                         <div class="container-fluid">
-                            <br>
                             <div class="card" ng-controller="cardCtrl">
                                 <div class="card-header">
                                     Detailed Goals
@@ -1023,7 +1100,7 @@
                                 <div class="card-header">
                                     Messages <span class="badge badge-success" ng-model="message_count">{{message_count}}</span>
                                     <div class="btn-group float-right">
-                                        <select name="health_coach" id="health coach" ng-change="changeHealthCoach();" ng-model="health_coach" ng-default="health_coach" ng-options="h.first_name for h in health_coaches">
+                                        <select name="health_coach" id="health coach" ng-change="changeHealthCoach();" ng-model="health_coach" ng-default="health_coach" ng-options="h.name for h in health_coaches">
                                         </select>
                                         <!-- {{health_coach}} -->
                                         <button id="refresh" class="btn btn-sm btn-primary" ng-click="refresh();">
@@ -1036,11 +1113,11 @@
                                     <div class="chatAreaWrapper">
                                         <div id="myChat" class="chatArea">
                                             <div ng-class="(x.sender==username?'chat sent':'chat received')" ng-repeat="x in chats">
-                                                {{x.message}}
+                                                {{x.text}}
                                                 <br>
-                                                <sub><a data-toggle="tooltip" data-placement="bottom" title="Read at {{x.read_time | date : 'MMM dd yyyy hh:mm:ss a'}}"><i
-                                                            ng-class="(x.read_time != null)?'fas fa-check-square':'far fa-check-square'"
-                                                            ng-show="(x.sender==username?true:false)"></i></a> {{x.sent_time
+                                                <sub><a data-toggle="tooltip" data-placement="bottom" title="Read at {{x.read_at | date : 'MMM dd yyyy hh:mm:ss a'}}"><i
+                                                    ng-class="(x.readAt != null)?'fas fa-check-square':'far fa-check-square'"
+                                                    ng-show="(x.sender == username?true:false)"></i></a> {{x.sentAt.seconds*1000
                                                     | date: 'MMM dd yyyy hh:mm:ss a'}}</sub>
                                             </div>
                                         </div>
@@ -1060,6 +1137,38 @@
                 </div>
             </div>
         </div>
+        <!-- <div id="fullscreen-charts" class="fullscreen-div">
+            <div id="fullscreen-goals" class="fullscreen" ng-controller="cardCtrl">
+                <canvas id="bar" class="chart chart-bar"
+                chart-data="goals_fullscreen_data" chart-labels="goals_fullscreen_labels"
+                chart-series="goals_fullscreen_series" chart-options="goals_fullscreen" height="400">
+                </canvas>
+            </div>
+            <div id="fullscreen-heartrate" class="fullscreen">
+                    
+            </div>
+            <div id="fullscreen-activity-chart" class="fullscreen">
+                    
+            </div>
+            <div id="fullscreen-activities" class="fullscreen">
+                    
+            </div>
+            <div id="fullscreen-feelings" class="fullscreen">
+                    
+            </div>
+            <div id="fullscreen-location" class="fullscreen">
+                    
+            </div>
+            <div id="fullscreen-company" class="fullscreen">
+                    
+            </div>
+            <div id="fullscreen-food-unhealthy" class="fullscreen">
+                    
+            </div>
+            <div id="fullscreen-food-healthy" class="fullscreen">
+                    
+            </div>
+        </div> -->
     </div>
     <!-- /#wrapper -->
 
@@ -1084,33 +1193,24 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-sanitize.js"></script>
     <script src="../angular-chart.js/angular-chart.min.js"></script>
 
+    <!-- Firebase JS -->
+    <script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
+
     <!-- Moment js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
     <script src="../vendor/metisMenu/metisMenu.min.js"></script>
 
-    <!-- Morris Charts JavaScript -->
-    <!-- <script src="../vendor/raphael/raphael.min.js"></script>
-    <script src="../vendor/morrisjs/morris.min.js"></script>
-    <script src="../data/morris-data.js"></script> -->
-
     <!-- Custom Theme JavaScript Important -->
     <script src="../dist/js/sb-admin-2.js"></script>
 
-    <!-- Flot Charts JavaScript -->
-    <!-- <script src="../vendor/flot/excanvas.min.js"></script>
-    <script src="../vendor/flot/jquery.flot.js"></script>
-    <script src="../vendor/flot/jquery.flot.pie.js"></script>
-    <script src="../vendor/flot/jquery.flot.resize.js"></script>
-    <script src="../vendor/flot/jquery.flot.time.js"></script>
-    <script src="../vendor/flot-tooltip/jquery.flot.tooltip.min.js"></script>
-    <script src="../data/flot-data.js"></script> -->
-
-    <script src="http://localhost:8889/socket.io/socket.io.js"></script>
+    <!-- socket.io js file -->
+    <!-- <script src="http://localhost:8889/socket.io/socket.io.js"></script> -->
     <!-- Custom scripts for this template -->
     <script src="../js/custom.js"></script>
-
+    <!-- firebase.js functions file -->
+    <script src="../js/firebase.js"></script>
     <!-- angular controller javascript -->
     <script src="../controllers/dashboardController.js"></script>
     <!-- for date range picker -->
