@@ -118,6 +118,7 @@ self.addEventListener('fetch', function(event) {
             // as well as the cache consuming the response, we need
             // to clone it so we have two streams.
             var responseToCache = response.clone();
+
             caches.open(cacheName)
               .then(function(cache) {
 
@@ -132,6 +133,7 @@ self.addEventListener('fetch', function(event) {
               .catch((err)=>{
                 console.log("Error putting to cache: ",err);
               })
+
             return response;
           })
           .catch((err)=>{

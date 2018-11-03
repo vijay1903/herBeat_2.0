@@ -162,7 +162,7 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                     }
                 }
                 data.forEach(element => {
-                    console.log(element)
+                    // console.log(element)
                     $scope.goals_fullscreen_labels.push($filter('date')(element.goal_date,'MM-dd-yy HH:mm'));
                     $scope.goals_fullscreen_data[0].push(element.energy);
                     $scope.goals_fullscreen_chart_colors[0].push({
