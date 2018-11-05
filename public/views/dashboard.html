@@ -77,8 +77,6 @@
             
 
             <div id="datepicker" class="col-auto" style="display: inherit;">
-                <!-- From <input type="date" id="startDate" ng-model="start" style="padding-right: 5px; width:auto;">
-                 to <input type="date" id="endDate" ng-model="end" style="padding-right: 5px; width:auto;"> -->
                 <div id="reportrange" style="background: #fff; cursor: pointer; padding: 6px 10px; border: 1px solid #ccc; width: 100%">
                     <i class="fa fa-calendar"></i>&nbsp;
                     <span on></span> <i class="fa fa-caret-down"></i>
@@ -161,8 +159,7 @@
                                 </div>
                             </div>
         
-                            <!-- /.row -->
-                            
+                            <!-- /.row -->         
                             <div class="card">
                                 <div class="card-body" style="font-size: 16px;">
                                     <div class="container">
@@ -221,17 +218,17 @@
                                                     <canvas id="fullscreenGoals0" class="chart chart-bar"
                                                     chart-data="goals_fullscreen_data[0]" chart-labels="goals_fullscreen_labels"
                                                     chart-series="goals_fullscreen_series[0]" chart-options="goals_fullscreen_options" style="display:initial;"
-                                                    chart-colors="goals_fullscreen_chart_colors[0]">
+                                                    chart-colors="goals_fullscreen_chart_colors[0]" width="1000">
                                                     </canvas>
                                                     <canvas id="fullscreenGoals1" class="chart chart-bar"
                                                     chart-data="goals_fullscreen_data[1]" chart-labels="goals_fullscreen_labels"
                                                     chart-series="goals_fullscreen_series[1]" chart-options="goals_fullscreen_options" style="display:none;"
-                                                    chart-colors="goals_fullscreen_chart_colors[1]">
+                                                    chart-colors="goals_fullscreen_chart_colors[1]" width="1000">
                                                     </canvas>
                                                     <canvas id="fullscreenGoals2" class="chart chart-bar"
                                                     chart-data="goals_fullscreen_data[2]" chart-labels="goals_fullscreen_labels"
                                                     chart-series="goals_fullscreen_series[2]" chart-options="goals_fullscreen_options" style="display:none;"
-                                                    chart-colors="goals_fullscreen_chart_colors[2]">
+                                                    chart-colors="goals_fullscreen_chart_colors[2]" width="1000">
                                                     </canvas>
                                                 </div>
                                             </div>
@@ -433,7 +430,7 @@
                                             <div class="fullscreen-chart-wrapper">
                                                 <canvas id="fullscreenHeartrate" class="chart chart-bar"
                                                 chart-data="data" chart-labels="labels" chart-colors="chart_color" 
-                                                chart-series="series" chart-options="heartrate_fullscreen_options" width="5000" height="700">
+                                                chart-series="series" chart-options="heartrate_fullscreen_options" width="5000">
                                                 </canvas>
                                             </div>
                                         </div>
@@ -518,8 +515,7 @@
                                         <div class="modal-body">
                                             <div class="fullscreen-chart-wrapper">
                                                 <canvas id="fullscreenActivity" class="chart-horizontal-bar" chart-data="data_bar" chart-labels="labels_bar" chart-series="series_bar"
-                                                chart-options="activity_fullscreen_options" chart-colors="chart_color_bar" width="1000" height="700"
-                                                ng-show="card_6">
+                                                chart-options="bar_options" chart-colors="chart_color_bar">
                                                 </canvas>
                                             </div>
                                         </div>
@@ -563,7 +559,9 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 Activities
-                                                <!-- <button class="btn btn-xs btn-outline-dark float-right"><i class="fas fa-expand"></i></button> -->
+                                                <button type="button" class="btn btn-xs btn-outline-dark float-right" data-toggle="modal" data-target="#fullscreenRadarModal" ng-click="radarShow('activities');">
+                                                    <i class="fas fa-expand"></i>
+                                                </button>
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_act" class="chart chart-radar" chart-data="data_act" chart-labels="labels_act" style="width:300px; height:600px"
@@ -573,7 +571,9 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 Feelings
-                                                <!-- <button class="btn btn-xs btn-outline-dark float-right"><i class="fas fa-expand"></i></button> -->
+                                                <button type="button" class="btn btn-xs btn-outline-dark float-right" data-toggle="modal" data-target="#fullscreenRadarModal" ng-click="radarShow('feelings');">
+                                                    <i class="fas fa-expand"></i>
+                                                </button>
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_feel" class="chart chart-radar" chart-data="data_feel" chart-labels="labels_feel" style="width:300px; height:600px"
@@ -587,7 +587,9 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 Location
-                                                <!-- <button class="btn btn-xs btn-outline-dark float-right"><i class="fas fa-expand"></i></button> -->
+                                                <button type="button" class="btn btn-xs btn-outline-dark float-right" data-toggle="modal" data-target="#fullscreenRadarModal" ng-click="radarShow('location');">
+                                                    <i class="fas fa-expand"></i>
+                                                </button>
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_loc" class="chart chart-radar" chart-data="data_loc" chart-labels="labels_loc" style="width:300px; height:600px"
@@ -598,7 +600,9 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 Company
-                                                <!-- <button class="btn btn-xs btn-outline-dark float-right"><i class="fas fa-expand"></i></button> -->
+                                                <button type="button" class="btn btn-xs btn-outline-dark float-right" data-toggle="modal" data-target="#fullscreenRadarModal" ng-click="radarShow('company');">
+                                                    <i class="fas fa-expand"></i>
+                                                </button>
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_comp" class="chart chart-radar" chart-data="data_comp" chart-labels="labels_comp" style="width:300px; height:600px"
@@ -612,7 +616,9 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 Food : Unhealthy
-                                                <!-- <button class="btn btn-xs btn-outline-dark float-right"><i class="fas fa-expand"></i></button> -->
+                                                <button type="button" class="btn btn-xs btn-outline-dark float-right" data-toggle="modal" data-target="#fullscreenRadarModal" ng-click="radarShow('unhealthy');">
+                                                    <i class="fas fa-expand"></i>
+                                                </button>
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_unhealthy" class="chart chart-radar" chart-data="data_unhealthy" chart-labels="labels_unhealthy" style="width:300px; height:600px"
@@ -623,7 +629,9 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 Food : Healthy
-                                                <!-- <button class="btn btn-xs btn-outline-dark float-right"><i class="fas fa-expand"></i></button> -->
+                                                <button type="button" class="btn btn-xs btn-outline-dark float-right" data-toggle="modal" data-target="#fullscreenRadarModal" ng-click="radarShow('healthy');">
+                                                    <i class="fas fa-expand"></i>
+                                                </button>
                                             </div>
                                             <div class="card-body">
                                                 <canvas id="radar_healthy" class="chart chart-radar" chart-data="data_healthy" chart-labels="labels_healthy" style="width:300px; height:600px"
@@ -641,96 +649,30 @@
                                     </p>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- /.row -->
-
-                        <!-- <div class="container-fluid">
-                            <div class="card-deck">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <i class="fas fa-comments fa-fw"></i> Chat
+                        <!-- Full screen radar modal -->
+                        <div class="modal fade" id="fullscreenRadarModal" tabindex="-1" role="dialog" aria-labelledby="fullscreenRadarModalLabel" aria-hidden="true">
+                            <div class="modal-dialog fullscreen-dialog" role="document">
+                                <div class="modal-content fullscreen-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="fullscreenRadarModalLabel" ng-model="fullscreen_radar['title']">{{fullscreen_radar['title']}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
-                                    <div class="card-body">
-                                        <ul class="chat">
-                                            <li class="left clearfix">
-                                                <span class="chat-img pull-left">
-                                                    <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
-                                                </span>
-                                                <div class="chat-body">
-                                                    <div class="header">
-                                                        <strong class="primary-font">Jack Sparrow</strong>
-                                                        <small class="pull-right text-muted">
-                                                            <i class="fas fa-clock-o fa-fw"></i> 12 mins ago
-                                                        </small>
-                                                    </div>
-                                                    <p>
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                                    </p>
-                                                </div>
-                                            </li>
-                                            <li class="right clearfix">
-                                                <span class="chat-img pull-right">
-                                                    <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
-                                                </span>
-                                                <div class="chat-body clearfix">
-                                                    <div class="header">
-                                                        <small class=" text-muted">
-                                                            <i class="fas fa-clock-o fa-fw"></i> 13 mins ago</small>
-                                                        <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                                                    </div>
-                                                    <p>
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                                    </p>
-                                                </div>
-                                            </li>
-                                            <li class="left clearfix">
-                                                <span class="chat-img pull-left">
-                                                    <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
-                                                </span>
-                                                <div class="chat-body clearfix">
-                                                    <div class="header">
-                                                        <strong class="primary-font">Jack Sparrow</strong>
-                                                        <small class="pull-right text-muted">
-                                                            <i class="fas fa-clock-o fa-fw"></i> 14 mins ago</small>
-                                                    </div>
-                                                    <p>
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                                    </p>
-                                                </div>
-                                            </li>
-                                            <li class="right clearfix">
-                                                <span class="chat-img pull-right">
-                                                    <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
-                                                </span>
-                                                <div class="chat-body clearfix">
-                                                    <div class="header">
-                                                        <small class=" text-muted">
-                                                            <i class="fas fa-clock-o fa-fw"></i> 15 mins ago</small>
-                                                        <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                                                    </div>
-                                                    <p>
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                                                    </p>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="input-group">
-                                            <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-warning btn-md" id="btn-chat">
-                                                    Send
-                                                </button>
-                                            </span>
+                                    <div class="modal-body">
+                                        <div class="fullscreen-chart-wrapper">
+                                            <canvas id="fullscreen_radar_act" class="chart chart-radar" chart-data="fullscreen_radar_data" chart-labels="fullscreen_radar_labels" 
+                                            chart-colors="fullscreen_radar_colors" chart-options="fullscreen_radar_options" width="1000">
+                                            </canvas>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-                        </div> -->
+                        </div>
+                        <!--/ Full screen heartrate modal -->
+                        </div>
 
+                        <!-- /.row -->
                     </div>
                     <div class="tab-pane fade" id="v-pills-tasks" role="tabcard" aria-labelledby="v-pills-tasks-tab">
                         <div class="container-fluid" ng-controller="cardCtrl">
@@ -1216,11 +1158,16 @@
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script> -->
 
     <!--Angular scripts-->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-sanitize.js"></script>
-    <script src="../angular-chart.js/angular-chart.min.js"></script>
+    <script src="../angular-chart.js/angular-chart.min.js"></script> -->
+    <script src="../vendor/angular-1.4.9/angular.min.js"></script>
+    <script src="../vendor/angular-1.4.9/angular-cookies.js"></script>
+    <script src="../vendor/angular-1.4.9/angular-route.min.js"></script>
+    <script src="../vendor/angular-1.4.9/angular-sanitize.js"></script>
+    <script src="../vendor/angular-chart/angular-chart.min.js"></script>
 
     <!-- Firebase JS -->
     <script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>

@@ -133,3 +133,14 @@ gulp.task('dev', ['browserSync', 'sass', 'minify-css', 'minify-js', 'pug'], func
   gulp.watch('*.html', browserSync.reload);
   gulp.watch('js/**/*.js', browserSync.reload);
 });
+
+gulp.task('generate-service-worker', function(callback) {
+  var path = require('path');
+  var swPrecache = require('sw-precache');
+  var rootDir = 'public';
+
+  swPrecache.write(path.join(rootDir, 'service-worker2.js'), {
+    staticFileGlobs: [rootDir + '/**/*.{js,html,css,png,jpg,gif}'],
+    stripPrefix: rootDir
+  }, callback);
+});

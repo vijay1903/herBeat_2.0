@@ -126,8 +126,8 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                 $scope.goals_fullscreen_chart_colors = [[],[],[]];
                 $scope.goals_fullscreen_series = ['Energy','Readiness','Walk'];
                 $scope.goals_fullscreen_options = {
-                    responsive: true,
-                    maintainAspectRatio: true,
+                    // responsive: false,
+                    maintainAspectRatio: false,
                     animation: {
                         duration:500
                     },
@@ -151,7 +151,7 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                // labelString: 'Heart rate'
+                                labelString: 'Goals'
                             },
                             ticks: {
                                 beginAtZero: true,
@@ -292,7 +292,7 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                 $scope.card_3 = true;
                 $scope.res_den = data[0].count;
                 $scope.doughnut_labels = ["Responded", "Not responded"];
-                $scope.doughnut_data[1] = $scope.res_den;
+                $scope.doughnut_data[1] = ($scope.res_den-$scope.res_num);
                 $scope.doughnut_colors = ["#34f83e","#f83434"];                
             }
             else {
@@ -487,6 +487,15 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                     }
                 }
             }
+            $scope.fullscreen_radar_options = {
+                responsive:false,
+                maintainAspectRatio:true,
+                scale: {
+                    ticks:{
+                        stepSize : ((data.length)?(5):1) //add comparision
+                    }
+                }
+            }
             //for activity radar 
             var act_times = [0,0,0,0,0,0];
             var act = ["jogging","standing","walking","sitting","bicycling","None of the above"];
@@ -573,6 +582,57 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
         .error(function(error) {
                 console.log('Error: ' + error);
         });
+        $scope.fullscreen_radar_title = '';
+        $scope.fullscreen_radar_data = [];
+        $scope.fullscreen_radar_labels = [];
+        $scope.fullscreen_radar_colors = [];
+        $scope.radarShow = function(radarName){
+            // ['activities','feelings','location','company','unhealthy','healthy'];
+            // window.alert('Toggle '+radarName);
+            switch (radarName) {
+                case 'activities':
+                    $scope.fullscreen_radar_title = "Activites";
+                    $scope.fullscreen_radar_data = $scope.data_act;
+                    $scope.fullscreen_radar_labels = $scope.labels_act;
+                    $scope.fullscreen_radar_colors = $scope.chart_colors_act;
+                    break;
+            
+                case 'feelings':
+                    $scope.fullscreen_radar_title = "Feelings";
+                    $scope.fullscreen_radar_data = $scope.data_feel;
+                    $scope.fullscreen_radar_labels = $scope.labels_feel;
+                    $scope.fullscreen_radar_colors = $scope.chart_colors_feel;
+                    break;
+        
+                case 'location':
+                    $scope.fullscreen_radar_title = "Location";
+                    $scope.fullscreen_radar_data = $scope.data_loc;
+                    $scope.fullscreen_radar_labels = $scope.labels_loc;
+                    $scope.fullscreen_radar_colors = $scope.chart_colors_loc;
+                    break;
+        
+                case 'company':
+                    $scope.fullscreen_radar_title = "Company";
+                    $scope.fullscreen_radar_data = $scope.data_comp;
+                    $scope.fullscreen_radar_labels = $scope.labels_comp;
+                    $scope.fullscreen_radar_colors = $scope.chart_colors_comp;
+                    break;
+        
+                case 'unhealthy':
+                    $scope.fullscreen_radar_title = "Food - Unhealthy";
+                    $scope.fullscreen_radar_data = $scope.data_unhealthy;
+                    $scope.fullscreen_radar_labels = $scope.labels_unhealthy;
+                    $scope.fullscreen_radar_colors = $scope.chart_colors_unhealthy;
+                    break;
+
+                case 'healthy':
+                    $scope.fullscreen_radar_title = "Food - Healthy";
+                    $scope.fullscreen_radar_data = $scope.data_healthy;
+                    $scope.fullscreen_radar_labels = $scope.labels_healthy;
+                    $scope.fullscreen_radar_colors = $scope.chart_colors_healthy;
+                    break;
+            }
+        }
 
         //For Message card
         $http({
@@ -715,7 +775,7 @@ app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
 
 
                 $scope.chart_color = chart_color_arr[x];
-                console.log("Data length: ",h_rate[x]);
+                // console.log("Data length: ",h_rate[x]);
                 $scope.data = h_rate[x];
                 // $scope.labels = [];
                 // var start = new Date(dates[x][0]);
@@ -806,7 +866,7 @@ app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
         };
         
         $scope.heartrate_fullscreen_options =  {
-            responsive: false,
+            // responsive: false,
             maintainAspectRatio: false,
             legend: {
                 position: 'top',

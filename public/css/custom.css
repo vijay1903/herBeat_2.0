@@ -528,10 +528,19 @@ button:disabled {
 }
 
 .fullscreen-chart-wrapper {
-    overflow: scroll;
-    height: 85vh;
-    width: 100vw;
+    /* overflow: scroll;
+    height: 75vh;
+    width: 100vw; */
+    margin: auto;
+    height: 84vh;
+    width: 90vw;
+    overflow : auto;
 }
+
+/* #fullscreenGoals0, #fullscreenGoals1, #fullscreenGoals2{
+    height: 700px;
+    width: 1200px;
+} */
 
 
 
@@ -627,11 +636,20 @@ button:disabled {
     }
     .fullscreen-content{
         height:100vh;
-        width:1000px;
+        width:100vw;
     }
-    /* .fullscreenGoals{
-        transform: rotateZ(90deg);
+    .fullscreen-chart-wrapper {
+        overflow: scroll;
+        /* height: 500px;
+        width: 300px; */
+    }
+    /* #fullscreenHeartrate {
+        height:525px!important;
     } */
+    #fullscreenGoals0, #fullscreenGoals1, #fullscreenGoals2{
+        height: 450px;
+        width: 700px;
+    }
   }
 
 @media screen and (max-height: 450px) {
