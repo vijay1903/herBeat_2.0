@@ -217,21 +217,23 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body fullscreen-body" id="fullscreenGoalsModalBody">
-                                                <canvas id="fullscreenGoals0" class="chart chart-bar"
-                                                chart-data="goals_fullscreen_data[0]" chart-labels="goals_fullscreen_labels"
-                                                chart-series="goals_fullscreen_series[0]" chart-options="goals_fullscreen_options" style="display:initial;"
-                                                chart-colors="goals_fullscreen_chart_colors[0]">
-                                                </canvas>
-                                                <canvas id="fullscreenGoals1" class="chart chart-bar"
-                                                chart-data="goals_fullscreen_data[1]" chart-labels="goals_fullscreen_labels"
-                                                chart-series="goals_fullscreen_series[1]" chart-options="goals_fullscreen_options" style="display:none;"
-                                                chart-colors="goals_fullscreen_chart_colors[1]">
-                                                </canvas>
-                                                <canvas id="fullscreenGoals2" class="chart chart-bar"
-                                                chart-data="goals_fullscreen_data[2]" chart-labels="goals_fullscreen_labels"
-                                                chart-series="goals_fullscreen_series[2]" chart-options="goals_fullscreen_options" style="display:none;"
-                                                chart-colors="goals_fullscreen_chart_colors[2]">
-                                                </canvas>
+                                                <div class="fullscreen-chart-wrapper">
+                                                    <canvas id="fullscreenGoals0" class="chart chart-bar"
+                                                    chart-data="goals_fullscreen_data[0]" chart-labels="goals_fullscreen_labels"
+                                                    chart-series="goals_fullscreen_series[0]" chart-options="goals_fullscreen_options" style="display:initial;"
+                                                    chart-colors="goals_fullscreen_chart_colors[0]">
+                                                    </canvas>
+                                                    <canvas id="fullscreenGoals1" class="chart chart-bar"
+                                                    chart-data="goals_fullscreen_data[1]" chart-labels="goals_fullscreen_labels"
+                                                    chart-series="goals_fullscreen_series[1]" chart-options="goals_fullscreen_options" style="display:none;"
+                                                    chart-colors="goals_fullscreen_chart_colors[1]">
+                                                    </canvas>
+                                                    <canvas id="fullscreenGoals2" class="chart chart-bar"
+                                                    chart-data="goals_fullscreen_data[2]" chart-labels="goals_fullscreen_labels"
+                                                    chart-series="goals_fullscreen_series[2]" chart-options="goals_fullscreen_options" style="display:none;"
+                                                    chart-colors="goals_fullscreen_chart_colors[2]">
+                                                    </canvas>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -363,9 +365,9 @@
                                 <div class="card">
                                     <div class="card-header">
                                             <i class="fas fa-file-medical-alt"></i> Heartrate
-                                            <!-- <button type="button" class="btn btn-xs btn-outline-dark float-right" data-toggle="modal" data-target="#fullscreenHeartrateModal">
+                                            <button type="button" class="btn btn-xs btn-outline-dark float-right" data-toggle="modal" data-target="#fullscreenHeartrateModal">
                                                 <i class="fas fa-expand"></i>
-                                            </button> -->
+                                            </button>
                                         <div style="display: inline-flex; float:right">
                                             <ul class="pagination">
                                                 <li class="page-item">
@@ -428,10 +430,12 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <canvas id="fullscreenHeartrate" class="chart chart-bar"
-                                            chart-data="data" chart-labels="labels"
-                                            chart-series="series" chart-options="heartrate_fullscreen_options">
-                                            </canvas>
+                                            <div class="fullscreen-chart-wrapper">
+                                                <canvas id="fullscreenHeartrate" class="chart chart-bar"
+                                                chart-data="data" chart-labels="labels" chart-colors="chart_color" 
+                                                chart-series="series" chart-options="heartrate_fullscreen_options" width="5000" height="700">
+                                                </canvas>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -446,7 +450,9 @@
                                 <div class="card">
                                     <div class="card-header">
                                             <i class="fas fa-chart-pie fa-fw"></i> Activity Chart
-                                            <!-- <button class="btn btn-xs btn-outline-dark float-right"><i class="fas fa-expand"></i></button> -->
+                                            <button type="button" class="btn btn-xs btn-outline-dark float-right" data-toggle="modal" data-target="#fullscreenActivityModal">
+                                                <i class="fas fa-expand"></i>
+                                            </button>
                                         <div style="display: inline-flex; float:right">
                                             <ul class="pagination">
                                                 <li class="page-item">
@@ -499,7 +505,30 @@
                                 </div>
                                 <!-- /.card -->
                             </div>
+                            <!-- Full screen activity modal -->
+                            <div class="modal fade" id="fullscreenActivityModal" tabindex="-1" role="dialog" aria-labelledby="fullscreenActivityModalLabel" aria-hidden="true">
+                                <div class="modal-dialog fullscreen-dialog" role="document">
+                                    <div class="modal-content fullscreen-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="fullscreenActivityModalLabel">Activity</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="fullscreen-chart-wrapper">
+                                                <canvas id="fullscreenActivity" class="chart-horizontal-bar" chart-data="data_bar" chart-labels="labels_bar" chart-series="series_bar"
+                                                chart-options="activity_fullscreen_options" chart-colors="chart_color_bar" width="1000" height="700"
+                                                ng-show="card_6">
+                                                </canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/ Full screen heartrate modal -->
                         </div>
+                        <br>
                         <!-- /.row -->
 
                         <div class="container-fluid" ng-controller="cardCtrl">

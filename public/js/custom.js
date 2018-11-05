@@ -282,7 +282,7 @@ function activate(name){
 function showGoals(){
   var e = document.getElementById('goal_select');
   var number =  e.options[e.selectedIndex].value;
-  var canvases = document.querySelector('#fullscreenGoalsModalBody').children;
+  var canvases = document.querySelector('#fullscreenGoalsModalBody div').children;
   for (let i = 0; i < canvases.length; i++) {
     const c = canvases[i];
     var id = '#fullscreenGoals'+i;

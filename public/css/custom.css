@@ -527,6 +527,12 @@ button:disabled {
     margin: 10px 0px 0px 0px;
 }
 
+.fullscreen-chart-wrapper {
+    overflow: scroll;
+    height: 85vh;
+    width: 100vw;
+}
+
 
 
 

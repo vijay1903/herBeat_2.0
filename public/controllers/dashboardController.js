@@ -156,7 +156,7 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                             ticks: {
                                 beginAtZero: true,
                                 display: true,
-                                suggestedMin: 10,
+                                suggestedMax: 10,
                             }
                         }]
                     }
@@ -715,6 +715,7 @@ app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
 
 
                 $scope.chart_color = chart_color_arr[x];
+                console.log("Data length: ",h_rate[x]);
                 $scope.data = h_rate[x];
                 // $scope.labels = [];
                 // var start = new Date(dates[x][0]);
@@ -805,8 +806,8 @@ app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
         };
         
         $scope.heartrate_fullscreen_options =  {
-            responsive: true,
-            maintainAspectRatio: true,
+            responsive: false,
+            maintainAspectRatio: false,
             legend: {
                 position: 'top',
             },
