@@ -125,10 +125,7 @@ self.addEventListener('fetch', function(event) {
 
                 // console.log(cache);
 
-                cache.put(event.request, responseToCache)
-                .catch((err)=>{
-                  console.log(err);
-                });
+                cache.put(event.request, responseToCache);
               })
               .catch((err)=>{
                 console.log("Error putting to cache: ",err);
