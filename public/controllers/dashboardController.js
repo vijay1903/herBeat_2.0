@@ -118,7 +118,7 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                 $scope.avg = $filter('number')(avg,2);
                 // for tables
                 $scope.goals = data;
-                console.log(data);
+                // console.log(data);
 
                 // for full screen graph
                 $scope.goals_fullscreen_labels = [];
@@ -126,7 +126,7 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
                 $scope.goals_fullscreen_chart_colors = [[],[],[]];
                 $scope.goals_fullscreen_series = ['Energy','Readiness','Walk'];
                 $scope.goals_fullscreen_options = {
-                    // responsive: false,
+                    responsive: false,
                     maintainAspectRatio: false,
                     animation: {
                         duration:500
@@ -866,7 +866,7 @@ app.controller('chartCtrl', function($rootScope, $scope, $filter, $http){
         };
         
         $scope.heartrate_fullscreen_options =  {
-            // responsive: false,
+            responsive: false,
             maintainAspectRatio: false,
             legend: {
                 position: 'top',

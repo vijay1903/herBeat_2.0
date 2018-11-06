@@ -7,7 +7,6 @@ gulp.task('generate-service-worker', function(callback) {
 
   swPrecache.write(path.join(rootDir, 'service-worker2.js'), {
     staticFileGlobs: [
-      rootDir + '/angular-chart.js/*.{js,html,css,png,jpg,gif}',
       rootDir + '/controllers/*.{js,html,css,png,jpg,gif}',
       rootDir + '/css/*.{js,html,css,png,jpg,gif}',
       rootDir + '/img/*.{js,html,css,png,jpg,gif}',
