@@ -1,17 +1,17 @@
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      navigator.serviceWorker.register('service-worker2.js')
-      .then(function(registration) {
-        // Registration was successful
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      })
-      .catch((err)=>{
-        this.console.log('SW Error',err);
-      });
-      
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/service-worker2.js')
+    .then(function(registration) {
+      // Registration was successful
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    })
+    .catch((err)=>{
+      this.console.log('SW Error',err);
     });
-  } else {
-console.log('No service Worker Found');
+    
+  });
+} else {
+  console.log('No service Worker Found');
 }
 Notification.requestPermission(function(status) {
   console.log('Notification permission status:', status);
