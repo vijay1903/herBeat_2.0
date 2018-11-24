@@ -65,7 +65,6 @@ function createGroup(members,name){
             }
         });
         if(groups.docs.length == 0 || groupNotFound){
-            console.log(groups)
             chatRef.add({
                 group_name:'name',
                 members: members
@@ -79,7 +78,7 @@ function createGroup(members,name){
             });
         } else {
             // console.log(groups.docs[0].id);
-            console.log('group found');
+            // console.log('group found');
             return(groups.docs[0].id);
         }
     })
@@ -101,14 +100,13 @@ function getChats(group_id,receiver){
                     msg.readAt = new Date()
                 }
             });
-            console.log("msgs:",msgs);
             chatRef
             .doc(group.id)
             .update({
                 messages:msgs
             })
             .then(()=>{
-                console.log("ReadAt updated!");
+                // console.log("ReadAt updated!");
             }).catch((err)=>{
                 console.log("Error updating readAt: ",err);
             });
@@ -164,7 +162,6 @@ function sendChat(group_id,text,sender){
         })
     })
     .then(function(docRef) {
-        console.log("Sent message to group with ID: ", group_id);
         return true;
     })
     .catch(function(error) {

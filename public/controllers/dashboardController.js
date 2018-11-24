@@ -1321,7 +1321,6 @@ app.controller('chatCtrl', function($rootScope,$scope,$cookies,$http){
         method:'POST',
         params:{ username:$scope.username, name:$scope.user_fullname, patient:'true'}
     }).success(function(result){
-        console.log(result);
     }).error(function(err){
         console.log(err);
     })
@@ -1360,11 +1359,9 @@ app.controller('chatCtrl', function($rootScope,$scope,$cookies,$http){
         $scope.changeHealthCoach();
     }
     $scope.sendMessage = function () {
-        console.log('send message');
         sendChat($scope.group_id, $scope.chat, $scope.username)
         .then((result) => {
             if (result == true) {
-                console.log('message sent');
                 $scope.chat = '';
                 getChats($scope.group_id,$scope.username)
                     .then((messages) => {

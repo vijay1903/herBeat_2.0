@@ -371,7 +371,6 @@ module.exports = function(app, conn) {
                 console.log(err);
             } else {
                 res.send(result);
-                console.log(result);
             }
         })
     })
