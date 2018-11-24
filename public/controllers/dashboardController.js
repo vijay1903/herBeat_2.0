@@ -1,6 +1,6 @@
 "use strict";
 
-var app = angular.module("myApp",['chart.js']);
+var app = angular.module("myApp",['chart.js','ngCookies']);
 // var socket, local_socket;
 // if(io != undefined){
 //     // console.log(io);
@@ -330,17 +330,6 @@ app.controller('cardCtrl', function($rootScope, $scope, $filter, $http){
             $scope.loc_filter_options = [{label:"In House",flag:true},{label:"at recreation center",flag:true},{label:"at park",flag:true},{label:"at restaurant",flag:true},{label:"None of the place",flag:true},{label:"at gym",flag:true}];
             $scope.feel_filter_options = [{label:"Very Positive",flag:true},{label:"Positive",flag:true},{label:"Neutral",flag:true},{label:"Negative",flag:true},{label:"Very Negative",flag:true}];
             $scope.food_filter_options = [{label:"Protein",flag:true},{label:"Vegetable",flag:true},{label:"Whole Grain",flag:true},{label:"One Drink",flag:true},{label:"Fruit",flag:true},{label:"None of the Above",flag:true},{label:"Sweet and Sugary Drink",flag:true},{label:"Salty Snack",flag:true},{label:"SeveralDrink",flag:true},{label:"Fried food",flag:true},{label:"Didn' Eat anything last hour",flag:true}];
-            // var filter_arr = [];
-            // filter_arr['activity'] = [];
-            // filter_arr['company'] = [];
-            // filter_arr['location'] = [];
-            // filter_arr['food'] = [];
-            // filter_arr['feel'] = [];
-            // $scope.searchText['activity'] = ["jogging","standing","walking","sitting","bicycling","None of the above"];
-            // $scope.searchText['company'] = ["Alone", "With Spouse", "With Children", "With friends", "With Co-worker", "None of the above"];
-            // $scope.searchText['location'] = ["In House", "at recreation center", "at park", "at restaurant", "None of the place", "at gym"];
-            // $scope.searchText['food'] = ["Protein","Vegetable","Whole Grain","One Drink","Fruit","None of the Above","Sweet and Sugary Drink","Salty Snack","SeveralDrink","Fried food","Didn' Eat anything last hour"];
-            // $scope.searchText['feel'] = ["Very Positive","Positive","Neutral","Negative","Very Negative"];
             
             var out = data;
             $scope.searchBy = function(category){
@@ -1294,7 +1283,7 @@ app.controller("barCtrl", function($rootScope, $scope, $filter, $http, $timeout)
     });
 });
 
-app.controller('chatCtrl', function($rootScope,$scope,$filter,$http){
+app.controller('chatCtrl', function($rootScope,$scope,$cookies,$http){
     $scope.username = document.getElementById('user_username').value;
     $scope.user_fullname = document.getElementById('user_fullname').value;
     $scope.chat_class = 'chat sent';
@@ -1302,21 +1291,25 @@ app.controller('chatCtrl', function($rootScope,$scope,$filter,$http){
     $scope.health_coaches = [];
     $scope.health_coach = '';
     $scope.group_id = '';
-    // createUser($scope.username,$scope.user_fullname);
-    
-    // getUsers();
+    $scope.chats = {};
     $http({
         url:'/api/getfirebaseusers',
         method:'GET'
     })
     .success(function(data){
+        var selected_user = '';
         if(data.length){
             $scope.health_coaches = [];
             data.forEach(user => {
                 if((user.name != $scope.user_fullname) && (user.patient!='true')){
                     $scope.health_coaches.push(user);
+                    // console.log(user);
+                }
+                if($cookies.get("health_coach") == user.username){
+                    selected_user = user;
                 }
             });
+            $scope.health_coach = selected_user;
         }
     })
     .error(function(error){
@@ -1335,144 +1328,60 @@ app.controller('chatCtrl', function($rootScope,$scope,$filter,$http){
 
     function updateScroll(){
         document.querySelector("#myChat").scrollTo(0,document.querySelector("#myChat").scrollHeight);
-        // $("#myChat").animate({scrollTop: $("#myChat")[0].scrollHeight},500);
+        $("#notificationBell").removeClass('notification');
     }
+
+    
     $scope.changeHealthCoach = function(){
         var receiver = $scope.health_coach.username;
+        $cookies.put('health_coach', receiver);
         $scope.members = [receiver,$scope.username];
         if(receiver != ''){
             createGroup([receiver,$scope.username])
             .then((id)=>{
-                // console.log(data);
                 $scope.group_id = id;
-                watchGroup(id);
-                getChats(id)
+                getChats(id,$scope.username)
                 .then((messages)=>{
                     if(messages != null){
-                        console.log(messages)
-                        $scope.chats = messages;
-                        // chat();
-                        updateScroll();
+                        if(messages.length != $scope.chats.length || messages[messages.length-1].readAt != $scope.chats[$scope.chats.length-1].readAt){
+                            $scope.chats = messages;
+                            $scope.$apply();
+                            updateScroll();
+                            watchGroup(id);
+                        }
                     }
                 })
-                // console.log($scope.group_id,$scope.members);
             })
+        } else {
+            window.alert("Please select a receiver from the list.");
         }
     }
     $scope.refresh = function(){
-        chat();
+        $scope.changeHealthCoach();
     }
-    var chat = function(){
-        // createGroup([receiver,$scope.username],receiver);
-        // getGroups($scope.username);
-        // console.log(receiver.first_name);
-        // $http({
-        //     url:"/api/getchatmessages",
-        //     method:'GET',
-        //     params:{sender:$scope.username, receiver:receiver.first_name}
-        // })
-        // .success(function(data){
-        //     if(data.length){
-        //         $scope.chats = data;
-        //         $scope.message_count = data.length;
-        //         socket.emit('read message', { user:$scope.username});
-        //         updateScroll();
-        //     }
-        // })
-        // .error(function(error){
-        //     console.log('Error', error)
-        // });
-
-        $scope.sendMessage = function(){
-            console.log('send message');
-            sendChat($scope.group_id,$scope.chat,$scope.username)
-            .then((result)=>{
-                if(result == true){
-                    console.log('message sent');
-                    $scope.chat = '';
-                    getChats($scope.group_id)
-                    .then((messages)=>{
-                        if(messages != null){
+    $scope.sendMessage = function () {
+        console.log('send message');
+        sendChat($scope.group_id, $scope.chat, $scope.username)
+        .then((result) => {
+            if (result == true) {
+                console.log('message sent');
+                $scope.chat = '';
+                getChats($scope.group_id,$scope.username)
+                    .then((messages) => {
+                        if (messages != null && messages != '') {
                             $scope.chats = messages;
+                            $scope.$apply();
                             updateScroll();
                         }
                     })
-                } else {
-                    console.log(result)
-                }
-            });
-            // $http({
-            //     url:"http://131.247.16.242:8888/api/sentpmessage",
-            //     method:'POST',
-            //     data:{message:$scope.chat,sender:$scope.username,receiver:"health_coach",date: new Date().toLocaleDateString().split('/')[2] + "-" + new Date().toLocaleDateString().split('/')[0] + "-" + new Date().toLocaleDateString().split('/')[1] + " " + new Date().toTimeString().slice(0, 8)}
-            // })
-            // .success(function(data){
-            //         console.log("Message sent to remote api.!");
-            //         // $scope.chats = data;
-            //         // $scope.chat = '';
-            //         // chat();
-            //         // updateScroll();
-            // })
-            // .error(function(error){
-            //     console.log('Error', error)
-            // });
-
-            // $http({
-            //     url:"/api/sendchatmessages",
-            //     method:'POST',
-            //     params:{message:$scope.chat,sender:$scope.username,receiver:$scope.health_coach.first_name} //Receiver to be changed
-            // })
-            // .success(function(data){
-            //         // $scope.chats = data;
-            //         $scope.chat = '';
-            //         chat();
-            //         updateScroll();
-            // })
-            // .error(function(error){
-            //     console.log('Error', error)
-            // });
-
-
-            // $http({
-            //     url:"http://localhost:8888/api/checkmessages",
-            //     method:'POST',
-            //     params:{receiver:'Vijay',sender:$scope.username} //Hard coded receiver to be removed
-            // })
-            // .success(function(data){
-            //         // $scope.messages = data;
-            //         // $scope.message = '';
-            //         // chat();
-            //         // updateScroll();
-            //         console.log("Message sent and receiver notified.")
-            // })
-            // .error(function(error){
-            //     console.log('Error', error)
-            // });
-            
-// sendChat($scope.group_id,'test',$scope.username);
-
-            //Send a ping to health coach socket server
-            // socket.emit('sent message', { user:$scope.username, message: $scope.chat});
-
-            // when a message is received from health coach
-        }
+            } else {
+                console.log(result)
+            }
+        });
     }
-    // setInterval(chat,3000);
-    // setTimeout(updateScroll(),1000);
-    // chat();
+    if($cookies.get("health_coach") != undefined){
+        setTimeout(()=>{
+            $scope.changeHealthCoach();
+        },500);
+    }
 });
-// local_socket.on('received message', function (data) {
-//     console.log('Received message from health coach: ',data.data2, data.msg2);
-//     $('#notificationBell').addClass('notification');
-//     // $('#tooltipMessage').html(data.user+' sent you a message.');
-//     displayNotification(data.data2+' : '+data.msg2);
-//     setTimeout(function(){$('#refresh').click()},500);
-// });
-// local_socket.on('refresh message', function (data) {
-//     console.log('Message read by  health coach: ',data.data2);
-//     // $('#notificationBell').addClass('notification');
-//     // $('#tooltipMessage').html(data.user+' sent you a message.');
-//     // displayNotification(data.data2+' sent you a message.');
-//     setTimeout(function(){$('#refresh').click()},500);
-
-// });

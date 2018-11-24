@@ -48,7 +48,7 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.js"></script>
     <![endif]-->
     <!-- Custom scripts for service worker -->
-    <script src="../js/sw.js"></script>
+    <!-- <script src="../js/sw.js"></script> -->
 </head>
 
 <body onload="myFunction()" style="margin:0;">
@@ -1071,7 +1071,7 @@
                                 <div class="card-header">
                                     Messages <span class="badge badge-success" ng-model="message_count">{{message_count}}</span>
                                     <div class="btn-group float-right">
-                                        <select name="health_coach" id="health coach" ng-change="changeHealthCoach();" ng-model="health_coach" ng-default="health_coach" ng-options="h.name for h in health_coaches">
+                                        <select name="health_coach" id="health_coach" ng-change="changeHealthCoach();" ng-model="health_coach" ng-default="health_coach" ng-options="h.name for h in health_coaches">
                                         </select>
                                         <!-- {{health_coach}} -->
                                         <button id="refresh" class="btn btn-sm btn-primary" ng-click="refresh();">
@@ -1180,6 +1180,8 @@
 
     <!-- Custom Theme JavaScript Important -->
     <script src="../dist/js/sb-admin-2.js"></script>
+    <!-- angular controller javascript -->
+    <script src="../controllers/dashboardController.js"></script>
 
     <!-- socket.io js file -->
     <!-- <script src="http://localhost:8889/socket.io/socket.io.js"></script> -->
@@ -1187,8 +1189,6 @@
     <script src="../js/custom.js"></script>
     <!-- firebase.js functions file -->
     <script src="../js/firebase.js"></script>
-    <!-- angular controller javascript -->
-    <script src="../controllers/dashboardController.js"></script>
     <!-- for date range picker -->
     <script src="../vendor/daterangepicker/daterangepicker.js"></script>
     

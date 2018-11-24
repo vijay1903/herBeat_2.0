@@ -1,3 +1,44 @@
+function setCookie(cname,cvalue,exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  var expires = "expires=" + d.toGMTString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+      }
+  }
+  return "";
+}
+
+if(getCookie("active_pill") != ""){
+  var active_one = "#"+getCookie("active_pill");
+  $(active_one).click();
+}
+
+var dock_list = document.querySelectorAll(".dock-link");
+dock_list.forEach(pill => {
+  pill.addEventListener('click',function(){
+    setCookie("active_pill",this.id,1);
+  })
+});
+
+var pill_list = document.querySelectorAll(".nav-link");
+pill_list.forEach(pill => {
+  pill.addEventListener('click',function(){
+    setCookie("active_pill",this.id,1);
+  })
+});
 
 var check = function() {
   if (document.getElementById('password1').value == document.getElementById('password2').value) {
@@ -257,13 +298,15 @@ function plusSlides(x){
   document.getElementById('dock-list').scrollLeft = pos+(w*x);
 }
 if(window.screen.width < 1000){
-  document.getElementById('chat_message').onfocus = function(){
-    document.getElementById('dock').style.display = 'none';
-  };
+  if(document.getElementById('chat_message')){
+    document.getElementById('chat_message').onfocus = function(){
+      document.getElementById('dock').style.display = 'none';
+    };
 
-  document.getElementById('chat_message').onfocusout = function(){
-    document.getElementById('dock').style.display = 'initial';
-  };
+    document.getElementById('chat_message').onfocusout = function(){
+      document.getElementById('dock').style.display = 'initial';
+    };
+  }
 }
 
 function activate(name){

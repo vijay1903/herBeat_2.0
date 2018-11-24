@@ -88,37 +88,49 @@ function createGroup(members,name){
     })
 }
 //// <summary>Get chats from groups with id as group_id</summary>
-function getChats(group_id){
+function getChats(group_id,receiver){
+    // readChats(group_id);
     return chatRef
     .doc(group_id)
     .get()
     .then(function(group) {
         if(group.data().messages){
-            // console.log('Messages for group: ', group.data().members);
-            group.data().messages.forEach(element => {
-                // console.log(element);
+            var msgs = group.data().messages;
+            msgs.forEach(msg => {
+                if(msg.readAt == null && msg.sender != receiver){
+                    msg.readAt = new Date()
+                }
             });
-            return(group.data().messages);
+            console.log("msgs:",msgs);
+            chatRef
+            .doc(group.id)
+            .update({
+                messages:msgs
+            })
+            .then(()=>{
+                console.log("ReadAt updated!");
+            }).catch((err)=>{
+                console.log("Error updating readAt: ",err);
+            });
+            return group.data().messages;
         } else {
             console.log("No message for this group.");
-            return(null);
+            return null;
         }
     })
     .catch(function(error) {
         console.log("Error getting chats: ", error);
     });
 }
-
 ////<summary>Watch for all groups with id as group_id.</summary> 
 function watchGroup(group_id){
     chatRef
     .doc(group_id)
     .onSnapshot((snap)=>{
-            // console.log(snap.data());
-
-            // snap.docs.forEach(group => {
-            console.log('Message watching:',snap.id);
-            // })
+            // console.log(snap);
+            // console.log('Message watching:',snap.id);
+            $('#notificationBell').addClass('notification');
+            $('#refresh').click();
     });
 }
 // <summary>Get all groups containing username as member</summary>
@@ -147,12 +159,11 @@ function sendChat(group_id,text,sender){
         messages: firebase.firestore.FieldValue.arrayUnion({
             sender:sender,
             text:text,
-            sentAt: new Date()
+            sentAt: new Date(),
+            readAt: null
         })
     })
     .then(function(docRef) {
-        // UpdateScroll();
-        // getChats(group_id);
         console.log("Sent message to group with ID: ", group_id);
         return true;
     })
@@ -161,3 +172,19 @@ function sendChat(group_id,text,sender){
         return error;
     });
 }
+
+function readChats(group_id){
+    chatRef.doc(group_id)
+    .update({
+        messages : firebase.firestore.FieldValue.arrayUnion({
+            readAt: new Date()
+        })
+    })
+    .then(()=>{
+        console.log("Updated read At");
+    })
+    .catch((err)=>{
+        console.log(err);
+    });
+}
+
